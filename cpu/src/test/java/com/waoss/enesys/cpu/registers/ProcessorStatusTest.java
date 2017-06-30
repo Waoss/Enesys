@@ -7,13 +7,13 @@ public class ProcessorStatusTest {
     ProcessorStatus processorStatus = new ProcessorStatus();
 
     @Test
-    public void isCarryFlagEnabled() throws Exception {
-        assert !processorStatus.isCarryFlagEnabled();
-    }
-
-    @Test
-    public void setCarryFlagEnabled() throws Exception {
+    public void test() throws Exception {
         processorStatus.setCarryFlagEnabled(true);
+        processorStatus.setZeroFlagEnabled(true);
+        processorStatus.setInterruptFlagEnabled(true);
+        assert processorStatus.isCarryFlagEnabled();
+        assert processorStatus.isZeroFlagEnabled();
+        assert processorStatus.isInterruptFlagEnabled();
     }
 
 }

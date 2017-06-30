@@ -3,16 +3,22 @@ package com.waoss.enesys.cpu.registers;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 
-public class ProcessorStatus extends UnsignedByteRegister {
+public final class ProcessorStatus extends UnsignedByteRegister {
 
-    BooleanProperty carryFlagEnabledProperty = new SimpleBooleanProperty(false);
+    private final BooleanProperty carryFlagEnabledProperty = new SimpleBooleanProperty(false);
+    private final BooleanProperty zeroFlagEnabledProperty = new SimpleBooleanProperty(false);
+    private final BooleanProperty interruptFlagEnabledProperty = new SimpleBooleanProperty(false);
 
     {
-        this.carryFlagEnabledProperty.setValue(((this.getValue().byteValue() & (1 << 7)) > 0));
+        this.carryFlagEnabledProperty.setValue(((this.getValue().byteValue() & (1 << 0)) > 0));
     }
 
     public ProcessorStatus() {
         super((byte) 0b00110000);
+    }
+
+    public BooleanProperty carryFlagEnabledProperty() {
+        return carryFlagEnabledProperty;
     }
 
     public boolean isCarryFlagEnabled() {
@@ -20,16 +26,40 @@ public class ProcessorStatus extends UnsignedByteRegister {
     }
 
     public void setCarryFlagEnabled(boolean carryFlagEnabled) {
-        this.carryFlagEnabledProperty.setValue(carryFlagEnabled);
-        if (carryFlagEnabled) {
-            enableBit((byte) 7);
-        } else {
-            clearBit((byte) 7);
-        }
+        enableFlag(carryFlagEnabledProperty, carryFlagEnabled, 0);
     }
 
-    public BooleanProperty carryFlagEnabledProperty() {
-        return carryFlagEnabledProperty;
+    public BooleanProperty zeroFlagEnabledProperty() {
+        return zeroFlagEnabledProperty;
+    }
+
+    public boolean isZeroFlagEnabled() {
+        return zeroFlagEnabledProperty.get();
+    }
+
+    public void setZeroFlagEnabled(boolean zeroFlagEnabled) {
+        enableFlag(zeroFlagEnabledProperty, zeroFlagEnabled, 1);
+    }
+
+    public boolean isInterruptFlagEnabled() {
+        return interruptFlagEnabledProperty.get();
+    }
+
+    public void setInterruptFlagEnabled(boolean interruptFlagEnabled) {
+        enableFlag(interruptFlagEnabledProperty, interruptFlagEnabled, 2);
+    }
+
+    public BooleanProperty interruptFlagEnabledProperty() {
+        return interruptFlagEnabledProperty;
+    }
+
+    private void enableFlag(BooleanProperty property, boolean value, int index) {
+        property.set(value);
+        if (value) {
+            enableBit((byte) index);
+        } else {
+            clearBit((byte) index);
+        }
     }
 
     private void enableBit(byte index) {
@@ -39,4 +69,5 @@ public class ProcessorStatus extends UnsignedByteRegister {
     private void clearBit(byte index) {
         this.setValue(this.getValue().byteValue() & ~(1 << index));
     }
+
 }

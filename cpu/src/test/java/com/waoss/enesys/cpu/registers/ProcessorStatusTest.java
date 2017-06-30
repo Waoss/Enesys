@@ -17,25 +17,31 @@ public class ProcessorStatusTest {
         processorStatus.setDecimalFlagEnabled(true);
         processorStatus.setBreakFlagEnabled(true);
         processorStatus.setOverflowFlagEnabled(true);
+        processorStatus.setNegativeFlagEnabled(true);
         assert processorStatus.isCarryFlagEnabled();
         assert processorStatus.isZeroFlagEnabled();
         assert processorStatus.isInterruptFlagEnabled();
         assert processorStatus.isDecimalFlagEnabled();
         assert processorStatus.isBreakFlagEnabled();
         assert processorStatus.isOverflowFlagEnabled();
+        assert processorStatus.isNegativeFlagEnabled();
+        System.out.println(processorStatus);
         processorStatus.setCarryFlagEnabled(false);
         processorStatus.setZeroFlagEnabled(false);
         processorStatus.setInterruptFlagEnabled(false);
         processorStatus.setDecimalFlagEnabled(false);
         processorStatus.setBreakFlagEnabled(false);
         processorStatus.setOverflowFlagEnabled(false);
+        processorStatus.setNegativeFlagEnabled(false);
         assert !processorStatus.isCarryFlagEnabled();
         assert !processorStatus.isZeroFlagEnabled();
         assert !processorStatus.isInterruptFlagEnabled();
         assert !processorStatus.isDecimalFlagEnabled();
         assert !processorStatus.isBreakFlagEnabled();
         assert !processorStatus.isOverflowFlagEnabled();
+        assert !processorStatus.isNegativeFlagEnabled();
         System.out.println(System.currentTimeMillis() - start);
+        System.out.println(processorStatus);
     }
 
 }

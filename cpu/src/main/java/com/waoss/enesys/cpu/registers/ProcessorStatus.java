@@ -3,6 +3,9 @@ package com.waoss.enesys.cpu.registers;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 
+import java.util.Arrays;
+import java.util.List;
+
 public final class ProcessorStatus extends UnsignedByteRegister {
 
     private final BooleanProperty carryFlagEnabledProperty = new SimpleBooleanProperty(false);
@@ -14,6 +17,18 @@ public final class ProcessorStatus extends UnsignedByteRegister {
 //     It should be unsued
     private final BooleanProperty unusedFlagEnabledProperty = new SimpleBooleanProperty(false);
     private final BooleanProperty overflowFlagEnabledProperty = new SimpleBooleanProperty(false);
+    private final BooleanProperty negativeFlagEnabledProperty = new SimpleBooleanProperty(false);
+    private final List<Boolean> flags =
+            Arrays.asList(
+                    isCarryFlagEnabled(),
+                    isZeroFlagEnabled(),
+                    isInterruptFlagEnabled(),
+                    isDecimalFlagEnabled(),
+                    isDecimalFlagEnabled(),
+                    isBreakFlagEnabled(),
+                    false,
+                    isOverflowFlagEnabled(),
+                    isNegativeFlagEnabled());
 
     {
         this.carryFlagEnabledProperty.set(((this.getValue().byteValue() & (1)) > 0));
@@ -23,6 +38,7 @@ public final class ProcessorStatus extends UnsignedByteRegister {
         this.breakFlagEnabledProperty.set(((this.getValue().byteValue() & (1 << 4)) > 0));
         this.unusedFlagEnabledProperty.set(((this.getValue().byteValue() & (1 << 5)) > 0));
         this.overflowFlagEnabledProperty.set(((this.getValue().byteValue() & (1 << 6)) > 0));
+        this.negativeFlagEnabledProperty.set(((this.getValue().byteValue() & (1 << 7)) > 0));
     }
 
     public ProcessorStatus() {
@@ -101,6 +117,31 @@ public final class ProcessorStatus extends UnsignedByteRegister {
         enableFlag(overflowFlagEnabledProperty, overflowFlagEnabled, 6);
     }
 
+    public BooleanProperty negativeFlagEnabledProperty() {
+        return negativeFlagEnabledProperty;
+    }
+
+    public boolean isNegativeFlagEnabled() {
+        return negativeFlagEnabledProperty.get();
+    }
+
+    public void setNegativeFlagEnabled(boolean negativeFlagEnabled) {
+        enableFlag(negativeFlagEnabledProperty, negativeFlagEnabled, 7);
+    }
+
+    @Override
+    public String toString() {
+        final String[] result = {""};
+        flags.forEach(flag -> {
+            if (flag) {
+                result[0] += "1";
+            } else {
+                result[0] += "0";
+            }
+        });
+        return result[0];
+    }
+
     private void enableFlag(BooleanProperty property, boolean value, int index) {
         property.set(value);
         if (value) {
@@ -108,6 +149,7 @@ public final class ProcessorStatus extends UnsignedByteRegister {
         } else {
             clearBit((byte) index);
         }
+        flags.set(index, value);
     }
 
     private void enableBit(byte index) {

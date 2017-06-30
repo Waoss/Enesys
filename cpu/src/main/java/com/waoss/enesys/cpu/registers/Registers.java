@@ -9,8 +9,5 @@ public final class Registers {
         if (!(value instanceof Byte)) {
             throw new NumberFormatException("Value must be a byte!");
         }
-        if (value.byteValue() < 0) {
-            throw new NumberFormatException("Value must be unsigned");
-        }
     }
 }

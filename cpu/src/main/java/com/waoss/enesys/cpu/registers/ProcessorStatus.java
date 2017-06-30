@@ -8,6 +8,7 @@ public final class ProcessorStatus extends UnsignedByteRegister {
     private final BooleanProperty carryFlagEnabledProperty = new SimpleBooleanProperty(false);
     private final BooleanProperty zeroFlagEnabledProperty = new SimpleBooleanProperty(false);
     private final BooleanProperty interruptFlagEnabledProperty = new SimpleBooleanProperty(false);
+    private final BooleanProperty decimalFlagEnabledProperty = new SimpleBooleanProperty(false);
 
     {
         this.carryFlagEnabledProperty.setValue(((this.getValue().byteValue() & (1 << 0)) > 0));
@@ -41,6 +42,10 @@ public final class ProcessorStatus extends UnsignedByteRegister {
         enableFlag(zeroFlagEnabledProperty, zeroFlagEnabled, 1);
     }
 
+    public BooleanProperty interruptFlagEnabledProperty() {
+        return interruptFlagEnabledProperty;
+    }
+
     public boolean isInterruptFlagEnabled() {
         return interruptFlagEnabledProperty.get();
     }
@@ -49,9 +54,18 @@ public final class ProcessorStatus extends UnsignedByteRegister {
         enableFlag(interruptFlagEnabledProperty, interruptFlagEnabled, 2);
     }
 
-    public BooleanProperty interruptFlagEnabledProperty() {
-        return interruptFlagEnabledProperty;
+    public BooleanProperty decimalFlagEnabledProperty() {
+        return decimalFlagEnabledProperty;
     }
+
+    public boolean isDecimalFlagEnabled() {
+        return decimalFlagEnabledProperty.get();
+    }
+
+    public void setDecimalFlagEnabled(boolean interruptFlagEnabled) {
+        enableFlag(decimalFlagEnabledProperty, interruptFlagEnabled, 2);
+    }
+
 
     private void enableFlag(BooleanProperty property, boolean value, int index) {
         property.set(value);

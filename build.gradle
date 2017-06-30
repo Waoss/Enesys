@@ -1,0 +1,12 @@
+allprojects {
+    apply plugin: 'java'
+    apply plugin: 'maven'
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        testCompile 'junit:junit:4.12'
+    }
+}
+apply plugin: 'application'
+mainClassName = 'com.waoss.enesys.Enesys'

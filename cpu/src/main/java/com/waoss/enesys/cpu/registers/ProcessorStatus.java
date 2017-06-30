@@ -10,13 +10,19 @@ public final class ProcessorStatus extends UnsignedByteRegister {
     private final BooleanProperty interruptFlagEnabledProperty = new SimpleBooleanProperty(false);
     private final BooleanProperty decimalFlagEnabledProperty = new SimpleBooleanProperty(false);
     private final BooleanProperty breakFlagEnabledProperty = new SimpleBooleanProperty(false);
+    //     private access means no one can use this guy.
+//     It should be unsued
+    private final BooleanProperty unusedFlagEnabledProperty = new SimpleBooleanProperty(false);
+    private final BooleanProperty overflowFlagEnabledProperty = new SimpleBooleanProperty(false);
 
     {
-        this.carryFlagEnabledProperty.setValue(((this.getValue().byteValue() & (1)) > 0));
-        this.zeroFlagEnabledProperty.setValue(((this.getValue().byteValue() & (1 << 1)) > 0));
-        this.interruptFlagEnabledProperty.setValue(((this.getValue().byteValue() & (1 << 2)) > 0));
-        this.decimalFlagEnabledProperty.setValue(((this.getValue().byteValue() & (1 << 3)) > 0));
-        this.breakFlagEnabledProperty.setValue(((this.getValue().byteValue() & (1 << 4)) > 0));
+        this.carryFlagEnabledProperty.set(((this.getValue().byteValue() & (1)) > 0));
+        this.zeroFlagEnabledProperty.set(((this.getValue().byteValue() & (1 << 1)) > 0));
+        this.interruptFlagEnabledProperty.set(((this.getValue().byteValue() & (1 << 2)) > 0));
+        this.decimalFlagEnabledProperty.set(((this.getValue().byteValue() & (1 << 3)) > 0));
+        this.breakFlagEnabledProperty.set(((this.getValue().byteValue() & (1 << 4)) > 0));
+        this.unusedFlagEnabledProperty.set(((this.getValue().byteValue() & (1 << 5)) > 0));
+        this.overflowFlagEnabledProperty.set(((this.getValue().byteValue() & (1 << 6)) > 0));
     }
 
     public ProcessorStatus() {
@@ -83,6 +89,18 @@ public final class ProcessorStatus extends UnsignedByteRegister {
         enableFlag(breakFlagEnabledProperty, breakFlagEnabled, 4);
     }
 
+    public BooleanProperty overflowFlagEnabledProperty() {
+        return overflowFlagEnabledProperty;
+    }
+
+    public boolean isOverflowFlagEnabled() {
+        return overflowFlagEnabledProperty.get();
+    }
+
+    public void setOverflowFlagEnabled(boolean overflowFlagEnabled) {
+        enableFlag(overflowFlagEnabledProperty, overflowFlagEnabled, 6);
+    }
+
     private void enableFlag(BooleanProperty property, boolean value, int index) {
         property.set(value);
         if (value) {
@@ -97,7 +115,7 @@ public final class ProcessorStatus extends UnsignedByteRegister {
     }
 
     private void clearBit(byte index) {
-        this.setValue(this.getValue().byteValue() & ~(1 << index));
+        this.setValue((byte) (this.getValue().byteValue() & ~(1 << index)));
     }
 
 }

@@ -9,9 +9,14 @@ public final class ProcessorStatus extends UnsignedByteRegister {
     private final BooleanProperty zeroFlagEnabledProperty = new SimpleBooleanProperty(false);
     private final BooleanProperty interruptFlagEnabledProperty = new SimpleBooleanProperty(false);
     private final BooleanProperty decimalFlagEnabledProperty = new SimpleBooleanProperty(false);
+    private final BooleanProperty breakFlagEnabledProperty = new SimpleBooleanProperty(false);
 
     {
-        this.carryFlagEnabledProperty.setValue(((this.getValue().byteValue() & (1 << 0)) > 0));
+        this.carryFlagEnabledProperty.setValue(((this.getValue().byteValue() & (1)) > 0));
+        this.zeroFlagEnabledProperty.setValue(((this.getValue().byteValue() & (1 << 1)) > 0));
+        this.interruptFlagEnabledProperty.setValue(((this.getValue().byteValue() & (1 << 2)) > 0));
+        this.decimalFlagEnabledProperty.setValue(((this.getValue().byteValue() & (1 << 3)) > 0));
+        this.breakFlagEnabledProperty.setValue(((this.getValue().byteValue() & (1 << 4)) > 0));
     }
 
     public ProcessorStatus() {
@@ -63,9 +68,20 @@ public final class ProcessorStatus extends UnsignedByteRegister {
     }
 
     public void setDecimalFlagEnabled(boolean interruptFlagEnabled) {
-        enableFlag(decimalFlagEnabledProperty, interruptFlagEnabled, 2);
+        enableFlag(decimalFlagEnabledProperty, interruptFlagEnabled, 3);
     }
 
+    public BooleanProperty breakFlagEnabledProperty() {
+        return breakFlagEnabledProperty;
+    }
+
+    public boolean isBreakFlagEnabled() {
+        return breakFlagEnabledProperty.get();
+    }
+
+    public void setBreakFlagEnabled(boolean breakFlagEnabled) {
+        enableFlag(breakFlagEnabledProperty, breakFlagEnabled, 4);
+    }
 
     private void enableFlag(BooleanProperty property, boolean value, int index) {
         property.set(value);

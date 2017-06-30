@@ -12,10 +12,12 @@ public class ProcessorStatusTest {
         processorStatus.setZeroFlagEnabled(true);
         processorStatus.setInterruptFlagEnabled(true);
         processorStatus.setDecimalFlagEnabled(true);
+        processorStatus.setBreakFlagEnabled(true);
         assert processorStatus.isCarryFlagEnabled();
         assert processorStatus.isZeroFlagEnabled();
         assert processorStatus.isInterruptFlagEnabled();
         assert processorStatus.isDecimalFlagEnabled();
+        assert processorStatus.isBreakFlagEnabled();
     }
 
 }

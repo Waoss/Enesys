@@ -2,9 +2,15 @@ package com.waoss.enesys.cpu.registers;
 
 import javafx.beans.property.SimpleObjectProperty;
 
-class UnsignedByteRegister extends Register<Byte> {
+abstract class UnsignedByteRegister extends Register<Byte> {
 
-    SimpleObjectProperty<Byte> valueProperty = new SimpleObjectProperty<>((byte) 0);
+    byte defaultValue;
+    SimpleObjectProperty<Byte> valueProperty;
+
+    protected UnsignedByteRegister(byte defaultValue) {
+        this.defaultValue = defaultValue;
+        valueProperty = new SimpleObjectProperty<>(defaultValue);
+    }
 
     @Override
     public Number getValue() {

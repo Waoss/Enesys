@@ -8,5 +8,7 @@ allprojects {
         testCompile 'junit:junit:4.12'
     }
 }
+group = 'com.waoss.enesys'
+version = '1.0'
 apply plugin: 'application'
 mainClassName = 'com.waoss.enesys.Enesys'

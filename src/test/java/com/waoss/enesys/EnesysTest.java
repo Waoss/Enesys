@@ -16,17 +16,16 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-apply plugin: 'java'
-apply plugin: 'maven'
-apply plugin: 'application'
-apply plugin: 'idea'
-apply plugin: 'eclipse'
-repositories {
-    mavenCentral()
+package com.waoss.enesys;
+
+import org.junit.Test;
+
+public class EnesysTest {
+
+    @Test
+    public void main() throws Exception {
+        Enesys.main();
+        System.out.println(Enesys.centralProcessor.getARegister().getValue());
+    }
+
 }
-dependencies {
-    testCompile 'junit:junit:4.12'
-}
-group = 'com.waoss.enesys'
-version = '1.0'
-mainClassName = 'com.waoss.enesys.Enesys'

@@ -22,12 +22,14 @@ import com.waoss.enesys.cpu.CentralProcessor;
 
 public class Enesys {
 
-    public static void main(String[] args) {
-        Console console = new Console();
-        CentralProcessor centralProcessor = new CentralProcessor(console);
+    static Console console;
+    static CentralProcessor centralProcessor;
+
+    public static void main(String... args) {
+        console = new Console();
+        centralProcessor = new CentralProcessor(console);
         centralProcessor.lda((byte) 10);
         centralProcessor.sta(0x0200);
-        console.foo();
         assert centralProcessor.getConsole() == console;
     }
 }

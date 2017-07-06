@@ -16,4 +16,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-rootProject.name = 'Enesys'
+package com.waoss.enesys.cpu.registers;
+
+import com.waoss.enesys.ValueContainer;
+
+public abstract class Register<T extends Number> implements ValueContainer<T> {
+}

@@ -16,4 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-rootProject.name = 'Enesys'
+package com.waoss.enesys.mem;
+
+public enum Addresing {
+}

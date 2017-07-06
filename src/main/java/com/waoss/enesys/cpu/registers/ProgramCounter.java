@@ -16,4 +16,11 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-rootProject.name = 'Enesys'
+package com.waoss.enesys.cpu.registers;
+
+public class ProgramCounter extends UnsignedShortRegister {
+
+    public ProgramCounter(short defaultValue) {
+        super(defaultValue);
+    }
+}

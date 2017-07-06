@@ -1,4 +1,0 @@
-dependencies {
-    compile project(':mem')
-}
-version = '1.2'

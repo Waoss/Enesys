@@ -16,4 +16,32 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-rootProject.name = 'Enesys'
+package com.waoss.enesys.cpu.registers;
+
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
+
+abstract class UnsignedByteRegister extends Register<Byte> {
+
+    protected byte defaultValue;
+    protected SimpleObjectProperty<Byte> valueProperty;
+
+    protected UnsignedByteRegister(byte defaultValue) {
+        this.defaultValue = defaultValue;
+        valueProperty = new SimpleObjectProperty<>(defaultValue);
+    }
+
+    public ObjectProperty<Byte> valueProperty() {
+        return valueProperty;
+    }
+
+    @Override
+    public Byte getValue() {
+        return valueProperty.get();
+    }
+
+    @Override
+    public void setValue(Byte value) {
+        valueProperty.set(value);
+    }
+}

@@ -16,4 +16,20 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-rootProject.name = 'Enesys'
+package com.waoss.enesys.cpu.registers;
+
+import com.waoss.enesys.Console;
+
+public final class Registers {
+
+    private Registers() {
+    }
+
+    public static <T extends Number> void loadRegister(Register<T> tRegister, T value) {
+        tRegister.setValue(value);
+    }
+
+    public static <T extends Byte> void storeRegister(Register<T> tRegister, Console console, int address) {
+        console.getCompleteMemory().getRandomAccessMemory().write((short) address, tRegister.getValue());
+    }
+}

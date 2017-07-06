@@ -16,18 +16,32 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.waoss.enesys;
+package com.waoss.enesys.cpu.registers;
 
-import com.waoss.enesys.cpu.CentralProcessor;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
 
-public class Enesys {
+abstract class UnsignedShortRegister extends Register<Short> {
 
-    public static void main(String[] args) {
-        Console console = new Console();
-        CentralProcessor centralProcessor = new CentralProcessor(console);
-        centralProcessor.lda((byte) 10);
-        centralProcessor.sta(0x0200);
-        console.foo();
-        assert centralProcessor.getConsole() == console;
+    protected short defaultValue;
+    protected SimpleObjectProperty<Short> valueProperty;
+
+    protected UnsignedShortRegister(short defaultValue) {
+        this.defaultValue = defaultValue;
+        valueProperty = new SimpleObjectProperty<>(defaultValue);
+    }
+
+    public ObjectProperty<Short> valueProperty() {
+        return valueProperty;
+    }
+
+    @Override
+    public Short getValue() {
+        return valueProperty.get();
+    }
+
+    @Override
+    public void setValue(Short value) {
+        valueProperty.set(value);
     }
 }

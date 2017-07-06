@@ -16,4 +16,14 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-rootProject.name = 'Enesys'
+package com.waoss.enesys.mem;
+
+public abstract class Memory {
+
+    protected Memory() {
+    }
+
+    public abstract byte read(short address);
+
+    public abstract void write(short address, byte value);
+}

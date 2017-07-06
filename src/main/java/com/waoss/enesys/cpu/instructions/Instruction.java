@@ -16,18 +16,35 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.waoss.enesys;
+package com.waoss.enesys.cpu.instructions;
 
-import com.waoss.enesys.cpu.CentralProcessor;
+import com.waoss.enesys.mem.Addresing;
 
-public class Enesys {
+public final class Instruction {
 
-    public static void main(String[] args) {
-        Console console = new Console();
-        CentralProcessor centralProcessor = new CentralProcessor(console);
-        centralProcessor.lda((byte) 10);
-        centralProcessor.sta(0x0200);
-        console.foo();
-        assert centralProcessor.getConsole() == console;
+    private InstructionName instructionName;
+    private byte opcode;
+    private Addresing addresing;
+
+    public Instruction(InstructionName instructionName, Addresing addresing) {
+        this.instructionName = instructionName;
+        this.addresing = addresing;
+    }
+
+    public Instruction(byte opcode, Addresing addresing) {
+        this.opcode = opcode;
+        this.addresing = addresing;
+    }
+
+    public InstructionName getInstructionName() {
+        return instructionName;
+    }
+
+    public byte getOpcode() {
+        return opcode;
+    }
+
+    public Addresing getAddresing() {
+        return addresing;
     }
 }

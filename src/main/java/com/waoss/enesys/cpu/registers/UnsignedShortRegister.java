@@ -18,30 +18,8 @@
 
 package com.waoss.enesys.cpu.registers;
 
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleObjectProperty;
-
-abstract class UnsignedShortRegister extends Register<Short> {
-
-    protected short defaultValue;
-    protected SimpleObjectProperty<Short> valueProperty;
-
-    protected UnsignedShortRegister(short defaultValue) {
-        this.defaultValue = defaultValue;
-        valueProperty = new SimpleObjectProperty<>(defaultValue);
-    }
-
-    public ObjectProperty<Short> valueProperty() {
-        return valueProperty;
-    }
-
-    @Override
-    public Short getValue() {
-        return valueProperty.get();
-    }
-
-    @Override
-    public void setValue(Short value) {
-        valueProperty.set(value);
+class UnsignedShortRegister extends RegisterImpl<Short> {
+    UnsignedShortRegister(Short defaultValue) {
+        super(defaultValue);
     }
 }

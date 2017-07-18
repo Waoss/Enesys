@@ -18,22 +18,30 @@
 
 package com.waoss.enesys.cpu.registers;
 
-/**
- * An instance of this class represents the "A" register of the processor
- * The default value of the A register is 0.
- *
- * @see Register
- * @see UnsignedByteRegister
- * @see UnsignedShortRegister
- * @see RegisterImpl
- */
-public class AccumalativeRegister extends UnsignedByteRegister {
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
 
-    /**
-     * Creates a new A register
-     * The constructor of {@link UnsignedByteRegister#UnsignedByteRegister(Byte)} takes in the default value
-     */
-    public AccumalativeRegister() {
-        super((byte) 0x0);
+public class RegisterImpl<T extends Number> extends Register<T> {
+
+    protected T defaultValue;
+    protected SimpleObjectProperty<T> valueProperty;
+
+    protected RegisterImpl(T defaultValue) {
+        this.defaultValue = defaultValue;
+        valueProperty = new SimpleObjectProperty<>(defaultValue);
+    }
+
+    public final ObjectProperty<T> valueProperty() {
+        return valueProperty;
+    }
+
+    @Override
+    public T getValue() {
+        return valueProperty.get();
+    }
+
+    @Override
+    public void setValue(T t) {
+        valueProperty.set(t);
     }
 }

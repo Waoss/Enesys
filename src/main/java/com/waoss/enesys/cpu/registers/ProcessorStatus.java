@@ -25,8 +25,8 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * An instance of this class represents the "status" of a processor
- * The processor status was a special register that stored meta-data of the 6502 containing the following
+ * An instance of this class represents the "status" of a processor<br>
+ * The processor status was a special register that stored meta-data of the 6502 containing the following<br>
  * <ul>
  * <li>Carry Flag : set when the last operation resulted in some sort of carry</li>
  * <li>Zero Flag : set when the last operation yielded zero</li>
@@ -34,7 +34,6 @@ import java.util.List;
  * <li>Decimal Flag : no use to us(The NES disabled Binary Coded Decimals of the 6502)</li>
  * <li>Break Flag : for break instructions(BRK)</li>
  * <li>Unused Flag : never used</li>
- * <p>
  * </ul>
  */
 public final class ProcessorStatus extends UnsignedByteRegister {

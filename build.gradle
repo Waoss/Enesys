@@ -30,3 +30,7 @@ dependencies {
 group = 'com.waoss.enesys'
 version = '1.0'
 mainClassName = 'com.waoss.enesys.Enesys'
+javadoc {
+    source = sourceSets.main.allJava
+    destinationDir = new File('docs/javadoc')
+}

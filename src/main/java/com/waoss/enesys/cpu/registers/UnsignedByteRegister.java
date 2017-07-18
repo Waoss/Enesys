@@ -21,7 +21,7 @@ package com.waoss.enesys.cpu.registers;
 /**
  * An implementation of a register that is one byte wide.
  */
-class UnsignedByteRegister extends RegisterImpl<Byte> {
+public class UnsignedByteRegister extends RegisterImpl<Byte> {
     /**
      * Creates a new UnsignedByteRegister
      *

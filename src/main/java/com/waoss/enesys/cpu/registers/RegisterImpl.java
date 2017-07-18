@@ -21,27 +21,69 @@ package com.waoss.enesys.cpu.registers;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 
+/**
+ * An implemented Register
+ * All Registers extend this class
+ *
+ * @param <T> The type of the register
+ */
 public class RegisterImpl<T extends Number> extends Register<T> {
 
+    /**
+     * The default value of the register
+     */
     protected T defaultValue;
+
+    /**
+     * The property that stores the value
+     * Reasons for using properties :
+     * <ul>
+     * <li>They can have {@link javafx.beans.value.ChangeListener}</li>
+     * <li>They can be passed on and the values and can be changed, without passing the whole bean</li>
+     * </ul>
+     */
     protected SimpleObjectProperty<T> valueProperty;
 
+
+    /**
+     * Creates a new <b>implemented</b> register
+     *
+     * @param defaultValue The default value of the register
+     */
     protected RegisterImpl(T defaultValue) {
         this.defaultValue = defaultValue;
         valueProperty = new SimpleObjectProperty<>(defaultValue);
     }
 
+
+    /**
+     * Returns the property that contains the value
+     *
+     * @return the property that contains the value
+     */
     public final ObjectProperty<T> valueProperty() {
         return valueProperty;
     }
 
+
+    /**
+     * Returns the value of the Register
+     *
+     * @return the value of the Register
+     */
     @Override
     public T getValue() {
         return valueProperty.get();
     }
 
+
+    /**
+     * Sets the value of the register
+     *
+     * @param value the value to be set
+     */
     @Override
-    public void setValue(T t) {
-        valueProperty.set(t);
+    public void setValue(T value) {
+        valueProperty.set(value);
     }
 }

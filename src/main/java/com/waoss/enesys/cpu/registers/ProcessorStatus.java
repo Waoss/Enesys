@@ -26,57 +26,64 @@ import java.util.List;
 
 /**
  * An instance of this class represents the "status" of a processor<br>
- * The processor status was a special register that stored meta-data of the 6502 containing the following<br>
- * <ul>
- * <li>Carry Flag : set when the last operation resulted in some sort of carry</li>
- * <li>Zero Flag : set when the last operation yielded zero</li>
- * <li>Interrupt Flag : not as sure when it's set(something to work on)</li>
- * <li>Decimal Flag : no use to us(The NES disabled Binary Coded Decimals of the 6502)</li>
- * <li>Break Flag : for break instructions(BRK)</li>
- * <li>Unused Flag : never used</li>
- * </ul>
+ * The processor status was a special register that stored meta-data of the 6502.<br>
+ * They have been implemented as JavaFX properties
  */
 public final class ProcessorStatus extends UnsignedByteRegister {
 
+    /**
+     * Carry Flag : set when the last operation resulted in some sort of carry
+     */
     private final BooleanProperty carryFlagEnabledProperty = new SimpleBooleanProperty(false);
+    /**
+     * Zero Flag :set when the last operation yielded zero
+     */
     private final BooleanProperty zeroFlagEnabledProperty = new SimpleBooleanProperty(false);
+    /**
+     * Interrupt Flag : not as sure when it's set(something to work on)
+     */
     private final BooleanProperty interruptFlagEnabledProperty = new SimpleBooleanProperty(true);
+    /**
+     * Decimal Flag : no use to us(The NES disabled Binary Coded Decimals of the 6502)
+     */
     private final BooleanProperty decimalFlagEnabledProperty = new SimpleBooleanProperty(false);
+    /**
+     * Break Flag : for break instructions(BRK)
+     */
     private final BooleanProperty breakFlagEnabledProperty = new SimpleBooleanProperty(true);
-    //     private access means no one can use this guy.
-//     It should be unsued
+    /**
+     * Unused Flag : never used
+     */
     private final BooleanProperty unusedFlagEnabledProperty = new SimpleBooleanProperty(true);
+    /**
+     * Overflow Flag : set when the last operation resulted in some sort of overflow
+     */
     private final BooleanProperty overflowFlagEnabledProperty = new SimpleBooleanProperty(false);
+    /**
+     * Negative Flag : set when an operation yields a negative value
+     */
     private final BooleanProperty negativeFlagEnabledProperty = new SimpleBooleanProperty(false);
 
-    private final List<Boolean> flags =
-            Arrays.asList(
-                    isCarryFlagEnabled(),
-                    isZeroFlagEnabled(),
-                    isInterruptFlagEnabled(),
-                    isDecimalFlagEnabled(),
-                    isDecimalFlagEnabled(),
-                    isBreakFlagEnabled(),
-                    true,
-                    isOverflowFlagEnabled(),
-                    isNegativeFlagEnabled());
-
+    /*
+     * Sets the values of all the properties.
+     * The strange left shift just tells us where some bit is.
+     */
     {
-        this.carryFlagEnabledProperty.set(((this.getValue().byteValue() & (1)) > 0));
-        this.zeroFlagEnabledProperty.set(((this.getValue().byteValue() & (1 << 1)) > 0));
-        this.interruptFlagEnabledProperty.set(!((this.getValue().byteValue() & (1 << 2)) > 0));
-        this.decimalFlagEnabledProperty.set(((this.getValue().byteValue() & (1 << 3)) > 0));
-        this.breakFlagEnabledProperty.set(((this.getValue().byteValue() & (1 << 4)) > 0));
-        this.unusedFlagEnabledProperty.set(((this.getValue().byteValue() & (1 << 5)) > 0));
-        this.overflowFlagEnabledProperty.set(((this.getValue().byteValue() & (1 << 6)) > 0));
-        this.negativeFlagEnabledProperty.set(((this.getValue().byteValue() & (1 << 7)) > 0));
+        this.carryFlagEnabledProperty.set(((this.getValue() & (1)) > 0));
+        this.zeroFlagEnabledProperty.set(((this.getValue() & (1 << 1)) > 0));
+        this.interruptFlagEnabledProperty.set(!((this.getValue() & (1 << 2)) > 0));
+        this.decimalFlagEnabledProperty.set(((this.getValue() & (1 << 3)) > 0));
+        this.breakFlagEnabledProperty.set(((this.getValue() & (1 << 4)) > 0));
+        this.unusedFlagEnabledProperty.set(((this.getValue() & (1 << 5)) > 0));
+        this.overflowFlagEnabledProperty.set(((this.getValue() & (1 << 6)) > 0));
+        this.negativeFlagEnabledProperty.set(((this.getValue() & (1 << 7)) > 0));
     }
 
     public ProcessorStatus() {
         super((byte) 0b00110100);
     }
 
-    public BooleanProperty carryFlagEnabledProperty() {
+    public final BooleanProperty carryFlagEnabledProperty() {
         return carryFlagEnabledProperty;
     }
 
@@ -88,7 +95,7 @@ public final class ProcessorStatus extends UnsignedByteRegister {
         enableFlag(carryFlagEnabledProperty, carryFlagEnabled, 0);
     }
 
-    public BooleanProperty zeroFlagEnabledProperty() {
+    public final BooleanProperty zeroFlagEnabledProperty() {
         return zeroFlagEnabledProperty;
     }
 
@@ -100,7 +107,7 @@ public final class ProcessorStatus extends UnsignedByteRegister {
         enableFlag(zeroFlagEnabledProperty, zeroFlagEnabled, 1);
     }
 
-    public BooleanProperty interruptFlagEnabledProperty() {
+    public final BooleanProperty interruptFlagEnabledProperty() {
         return interruptFlagEnabledProperty;
     }
 
@@ -112,7 +119,7 @@ public final class ProcessorStatus extends UnsignedByteRegister {
         enableFlag(interruptFlagEnabledProperty, !interruptFlagEnabled, 2);
     }
 
-    public BooleanProperty decimalFlagEnabledProperty() {
+    public final BooleanProperty decimalFlagEnabledProperty() {
         return decimalFlagEnabledProperty;
     }
 
@@ -124,7 +131,7 @@ public final class ProcessorStatus extends UnsignedByteRegister {
         enableFlag(decimalFlagEnabledProperty, interruptFlagEnabled, 3);
     }
 
-    public BooleanProperty breakFlagEnabledProperty() {
+    public final BooleanProperty breakFlagEnabledProperty() {
         return breakFlagEnabledProperty;
     }
 
@@ -136,7 +143,7 @@ public final class ProcessorStatus extends UnsignedByteRegister {
         enableFlag(breakFlagEnabledProperty, breakFlagEnabled, 4);
     }
 
-    public BooleanProperty overflowFlagEnabledProperty() {
+    public final BooleanProperty overflowFlagEnabledProperty() {
         return overflowFlagEnabledProperty;
     }
 
@@ -148,7 +155,7 @@ public final class ProcessorStatus extends UnsignedByteRegister {
         enableFlag(overflowFlagEnabledProperty, overflowFlagEnabled, 6);
     }
 
-    public BooleanProperty negativeFlagEnabledProperty() {
+    public final BooleanProperty negativeFlagEnabledProperty() {
         return negativeFlagEnabledProperty;
     }
 
@@ -160,10 +167,15 @@ public final class ProcessorStatus extends UnsignedByteRegister {
         enableFlag(negativeFlagEnabledProperty, negativeFlagEnabled, 7);
     }
 
+    /**
+     * Returns a string representation of the Processor Status<br>A binary string with zeroes and ones representing every bit of the status.
+     *
+     * @return a string representation of the Processor Status
+     */
     @Override
     public String toString() {
         final String[] result = {""};
-        flags.forEach(flag -> {
+        flags().forEach(flag -> {
             if (flag) {
                 result[0] += "1";
             } else {
@@ -179,7 +191,14 @@ public final class ProcessorStatus extends UnsignedByteRegister {
      * @return a list representation of all the flags
      */
     public List<Boolean> flags() {
-        return flags;
+        return Arrays.asList(
+                isCarryFlagEnabled(),
+                isZeroFlagEnabled(),
+                isInterruptFlagEnabled(),
+                isDecimalFlagEnabled(),
+                isBreakFlagEnabled(),
+                isOverflowFlagEnabled(),
+                isNegativeFlagEnabled());
     }
 
     private void enableFlag(BooleanProperty property, boolean value, int index) {
@@ -189,7 +208,7 @@ public final class ProcessorStatus extends UnsignedByteRegister {
         } else {
             clearBit((byte) index);
         }
-        flags.set(index, value);
+        flags().set(index, value);
     }
 
     private void enableBit(byte index) {

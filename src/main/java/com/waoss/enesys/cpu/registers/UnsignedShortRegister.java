@@ -19,7 +19,7 @@
 package com.waoss.enesys.cpu.registers;
 
 public class UnsignedShortRegister extends RegisterImpl<Short> {
-    UnsignedShortRegister(Short defaultValue) {
+    public UnsignedShortRegister(Short defaultValue) {
         super(defaultValue);
     }
 }

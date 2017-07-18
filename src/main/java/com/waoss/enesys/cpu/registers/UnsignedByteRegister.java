@@ -27,7 +27,7 @@ public class UnsignedByteRegister extends RegisterImpl<Byte> {
      *
      * @param defaultValue The default value of the register
      */
-    UnsignedByteRegister(Byte defaultValue) {
+    public UnsignedByteRegister(Byte defaultValue) {
         super(defaultValue);
     }
 }

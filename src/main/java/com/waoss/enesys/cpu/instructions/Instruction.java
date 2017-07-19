@@ -23,9 +23,10 @@ import javafx.beans.property.SimpleObjectProperty;
 
 public final class Instruction {
 
-    private SimpleObjectProperty<InstructionName> instructionName = new SimpleObjectProperty<>(this, "instructionName");
-    private SimpleObjectProperty<Byte> opCode = new SimpleObjectProperty<>(this, "opCode");
-    private SimpleObjectProperty<Addresing> addresing = new SimpleObjectProperty<>(this, "addresing");
+    private final SimpleObjectProperty<InstructionName> instructionName = new SimpleObjectProperty<>(this, "instructionName");
+    private final SimpleObjectProperty<Byte> opCode = new SimpleObjectProperty<>(this, "opCode");
+    private final SimpleObjectProperty<Addresing> addresing = new SimpleObjectProperty<>(this, "addresing");
+    private final SimpleObjectProperty<Object[]> arguments = new SimpleObjectProperty<>(this, "arguments");
 
     public Instruction(InstructionName instructionName, Addresing addresing) {
         this.instructionName.set(instructionName);
@@ -45,7 +46,7 @@ public final class Instruction {
         this.instructionName.set(instructionName);
     }
 
-    public SimpleObjectProperty<InstructionName> instructionNameProperty() {
+    public final SimpleObjectProperty<InstructionName> instructionNameProperty() {
         return instructionName;
     }
 
@@ -57,7 +58,7 @@ public final class Instruction {
         this.opCode.set(opCode);
     }
 
-    public SimpleObjectProperty<Byte> opCodeProperty() {
+    public final SimpleObjectProperty<Byte> opCodeProperty() {
         return opCode;
     }
 
@@ -69,7 +70,19 @@ public final class Instruction {
         this.addresing.set(addresing);
     }
 
-    public SimpleObjectProperty<Addresing> addresingProperty() {
+    public final SimpleObjectProperty<Addresing> addresingProperty() {
         return addresing;
+    }
+
+    public Object[] getArguments() {
+        return arguments.get();
+    }
+
+    public void setArguments(Object... arguments) {
+        this.arguments.set(arguments);
+    }
+
+    public SimpleObjectProperty<Object[]> argumentsProperty() {
+        return arguments;
     }
 }

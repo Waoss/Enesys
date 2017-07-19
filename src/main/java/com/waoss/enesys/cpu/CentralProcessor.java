@@ -19,8 +19,12 @@
 package com.waoss.enesys.cpu;
 
 import com.waoss.enesys.Console;
+import com.waoss.enesys.cpu.instructions.Instruction;
+import com.waoss.enesys.cpu.instructions.InstructionName;
 import com.waoss.enesys.cpu.registers.*;
 import com.waoss.enesys.mem.CompleteMemory;
+
+import java.io.IOException;
 
 /**
  * <p>An instance of this class represents the CPU of the NES
@@ -130,6 +134,14 @@ public final class CentralProcessor implements Cloneable {
         return console.getProgramCounter();
     }
 
+    private void checkZeroAndNegative(byte value) {
+        if (value == 0) {
+            getProcessorStatus().setZeroFlagEnabled(true);
+        } else if (value < 0) {
+            getProcessorStatus().setNegativeFlagEnabled(true);
+        }
+    }
+
     /**
      * Loads a value into the A register.
      * Implementation of {@link com.waoss.enesys.cpu.instructions.InstructionName#LDA}
@@ -138,16 +150,32 @@ public final class CentralProcessor implements Cloneable {
      */
     public void lda(byte value) {
         Registers.loadRegister(this.getARegister(), value);
+        checkZeroAndNegative(getARegister().getValue());
     }
 
     /**
      * Stores the value of the A register into the index specified
      * Implementation of {@link com.waoss.enesys.cpu.instructions.InstructionName#STA}
      *
-     * @param index The index
+     * @param instruction The instruction
      */
-    public void sta(int index) {
-        Registers.storeRegister(this.getARegister(), console, index);
+    public void sta(Instruction instruction) throws IOException {
+        if (instruction.instructionNameProperty().get() != InstructionName.STA) {
+            throw new IOException("Cannot execute instruction");
+        }
+        //Todo
+    }
+
+    /**
+     * Logical AND
+     * Stores into the accumalator the "AND" of the value and the previous value
+     * Implementation of {@link com.waoss.enesys.cpu.instructions.InstructionName#AND}
+     *
+     * @param value The value
+     */
+    public void and(byte value) {
+        getARegister().setValue((byte) (getARegister().getValue() & value));
+        checkZeroAndNegative(getARegister().getValue());
     }
 
 }

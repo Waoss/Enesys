@@ -19,32 +19,57 @@
 package com.waoss.enesys.cpu.instructions;
 
 import com.waoss.enesys.mem.Addresing;
+import javafx.beans.property.SimpleObjectProperty;
 
 public final class Instruction {
 
-    private InstructionName instructionName;
-    private Byte opCode;
-    private Addresing addresing;
+    private SimpleObjectProperty<InstructionName> instructionName = new SimpleObjectProperty<>(this, "instructionName");
+    private SimpleObjectProperty<Byte> opCode = new SimpleObjectProperty<>(this, "opCode");
+    private SimpleObjectProperty<Addresing> addresing = new SimpleObjectProperty<>(this, "addresing");
 
     public Instruction(InstructionName instructionName, Addresing addresing) {
-        this.instructionName = instructionName;
-        this.addresing = addresing;
+        this.instructionName.set(instructionName);
+        this.addresing.set(addresing);
     }
 
     public Instruction(Byte opcode, Addresing addresing) {
-        this.opCode = opcode;
-        this.addresing = addresing;
+        this.opCode.set(opcode);
+        this.addresing.set(addresing);
     }
 
     public InstructionName getInstructionName() {
+        return instructionName.get();
+    }
+
+    public void setInstructionName(InstructionName instructionName) {
+        this.instructionName.set(instructionName);
+    }
+
+    public SimpleObjectProperty<InstructionName> instructionNameProperty() {
         return instructionName;
     }
 
-    public byte getOpCode() {
+    public Byte getOpCode() {
+        return opCode.get();
+    }
+
+    public void setOpCode(Byte opCode) {
+        this.opCode.set(opCode);
+    }
+
+    public SimpleObjectProperty<Byte> opCodeProperty() {
         return opCode;
     }
 
     public Addresing getAddresing() {
+        return addresing.get();
+    }
+
+    public void setAddresing(Addresing addresing) {
+        this.addresing.set(addresing);
+    }
+
+    public SimpleObjectProperty<Addresing> addresingProperty() {
         return addresing;
     }
 }

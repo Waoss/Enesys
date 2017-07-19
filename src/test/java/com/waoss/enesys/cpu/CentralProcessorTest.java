@@ -16,24 +16,13 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-apply plugin: 'java'
-apply plugin: 'maven'
-apply plugin: 'application'
-apply plugin: 'idea'
-apply plugin: 'eclipse'
-repositories {
-    mavenCentral()
-}
-dependencies {
-    testCompile 'junit:junit:4.12'
-}
-group = 'com.waoss.enesys'
-version = '1.0'
-mainClassName = 'com.waoss.enesys.Enesys'
-javadoc {
-    source = sourceSets.main.allJava
-    destinationDir = new File('docs/javadoc')
-}
-dependencies {
-    compile group: 'com.google.code.gson', name: 'gson', version: '2.8.1'
+package com.waoss.enesys.cpu;
+
+import com.waoss.enesys.Console;
+
+public class CentralProcessorTest {
+
+    Console targetConsole = new Console();
+    CentralProcessor target = new CentralProcessor(targetConsole);
+
 }

@@ -18,10 +18,14 @@
 
 package com.waoss.enesys.cpu;
 
+import com.google.gson.GsonBuilder;
 import com.waoss.enesys.Console;
 import com.waoss.enesys.cpu.registers.*;
 import com.waoss.enesys.mem.CompleteMemory;
 
+/**
+ * An instance of this class represents the CPU of the NES<br>
+ */
 public final class CentralProcessor implements Cloneable {
 
     private CompleteMemory completeMemory;
@@ -33,6 +37,11 @@ public final class CentralProcessor implements Cloneable {
     private ProgramCounter programCounter;
     private Console console;
 
+    /**
+     * Creates a new Processor for the console.
+     *
+     * @param console The console
+     */
     public CentralProcessor(Console console) {
         this.console = console;
         this.completeMemory = console.getCompleteMemory();
@@ -44,15 +53,28 @@ public final class CentralProcessor implements Cloneable {
         this.stackPointer = console.getStackPointer();
     }
 
+    /**
+     * Creates a clone by copying all the properties
+     * @param centralProcessor the processor to clone
+     */
     public CentralProcessor(CentralProcessor centralProcessor) {
         this(centralProcessor.console);
     }
 
+    /**
+     * Returns a clone of this processor
+     * @return A clone
+     * @throws CloneNotSupportedException Never
+     */
     @Override
     protected Object clone() throws CloneNotSupportedException {
         return new CentralProcessor(this);
     }
 
+    /**
+     * Returns the console the processor is part of
+     * @return the console the processor is part of
+     */
     public Console getConsole() {
         return console;
     }
@@ -91,5 +113,10 @@ public final class CentralProcessor implements Cloneable {
 
     public void sta(int index) {
         Registers.storeRegister(this.ARegister, console, index);
+    }
+
+    @Override
+    public String toString() {
+        return new GsonBuilder().setPrettyPrinting().serializeNulls().create().toJson(this);
     }
 }

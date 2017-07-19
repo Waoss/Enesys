@@ -83,6 +83,11 @@ public final class ProcessorStatus extends UnsignedByteRegister {
         super((byte) 0b00110100);
     }
 
+    /**
+     * Returns the property that contains the carry flag being enabled
+     *
+     * @return the property that contains the carry flag being enabled
+     */
     public final BooleanProperty carryFlagEnabledProperty() {
         return carryFlagEnabledProperty;
     }

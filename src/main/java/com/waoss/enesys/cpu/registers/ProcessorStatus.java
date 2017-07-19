@@ -34,142 +34,244 @@ public final class ProcessorStatus extends UnsignedByteRegister {
     /**
      * Carry Flag : set when the last operation resulted in some sort of carry
      */
-    private final BooleanProperty carryFlagEnabledProperty = new SimpleBooleanProperty(false);
+    private final BooleanProperty carryFlagEnabled = new SimpleBooleanProperty(false);
     /**
      * Zero Flag :set when the last operation yielded zero
      */
-    private final BooleanProperty zeroFlagEnabledProperty = new SimpleBooleanProperty(false);
+    private final BooleanProperty zeroFlagEnabled = new SimpleBooleanProperty(false);
     /**
      * Interrupt Flag : not as sure when it's set(something to work on)
      */
-    private final BooleanProperty interruptFlagEnabledProperty = new SimpleBooleanProperty(true);
+    private final BooleanProperty interruptFlagEnabled = new SimpleBooleanProperty(true);
     /**
      * Decimal Flag : no use to us(The NES disabled Binary Coded Decimals of the 6502)
      */
-    private final BooleanProperty decimalFlagEnabledProperty = new SimpleBooleanProperty(false);
+    private final BooleanProperty decimalFlagEnabled = new SimpleBooleanProperty(false);
     /**
      * Break Flag : for break instructions(BRK)
      */
-    private final BooleanProperty breakFlagEnabledProperty = new SimpleBooleanProperty(true);
+    private final BooleanProperty breakFlagEnabled = new SimpleBooleanProperty(true);
     /**
      * Unused Flag : never used
      */
-    private final BooleanProperty unusedFlagEnabledProperty = new SimpleBooleanProperty(true);
+    private final BooleanProperty unusedFlagEnabled = new SimpleBooleanProperty(true);
     /**
      * Overflow Flag : set when the last operation resulted in some sort of overflow
      */
-    private final BooleanProperty overflowFlagEnabledProperty = new SimpleBooleanProperty(false);
+    private final BooleanProperty overflowFlagEnabled = new SimpleBooleanProperty(false);
     /**
      * Negative Flag : set when an operation yields a negative value
      */
-    private final BooleanProperty negativeFlagEnabledProperty = new SimpleBooleanProperty(false);
+    private final BooleanProperty negativeFlagEnabled = new SimpleBooleanProperty(false);
 
     /*
      * Sets the values of all the properties.
      * The strange left shift just tells us where some bit is.
-     */
-    {
-        this.carryFlagEnabledProperty.set(((this.getValue() & (1)) > 0));
-        this.zeroFlagEnabledProperty.set(((this.getValue() & (1 << 1)) > 0));
-        this.interruptFlagEnabledProperty.set(!((this.getValue() & (1 << 2)) > 0));
-        this.decimalFlagEnabledProperty.set(((this.getValue() & (1 << 3)) > 0));
-        this.breakFlagEnabledProperty.set(((this.getValue() & (1 << 4)) > 0));
-        this.unusedFlagEnabledProperty.set(((this.getValue() & (1 << 5)) > 0));
-        this.overflowFlagEnabledProperty.set(((this.getValue() & (1 << 6)) > 0));
-        this.negativeFlagEnabledProperty.set(((this.getValue() & (1 << 7)) > 0));
+     */ {
+        this.carryFlagEnabled.set(((this.getValue() & (1)) > 0));
+        this.zeroFlagEnabled.set(((this.getValue() & (1 << 1)) > 0));
+        this.interruptFlagEnabled.set(!((this.getValue() & (1 << 2)) > 0));
+        this.decimalFlagEnabled.set(((this.getValue() & (1 << 3)) > 0));
+        this.breakFlagEnabled.set(((this.getValue() & (1 << 4)) > 0));
+        this.unusedFlagEnabled.set(((this.getValue() & (1 << 5)) > 0));
+        this.overflowFlagEnabled.set(((this.getValue() & (1 << 6)) > 0));
+        this.negativeFlagEnabled.set(((this.getValue() & (1 << 7)) > 0));
     }
 
+    /**
+     * Creates a new ProcessorStatus with the default values for all the flags
+     */
     public ProcessorStatus() {
         super((byte) 0b00110100);
     }
 
     /**
-     * Returns the property that contains the carry flag being enabled
+     * Returns the property that contains the flag
      *
-     * @return the property that contains the carry flag being enabled
+     * @return the property that contains the flag
      */
     public final BooleanProperty carryFlagEnabledProperty() {
-        return carryFlagEnabledProperty;
+        return carryFlagEnabled;
     }
 
+    /**
+     * Returns true if the carry flag is enabled
+     *
+     * @return true if the carry flag is enabled
+     */
     public boolean isCarryFlagEnabled() {
-        return carryFlagEnabledProperty.get();
+        return carryFlagEnabled.get();
     }
 
+    /**
+     * Enables/disables the flag
+     *
+     * @param carryFlagEnabled to enable or to disable
+     */
     public void setCarryFlagEnabled(boolean carryFlagEnabled) {
-        enableFlag(carryFlagEnabledProperty, carryFlagEnabled, 0);
+        enableFlag(this.carryFlagEnabled, carryFlagEnabled, 0);
     }
 
+    /**
+     * Returns the property that contains the flag
+     *
+     * @return the property that contains the flag
+     */
     public final BooleanProperty zeroFlagEnabledProperty() {
-        return zeroFlagEnabledProperty;
+        return zeroFlagEnabled;
     }
 
+    /**
+     * Returns true if the zero flag is enabled
+     *
+     * @return true if the zero flag is enabled
+     */
     public boolean isZeroFlagEnabled() {
-        return zeroFlagEnabledProperty.get();
+        return zeroFlagEnabled.get();
     }
 
+    /**
+     * Enables/disables the flag
+     *
+     * @param zeroFlagEnabled to enable or to disable
+     */
     public void setZeroFlagEnabled(boolean zeroFlagEnabled) {
-        enableFlag(zeroFlagEnabledProperty, zeroFlagEnabled, 1);
+        enableFlag(this.zeroFlagEnabled, zeroFlagEnabled, 1);
     }
 
+    /**
+     * Returns the property that contains the flag
+     *
+     * @return the property that contains the flag
+     */
     public final BooleanProperty interruptFlagEnabledProperty() {
-        return interruptFlagEnabledProperty;
+        return interruptFlagEnabled;
     }
 
+    /**
+     * Returns true if the interrupt flag is enabled
+     *
+     * @return true if the interrupt flag is enabled
+     */
     public boolean isInterruptFlagEnabled() {
-        return interruptFlagEnabledProperty.get();
+        return interruptFlagEnabled.get();
     }
 
+    /**
+     * Enables/disables the flag
+     *
+     * @param interruptFlagEnabled to enable or to disable
+     */
     public void setInterruptFlagEnabled(boolean interruptFlagEnabled) {
-        enableFlag(interruptFlagEnabledProperty, !interruptFlagEnabled, 2);
+        enableFlag(this.interruptFlagEnabled, !interruptFlagEnabled, 2);
     }
 
+    /**
+     * Returns the property that contains the flag
+     *
+     * @return the property that contains the flag
+     */
     public final BooleanProperty decimalFlagEnabledProperty() {
-        return decimalFlagEnabledProperty;
+        return decimalFlagEnabled;
     }
 
+    /**
+     * Returns true if the decimal flag is enabled
+     *
+     * @return true if the decimal flag is enabled
+     */
     public boolean isDecimalFlagEnabled() {
-        return decimalFlagEnabledProperty.get();
+        return decimalFlagEnabled.get();
     }
 
+    /**
+     * Enables/disables the flag
+     *
+     * @param interruptFlagEnabled to enable or to disable
+     */
     public void setDecimalFlagEnabled(boolean interruptFlagEnabled) {
-        enableFlag(decimalFlagEnabledProperty, interruptFlagEnabled, 3);
+        enableFlag(decimalFlagEnabled, interruptFlagEnabled, 3);
     }
 
+    /**
+     * Returns the property that contains the flag
+     *
+     * @return the property that contains the flag
+     */
     public final BooleanProperty breakFlagEnabledProperty() {
-        return breakFlagEnabledProperty;
+        return breakFlagEnabled;
     }
 
+    /**
+     * Returns true if the break flag is enabled
+     *
+     * @return true if the break flag is enabled
+     */
     public boolean isBreakFlagEnabled() {
-        return breakFlagEnabledProperty.get();
+        return breakFlagEnabled.get();
     }
 
+    /**
+     * Enables/disables the flag
+     *
+     * @param breakFlagEnabled to enable or to disable
+     */
     public void setBreakFlagEnabled(boolean breakFlagEnabled) {
-        enableFlag(breakFlagEnabledProperty, breakFlagEnabled, 4);
+        enableFlag(this.breakFlagEnabled, breakFlagEnabled, 4);
     }
 
+    /**
+     * Returns the property that contains the flag
+     *
+     * @return the property that contains the flag
+     */
     public final BooleanProperty overflowFlagEnabledProperty() {
-        return overflowFlagEnabledProperty;
+        return overflowFlagEnabled;
     }
 
+    /**
+     * Returns true if the overflow flag is enabled
+     *
+     * @return true if the overflow flag is enabled
+     */
     public boolean isOverflowFlagEnabled() {
-        return overflowFlagEnabledProperty.get();
+        return overflowFlagEnabled.get();
     }
 
+    /**
+     * Enables/disables the flag
+     *
+     * @param overflowFlagEnabled to enable or to disable
+     */
     public void setOverflowFlagEnabled(boolean overflowFlagEnabled) {
-        enableFlag(overflowFlagEnabledProperty, overflowFlagEnabled, 6);
+        enableFlag(this.overflowFlagEnabled, overflowFlagEnabled, 6);
     }
 
+    /**
+     * Returns the property that contains the flag
+     *
+     * @return the property that contains the flag
+     */
     public final BooleanProperty negativeFlagEnabledProperty() {
-        return negativeFlagEnabledProperty;
+        return negativeFlagEnabled;
     }
 
+    /**
+     * Returns true if the negative flag is enabled
+     *
+     * @return true if the negative flag is enabled
+     */
     public boolean isNegativeFlagEnabled() {
-        return negativeFlagEnabledProperty.get();
+        return negativeFlagEnabled.get();
     }
 
+    /**
+     * Enables/disables the flag
+     *
+     * @param negativeFlagEnabled to enable or to disable
+     */
     public void setNegativeFlagEnabled(boolean negativeFlagEnabled) {
-        enableFlag(negativeFlagEnabledProperty, negativeFlagEnabled, 7);
+        enableFlag(this.negativeFlagEnabled, negativeFlagEnabled, 7);
     }
 
     /**
@@ -217,11 +319,11 @@ public final class ProcessorStatus extends UnsignedByteRegister {
     }
 
     private void enableBit(byte index) {
-        this.setValue((byte) (this.getValue().byteValue() | (1 << index)));
+        this.setValue((byte) (this.getValue() | (1 << index)));
     }
 
     private void clearBit(byte index) {
-        this.setValue((byte) (this.getValue().byteValue() & ~(1 << index)));
+        this.setValue((byte) (this.getValue() & ~(1 << index)));
     }
 
 }

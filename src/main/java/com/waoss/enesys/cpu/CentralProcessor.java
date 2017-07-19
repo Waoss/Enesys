@@ -18,23 +18,20 @@
 
 package com.waoss.enesys.cpu;
 
-import com.google.gson.GsonBuilder;
 import com.waoss.enesys.Console;
 import com.waoss.enesys.cpu.registers.*;
 import com.waoss.enesys.mem.CompleteMemory;
 
 /**
- * An instance of this class represents the CPU of the NES<br>
+ * <p>An instance of this class represents the CPU of the NES
+ * The CPU of the NES had only 6 registers.All of them,except the {@link ProgramCounter} were 8 bits wide.
+ * </p>
  */
 public final class CentralProcessor implements Cloneable {
 
-    private CompleteMemory completeMemory;
-    private ProcessorStatus processorStatus;
-    private AccumalativeRegister ARegister;
-    private XRegister XRegister;
-    private YRegister YRegister;
-    private StackPointer stackPointer;
-    private ProgramCounter programCounter;
+    /**
+     * The console "this" is a part of.
+     */
     private Console console;
 
     /**
@@ -44,17 +41,11 @@ public final class CentralProcessor implements Cloneable {
      */
     public CentralProcessor(Console console) {
         this.console = console;
-        this.completeMemory = console.getCompleteMemory();
-        this.ARegister = console.getARegister();
-        this.XRegister = console.getXRegister();
-        this.YRegister = console.getYRegister();
-        this.processorStatus = console.getProcessorStatus();
-        this.programCounter = console.getProgramCounter();
-        this.stackPointer = console.getStackPointer();
     }
 
     /**
      * Creates a clone by copying all the properties
+     *
      * @param centralProcessor the processor to clone
      */
     public CentralProcessor(CentralProcessor centralProcessor) {
@@ -63,6 +54,7 @@ public final class CentralProcessor implements Cloneable {
 
     /**
      * Returns a clone of this processor
+     *
      * @return A clone
      * @throws CloneNotSupportedException Never
      */
@@ -72,51 +64,90 @@ public final class CentralProcessor implements Cloneable {
     }
 
     /**
-     * Returns the console the processor is part of
-     * @return the console the processor is part of
+     * Returns the {@link Console} the processor is part of
+     *
+     * @return the {@link Console} the processor is part of
      */
     public Console getConsole() {
         return console;
     }
 
     public CompleteMemory getCompleteMemory() {
-        return completeMemory;
+        return console.getCompleteMemory();
     }
 
+    /**
+     * Returns the {@link ProcessorStatus}
+     *
+     * @return the {@link ProcessorStatus}
+     */
     public ProcessorStatus getProcessorStatus() {
-        return processorStatus;
+        return console.getProcessorStatus();
     }
 
+    /**
+     * Returns the {@link AccumalativeRegister}
+     *
+     * @return the {@link AccumalativeRegister}
+     */
     public AccumalativeRegister getARegister() {
-        return ARegister;
+        return console.getARegister();
     }
 
+    /**
+     * Returns the {@link XRegister}
+     *
+     * @return the {@link XRegister}
+     */
     public XRegister getXRegister() {
-        return XRegister;
+        return console.getXRegister();
     }
 
+    /**
+     * Returns the {@link YRegister}
+     *
+     * @return the {@link YRegister}
+     */
     public YRegister getYRegister() {
-        return YRegister;
+        return console.getYRegister();
     }
 
+    /**
+     * Returns the {@link StackPointer}
+     *
+     * @return the {@link StackPointer}
+     */
     public StackPointer getStackPointer() {
-        return stackPointer;
+        return console.getStackPointer();
     }
 
+    /**
+     * Returns the {@link ProgramCounter}
+     *
+     * @return the {@link ProgramCounter}
+     */
     public ProgramCounter getProgramCounter() {
-        return programCounter;
+        return console.getProgramCounter();
     }
 
+    /**
+     * Loads a value into the A register.
+     * Implementation of {@link com.waoss.enesys.cpu.instructions.InstructionName#LDA}
+     *
+     * @param value The value to laod
+     */
     public void lda(byte value) {
-        Registers.loadRegister(this.ARegister, value);
+        Registers.loadRegister(this.getARegister(), value);
     }
 
+    /**
+     * Stores the value of the A register into the index specified
+     * Implementation of {@link com.waoss.enesys.cpu.instructions.InstructionName#STA}
+     *
+     * @param index The index
+     */
     public void sta(int index) {
-        Registers.storeRegister(this.ARegister, console, index);
+        Registers.storeRegister(this.getARegister(), console, index);
     }
 
-    @Override
-    public String toString() {
-        return new GsonBuilder().setPrettyPrinting().serializeNulls().create().toJson(this);
-    }
 }

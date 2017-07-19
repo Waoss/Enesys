@@ -19,7 +19,13 @@
 package com.waoss.enesys.cpu.instructions;
 
 public enum InstructionName {
+    /**
+     * Add with carry
+     */
     ADC,
+    /**
+     * Logical And
+     */
     AND,
     ASL,
     BCC,

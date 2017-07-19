@@ -23,7 +23,7 @@ import com.waoss.enesys.mem.Addresing;
 public final class Instruction {
 
     private InstructionName instructionName;
-    private byte opcode;
+    private Byte opCode;
     private Addresing addresing;
 
     public Instruction(InstructionName instructionName, Addresing addresing) {
@@ -31,8 +31,8 @@ public final class Instruction {
         this.addresing = addresing;
     }
 
-    public Instruction(byte opcode, Addresing addresing) {
-        this.opcode = opcode;
+    public Instruction(Byte opcode, Addresing addresing) {
+        this.opCode = opcode;
         this.addresing = addresing;
     }
 
@@ -40,8 +40,8 @@ public final class Instruction {
         return instructionName;
     }
 
-    public byte getOpcode() {
-        return opcode;
+    public byte getOpCode() {
+        return opCode;
     }
 
     public Addresing getAddresing() {

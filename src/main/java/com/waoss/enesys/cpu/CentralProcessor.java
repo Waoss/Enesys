@@ -163,7 +163,9 @@ public final class CentralProcessor implements Cloneable {
         if (instruction.instructionNameProperty().get() != InstructionName.STA) {
             throw new IOException("Cannot execute instruction");
         }
-        //Todo
+        Number temp = (Number) instruction.argumentsProperty().get()[0];
+        Short address = temp.shortValue();
+        getCompleteMemory().write(address, getARegister().getValue());
     }
 
     /**
@@ -176,6 +178,13 @@ public final class CentralProcessor implements Cloneable {
     public void and(byte value) {
         getARegister().setValue((byte) (getARegister().getValue() & value));
         checkZeroAndNegative(getARegister().getValue());
+    }
+
+    private void parseAddresing(Instruction instruction) {
+        final Object[] arguments = instruction.argumentsProperty().get();
+        switch (instruction.addressingProperty().get()) {
+
+        }
     }
 
 }

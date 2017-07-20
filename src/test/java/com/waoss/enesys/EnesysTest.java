@@ -24,8 +24,6 @@ public class EnesysTest {
 
     @Test
     public void main() throws Exception {
-        Enesys.main();
-        System.out.println(Enesys.centralProcessor.getARegister().getValue());
     }
 
 }

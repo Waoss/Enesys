@@ -18,6 +18,8 @@
 
 package com.waoss.enesys.cpu.instructions;
 
+import com.waoss.enesys.mem.Addressing;
+
 public enum InstructionName {
     /**
      * Add with carry
@@ -80,5 +82,27 @@ public enum InstructionName {
     TSX,
     TXA,
     TXS,
-    TYA
+    TYA;
+
+    /**
+     * Returns the corresponding {@link InstructionName} according to the opCode.
+     *
+     * @param opCode
+     * @return
+     */
+    public static InstructionName getByOpCode(Byte opCode) {
+        //TODO
+        return null;
+    }
+
+    /**
+     * Returns the opcode of this instruction name based on the addressing
+     *
+     * @param addressing The Addressing
+     * @return The OpCode
+     */
+    public byte getOpCode(Addressing addressing) {
+        //TODO
+        return 0;
+    }
 }

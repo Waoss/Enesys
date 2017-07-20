@@ -22,7 +22,7 @@ import java.nio.ByteBuffer;
 
 public final class RandomAccessMemory extends Memory {
 
-    private ByteBuffer buffer = ByteBuffer.allocate(2000);
+    private ByteBuffer buffer = ByteBuffer.allocate(2048);
 
     public RandomAccessMemory() {
         super();

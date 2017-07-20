@@ -19,10 +19,22 @@
 package com.waoss.enesys.cpu;
 
 import com.waoss.enesys.Console;
+import com.waoss.enesys.cpu.instructions.Instruction;
+import com.waoss.enesys.cpu.instructions.InstructionName;
+import com.waoss.enesys.mem.Addressing;
+import org.junit.Test;
 
 public class CentralProcessorTest {
 
     Console targetConsole = new Console();
     CentralProcessor target = new CentralProcessor(targetConsole);
 
+    @Test
+    public void sta() throws Exception {
+        Instruction instruction = new Instruction(InstructionName.STA, Addressing.ABSOLUTE);
+        instruction.setArguments(0x0200);
+        target.lda((byte) 42);
+        target.sta(instruction);
+        assert target.getARegister().getValue() == targetConsole.getCompleteMemory().read((short) 0x0200);
+    }
 }

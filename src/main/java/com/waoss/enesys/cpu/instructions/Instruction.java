@@ -18,24 +18,51 @@
 
 package com.waoss.enesys.cpu.instructions;
 
-import com.waoss.enesys.mem.Addresing;
+import com.waoss.enesys.mem.Addressing;
 import javafx.beans.property.SimpleObjectProperty;
 
 public final class Instruction {
 
+    /**
+     * This property holds the instruction name
+     */
     private final SimpleObjectProperty<InstructionName> instructionName = new SimpleObjectProperty<>(this, "instructionName");
+    /**
+     * This property holds the opcode
+     */
     private final SimpleObjectProperty<Byte> opCode = new SimpleObjectProperty<>(this, "opCode");
-    private final SimpleObjectProperty<Addresing> addresing = new SimpleObjectProperty<>(this, "addresing");
+    /**
+     * This property holds the addressing mode
+     */
+    private final SimpleObjectProperty<Addressing> addressing = new SimpleObjectProperty<>(this, "addressing");
+    /**
+     * This property stores the arguments<br>
+     * For example, a branching instruction would have one argument: where to go if condition is true
+     */
     private final SimpleObjectProperty<Object[]> arguments = new SimpleObjectProperty<>(this, "arguments");
 
-    public Instruction(InstructionName instructionName, Addresing addresing) {
+    /**
+     * Creates a new Instruction when given the name and addressing
+     *
+     * @param instructionName The name
+     * @param addressing      The Addressing mode
+     */
+    public Instruction(InstructionName instructionName, Addressing addressing) {
         this.instructionName.set(instructionName);
-        this.addresing.set(addresing);
+        this.addressing.set(addressing);
+        this.opCode.set(instructionName.getOpCode(this.addressing.get()));
     }
 
-    public Instruction(Byte opcode, Addresing addresing) {
+    /**
+     * Creates a new Instruction given the opcode and addressing
+     *
+     * @param opcode     The opcode
+     * @param addressing The addressing mode
+     */
+    public Instruction(Byte opcode, Addressing addressing) {
         this.opCode.set(opcode);
-        this.addresing.set(addresing);
+        this.addressing.set(addressing);
+        this.instructionName.set(InstructionName.getByOpCode(opcode));
     }
 
     public InstructionName getInstructionName() {
@@ -62,16 +89,16 @@ public final class Instruction {
         return opCode;
     }
 
-    public Addresing getAddresing() {
-        return addresing.get();
+    public Addressing getAddressing() {
+        return addressing.get();
     }
 
-    public void setAddresing(Addresing addresing) {
-        this.addresing.set(addresing);
+    public void setAddressing(Addressing addressing) {
+        this.addressing.set(addressing);
     }
 
-    public final SimpleObjectProperty<Addresing> addresingProperty() {
-        return addresing;
+    public final SimpleObjectProperty<Addressing> addressingProperty() {
+        return addressing;
     }
 
     public Object[] getArguments() {

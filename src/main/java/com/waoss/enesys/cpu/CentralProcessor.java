@@ -153,16 +153,28 @@ public final class CentralProcessor implements Cloneable {
     }
 
     /**
-     * Stores the value of the A register into the index specified
-     * Implementation of {@link com.waoss.enesys.cpu.instructions.InstructionName#STA}
+     * <p>Stores the value of the A register into the index specified
+     * Implementation of {@link com.waoss.enesys.cpu.instructions.InstructionName#STA}</p>
      *
      * @param instruction The instruction
      */
     public void sta(Instruction instruction) throws IOException {
-        checkInstructionName(instruction, InstructionName.STA);
-        Registers.storeRegister(getARegister(), console, (Integer) instruction.argumentsProperty().get()[0]);
-        //necessary stuff
-        checkZeroAndNegative(getARegister().getValue());
+        storeRegister(getARegister(), instruction, InstructionName.STA);
+    }
+
+    /**
+     * <p>Stores the value of the X register into the index specified
+     * Implementation of {@link InstructionName#LDX}</p>
+     *
+     * @param instruction The instruction
+     * @throws IOException If the instruction is LDX
+     */
+    public void ldx(Instruction instruction) throws IOException {
+        loadRegister(getXRegister(), instruction, InstructionName.LDX);
+    }
+
+    public void stx(Instruction instruction) throws IOException {
+        storeRegister(getXRegister(), instruction, InstructionName.STX);
     }
 
     /**
@@ -193,6 +205,12 @@ public final class CentralProcessor implements Cloneable {
     private void loadRegister(Register register, Instruction instruction, InstructionName name) throws IOException {
         checkInstructionName(instruction, name);
         Registers.loadRegister(register, (Number) instruction.argumentsProperty().get()[0]);
+        checkZeroAndNegative((Byte) register.getValue());
+    }
+
+    private void storeRegister(Register register, Instruction instruction, InstructionName name) throws IOException {
+        checkInstructionName(instruction, name);
+        Registers.storeRegister(register, console, (Integer) instruction.argumentsProperty().get()[0]);
         checkZeroAndNegative((Byte) register.getValue());
     }
 

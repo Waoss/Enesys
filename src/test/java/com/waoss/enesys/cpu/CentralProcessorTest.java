@@ -30,10 +30,9 @@ public class CentralProcessorTest {
     CentralProcessor target = new CentralProcessor(targetConsole);
 
     @Test
-    public void sta() throws Exception {
+    public void test() throws Exception {
         Instruction instruction = new Instruction(InstructionName.STA, Addressing.ABSOLUTE);
         instruction.setArguments(0x0200);
-        target.lda((byte) 42);
         target.sta(instruction);
         assert target.getARegister().getValue() == targetConsole.getCompleteMemory().read((short) 0x0200);
     }

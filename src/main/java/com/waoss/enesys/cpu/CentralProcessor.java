@@ -146,11 +146,10 @@ public final class CentralProcessor implements Cloneable {
      * Loads a value into the A register.
      * Implementation of {@link com.waoss.enesys.cpu.instructions.InstructionName#LDA}
      *
-     * @param value The value to laod
+     * @param instruction The instruction
      */
-    public void lda(byte value) {
-        Registers.loadRegister(this.getARegister(), value);
-        checkZeroAndNegative(getARegister().getValue());
+    public void lda(Instruction instruction) throws IOException {
+        loadRegister(getARegister(), instruction, InstructionName.LDA);
     }
 
     /**
@@ -160,12 +159,10 @@ public final class CentralProcessor implements Cloneable {
      * @param instruction The instruction
      */
     public void sta(Instruction instruction) throws IOException {
-        if (instruction.instructionNameProperty().get() != InstructionName.STA) {
-            throw new IOException("Cannot execute instruction");
-        }
-        Number temp = (Number) instruction.argumentsProperty().get()[0];
-        Short address = temp.shortValue();
-        getCompleteMemory().write(address, getARegister().getValue());
+        checkInstructionName(instruction, InstructionName.STA);
+        Registers.storeRegister(getARegister(), console, (Integer) instruction.argumentsProperty().get()[0]);
+        //necessary stuff
+        checkZeroAndNegative(getARegister().getValue());
     }
 
     /**
@@ -185,6 +182,18 @@ public final class CentralProcessor implements Cloneable {
         switch (instruction.addressingProperty().get()) {
 
         }
+    }
+
+    private void checkInstructionName(Instruction instruction, InstructionName name) throws IOException {
+        if (instruction.instructionNameProperty().get() != name) {
+            throw new IOException("Wrong Instruction");
+        }
+    }
+
+    private void loadRegister(Register register, Instruction instruction, InstructionName name) throws IOException {
+        checkInstructionName(instruction, name);
+        Registers.loadRegister(register, (Number) instruction.argumentsProperty().get()[0]);
+        checkZeroAndNegative((Byte) register.getValue());
     }
 
 }

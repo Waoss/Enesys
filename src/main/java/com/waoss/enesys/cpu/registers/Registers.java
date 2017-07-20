@@ -30,6 +30,6 @@ public final class Registers {
     }
 
     public static <T extends Byte> void storeRegister(Register<T> tRegister, Console console, int address) {
-        console.getCompleteMemory().getRandomAccessMemory().write((short) address, tRegister.getValue());
+        console.getCompleteMemory().write((short) address, tRegister.getValue());
     }
 }

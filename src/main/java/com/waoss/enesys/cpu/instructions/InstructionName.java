@@ -18,7 +18,7 @@
 
 package com.waoss.enesys.cpu.instructions;
 
-import com.waoss.enesys.mem.Addressing;
+import static com.waoss.enesys.cpu.instructions.InstructionConstants.instructions;
 
 public enum InstructionName {
     /**
@@ -84,118 +84,8 @@ public enum InstructionName {
     TXS,
     TYA;
 
-    /**
-     * Returns the corresponding {@link InstructionName} according to the opCode.
-     *
-     * @param opCode
-     * @return
-     */
-    public static InstructionName getByOpCode(Byte opCode) {
-        //TODO
-        return null;
+    public static InstructionName getByOpCode(byte opCode) {
+        return valueOf(instructions[opCode]);
     }
 
-    /**
-     * Returns the opcode of this instruction name based on the addressing
-     *
-     * @param addressing The Addressing
-     * @return The OpCode
-     */
-    public byte getOpCode(Addressing addressing) {
-        //TODO
-        switch (addressing) {
-            case ABSOLUTE:
-                switch (this) {
-                    case ADC:
-                        return 0x69;
-                    case AND:
-                        return 0x29;
-                    case ASL:
-                        return 0x0a;
-                    case BIT:
-                        return 0x2c;
-                    case BRK:
-                        return 0;
-                    case CMP:
-                        return (byte) 0xcd;
-                    case CPX:
-                        return (byte) 0xec;
-                    case CPY:
-                        return (byte) 0xcc;
-                    case DEC:
-                        return (byte) 0xce;
-                    case DEX:
-                        break;
-                    case DEY:
-                        break;
-                    case EOR:
-                        break;
-                    case INC:
-                        break;
-                    case INX:
-                        break;
-                    case INY:
-                        break;
-                    case JMP:
-                        break;
-                    case JSR:
-                        break;
-                    case LDA:
-                        break;
-                    case LDX:
-                        break;
-                    case LDY:
-                        break;
-                    case LSR:
-                        break;
-                    case NOP:
-                        break;
-                    case ORA:
-                        break;
-                    case PHA:
-                        break;
-                    case PHP:
-                        break;
-                    case PLA:
-                        break;
-                    case PLP:
-                        break;
-                    case ROL:
-                        break;
-                    case ROR:
-                        break;
-                    case RTI:
-                        break;
-                    case RTS:
-                        break;
-                    case SBC:
-                        break;
-                    case SEC:
-                        break;
-                    case SED:
-                        break;
-                    case SEI:
-                        break;
-                    case STA:
-                        break;
-                    case STX:
-                        break;
-                    case STY:
-                        break;
-                    case TAX:
-                        break;
-                    case TAY:
-                        break;
-                    case TSX:
-                        break;
-                    case TXA:
-                        break;
-                    case TXS:
-                        break;
-                    case TYA:
-                        break;
-                }
-        }
-        return 0;
-    }
 }

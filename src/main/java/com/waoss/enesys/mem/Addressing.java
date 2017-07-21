@@ -20,15 +20,16 @@ package com.waoss.enesys.mem;
 
 public enum Addressing {
     ABSOLUTE,
-    ZERO_PAGE,
-    ZERO_PAGE_X,
-    ZERO_PAGE_Y,
     ABSOLUTE_X,
     ABSOLUTE_Y,
+    ACCUMULATOR,
     IMMEDIATE,
-    RELATIVE,
-    IMPLICIT,
+    IMPLIED,
+    INDEXED_INDIRECT,
     INDIRECT,
-    INDIRECT_INDEXED_X,
-    INDIRECT_INDEXED_Y
+    INDIRECT_INDEXED,
+    RELATIVE,
+    ZERO_PAGE,
+    ZERO_PAGE_X,
+    ZERO_PAGE_Y
 }

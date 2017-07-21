@@ -20,6 +20,7 @@ package com.waoss.enesys.cpu;
 
 import com.waoss.enesys.Console;
 import com.waoss.enesys.cpu.instructions.Instruction;
+import com.waoss.enesys.cpu.instructions.InstructionConstants;
 import com.waoss.enesys.cpu.instructions.InstructionName;
 import com.waoss.enesys.mem.Addressing;
 import org.junit.Test;
@@ -35,5 +36,12 @@ public class CentralProcessorTest {
         instruction.setArguments(0x0200);
         target.sta(instruction);
         assert target.getARegister().getValue() == targetConsole.getCompleteMemory().read((short) 0x0200);
+    }
+
+    @Test
+    public void testOpCodeMatching() {
+        InstructionName instructionName = InstructionName.getByOpCode((byte) 0x69);
+        assert instructionName == InstructionName.ADC;
+        assert InstructionConstants.addressings[0x69] == Addressing.IMMEDIATE;
     }
 }

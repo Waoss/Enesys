@@ -39,7 +39,13 @@ public final class Instruction {
      * This property stores the arguments<br>
      * For example, a branching instruction would have one argument: where to go if condition is true
      */
-    private final SimpleObjectProperty<Object[]> arguments = new SimpleObjectProperty<>(this, "arguments");
+    private final SimpleObjectProperty<Number[]> arguments = new SimpleObjectProperty<>(this, "arguments");
+
+    {
+        this.addressing.addListener((observable, oldValue, newValue) -> {
+
+        });
+    }
 
     /**
      * Creates a new Instruction when given the name and addressing
@@ -50,7 +56,6 @@ public final class Instruction {
     public Instruction(InstructionName instructionName, Addressing addressing) {
         this.instructionName.set(instructionName);
         this.addressing.set(addressing);
-        this.opCode.set(instructionName.getOpCode(this.addressing.get()));
     }
 
     /**
@@ -105,11 +110,11 @@ public final class Instruction {
         return arguments.get();
     }
 
-    public void setArguments(Object... arguments) {
+    public void setArguments(Number... arguments) {
         this.arguments.set(arguments);
     }
 
-    public SimpleObjectProperty<Object[]> argumentsProperty() {
+    public SimpleObjectProperty<Number[]> argumentsProperty() {
         return arguments;
     }
 }

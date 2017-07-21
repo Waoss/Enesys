@@ -21,31 +21,27 @@ package com.waoss.enesys.cpu.instructions;
 import com.waoss.enesys.mem.Addressing;
 import javafx.beans.property.SimpleObjectProperty;
 
+import java.util.concurrent.atomic.AtomicReference;
+
 public final class Instruction {
 
     /**
      * This property holds the instruction name
      */
-    private final SimpleObjectProperty<InstructionName> instructionName = new SimpleObjectProperty<>(this, "instructionName");
+    private final AtomicReference<SimpleObjectProperty<InstructionName>> instructionName = new AtomicReference<>(new SimpleObjectProperty<>(this, "instructionName"));
     /**
      * This property holds the opcode
      */
-    private final SimpleObjectProperty<Integer> opCode = new SimpleObjectProperty<>(this, "opCode");
+    private final AtomicReference<SimpleObjectProperty<Integer>> opCode = new AtomicReference<>(new SimpleObjectProperty<>(this, "opCode"));
     /**
      * This property holds the addressing mode
      */
-    private final SimpleObjectProperty<Addressing> addressing = new SimpleObjectProperty<>(this, "addressing");
+    private final AtomicReference<SimpleObjectProperty<Addressing>> addressing = new AtomicReference<>(new SimpleObjectProperty<>(this, "addressing"));
     /**
      * This property stores the arguments<br>
      * For example, a branching instruction would have one argument: where to go if condition is true
      */
-    private final SimpleObjectProperty<Number[]> arguments = new SimpleObjectProperty<>(this, "arguments");
-
-    {
-        this.addressing.addListener((observable, oldValue, newValue) -> {
-
-        });
-    }
+    private final AtomicReference<SimpleObjectProperty<Number[]>> arguments = new AtomicReference<>(new SimpleObjectProperty<>(this, "arguments"));
 
     /**
      * Creates a new Instruction when given the name and addressing
@@ -54,8 +50,8 @@ public final class Instruction {
      * @param addressing      The Addressing mode
      */
     public Instruction(InstructionName instructionName, Addressing addressing) {
-        this.instructionName.set(instructionName);
-        this.addressing.set(addressing);
+        this.instructionName.get().set(instructionName);
+        this.addressing.get().set(addressing);
     }
 
     /**
@@ -65,56 +61,56 @@ public final class Instruction {
      * @param addressing The addressing mode
      */
     public Instruction(Integer opcode, Addressing addressing) {
-        this.opCode.set(opcode);
-        this.addressing.set(addressing);
-        this.instructionName.set(InstructionName.getByOpCode(opcode));
+        this.opCode.get().set(opcode);
+        this.addressing.get().set(addressing);
+        this.instructionName.get().set(InstructionName.getByOpCode(opcode));
     }
 
     public InstructionName getInstructionName() {
-        return instructionName.get();
+        return instructionName.get().get();
     }
 
     public void setInstructionName(InstructionName instructionName) {
-        this.instructionName.set(instructionName);
+        this.instructionName.get().set(instructionName);
     }
 
     public final SimpleObjectProperty<InstructionName> instructionNameProperty() {
-        return instructionName;
+        return instructionName.get();
     }
 
     public Integer getOpCode() {
-        return opCode.get();
+        return opCode.get().get();
     }
 
     public void setOpCode(Integer opCode) {
-        this.opCode.set(opCode);
+        this.opCode.get().set(opCode);
     }
 
     public final SimpleObjectProperty<Integer> opCodeProperty() {
-        return opCode;
+        return opCode.get();
     }
 
     public Addressing getAddressing() {
-        return addressing.get();
+        return addressing.get().get();
     }
 
     public void setAddressing(Addressing addressing) {
-        this.addressing.set(addressing);
+        this.addressing.get().set(addressing);
     }
 
     public final SimpleObjectProperty<Addressing> addressingProperty() {
-        return addressing;
+        return addressing.get();
     }
 
     public Object[] getArguments() {
-        return arguments.get();
+        return arguments.get().get();
     }
 
     public void setArguments(Number... arguments) {
-        this.arguments.set(arguments);
+        this.arguments.get().set(arguments);
     }
 
     public SimpleObjectProperty<Number[]> argumentsProperty() {
-        return arguments;
+        return arguments.get();
     }
 }

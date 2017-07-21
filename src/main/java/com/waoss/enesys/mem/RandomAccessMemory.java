@@ -19,10 +19,11 @@
 package com.waoss.enesys.mem;
 
 import java.nio.IntBuffer;
+import java.util.concurrent.atomic.AtomicReference;
 
 public final class RandomAccessMemory extends Memory {
 
-    private IntBuffer buffer = IntBuffer.allocate(2048);
+    private final AtomicReference<IntBuffer> buffer = new AtomicReference<>(IntBuffer.allocate(2048));
 
     public RandomAccessMemory() {
         super();
@@ -30,11 +31,11 @@ public final class RandomAccessMemory extends Memory {
 
     @Override
     public int read(short address) {
-        return buffer.get(address);
+        return buffer.get().get(address);
     }
 
     @Override
     public void write(short address, int value) {
-        buffer = buffer.put(address, value);
+        buffer.set(buffer.get().put(address, value));
     }
 }

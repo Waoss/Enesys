@@ -23,32 +23,35 @@ import com.waoss.enesys.cpu.instructions.Instruction;
 import com.waoss.enesys.cpu.instructions.InstructionConstants;
 import com.waoss.enesys.cpu.instructions.Instructions;
 
+import java.util.concurrent.atomic.AtomicReference;
+
 /**
  *
  */
 public class CentralProcessingThread extends Thread {
 
-    private final CentralProcessor centralProcessor;
-    private final Console console;
+    private final AtomicReference<CentralProcessor> centralProcessor;
+    private final AtomicReference<Console> console;
 
     public CentralProcessingThread(CentralProcessor centralProcessor, Console console) {
-        this.centralProcessor = centralProcessor;
-        this.console = console;
+        this.centralProcessor = new AtomicReference<>(centralProcessor);
+        this.console = new AtomicReference<>(console);
     }
 
     @Override
     public void run() {
-        for (short i = 0x0600; ; i++) {
-            int opCode = console.getCompleteMemory().read(i);
-            int size = Instructions.getInstructionSize(opCode);
+        for (short i = console.get().getProgramCounter().getValue(); ; i++) {
+            int opCode = console.get().getCompleteMemory().read(i);
+            int size = Instructions.getInstructionSize(opCode) - 1;
             final Number[] arguments = new Number[size];
             for (short j = 1; j <= size; j++) {
-                arguments[j - 1] = console.getCompleteMemory().read((short) (i + j));
+                arguments[j - 1] = console.get().getCompleteMemory().read((short) (i + j));
             }
             final Instruction result = new Instruction(opCode, InstructionConstants.addressings[opCode]);
             result.argumentsProperty().set(arguments);
-            centralProcessor.process(result);
-            i += size - 1;
+            centralProcessor.get().process(result);
+            i += size;
+            console.get().getProgramCounter().setValue(i);
         }
     }
 }

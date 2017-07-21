@@ -49,6 +49,6 @@ public class CentralProcessorTest {
     public void testCentralProcessingThread() throws Exception {
         targetConsole.getCompleteMemory().write((short) 0x0600, 0xa2);
         targetConsole.getCompleteMemory().write((short) 0x0601, 0x44);
-        target.start();
+        target.run();
     }
 }

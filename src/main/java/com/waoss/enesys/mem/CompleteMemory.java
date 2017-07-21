@@ -20,20 +20,22 @@ package com.waoss.enesys.mem;
 
 import javafx.beans.property.SimpleObjectProperty;
 
+import java.util.concurrent.atomic.AtomicReference;
+
 public class CompleteMemory extends Memory {
 
-    SimpleObjectProperty<RandomAccessMemory> randomAccessMemory = new SimpleObjectProperty<>(new RandomAccessMemory());
+    final AtomicReference<SimpleObjectProperty<RandomAccessMemory>> randomAccessMemory = new AtomicReference<>(new SimpleObjectProperty<>(new RandomAccessMemory()));
 
     public RandomAccessMemory getRandomAccessMemory() {
-        return randomAccessMemory.get();
+        return randomAccessMemory.get().get();
     }
 
     public void setRandomAccessMemory(RandomAccessMemory randomAccessMemory) {
-        this.randomAccessMemory.set(randomAccessMemory);
+        this.randomAccessMemory.get().set(randomAccessMemory);
     }
 
     public SimpleObjectProperty<RandomAccessMemory> randomAccessMemoryProperty() {
-        return randomAccessMemory;
+        return randomAccessMemory.get();
     }
 
     /**
@@ -46,7 +48,7 @@ public class CompleteMemory extends Memory {
     public int read(short address) {
         //guy wants RAM
         if (address < 2048) {
-            return randomAccessMemory.get().read(address);
+            return randomAccessMemory.get().get().read(address);
         }
         return 0;
     }
@@ -60,7 +62,7 @@ public class CompleteMemory extends Memory {
     @Override
     public void write(short address, int value) {
         if (address < 2048) {
-            randomAccessMemory.get().write(address, value);
+            randomAccessMemory.get().get().write(address, value);
         }
     }
 }

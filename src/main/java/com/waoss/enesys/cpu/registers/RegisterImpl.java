@@ -21,6 +21,8 @@ package com.waoss.enesys.cpu.registers;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 
+import java.util.concurrent.atomic.AtomicReference;
+
 /**
  * An implemented Register
  * All Registers extend this class
@@ -32,7 +34,7 @@ public class RegisterImpl<T extends Number> extends Register<T> {
     /**
      * The default value of the register
      */
-    protected T defaultValue;
+    protected final AtomicReference<SimpleObjectProperty<T>> defaultValue = new AtomicReference<>(new SimpleObjectProperty<>(this, "defaultValue"));
 
     /**
      * The property that stores the value
@@ -42,7 +44,7 @@ public class RegisterImpl<T extends Number> extends Register<T> {
      * <li>They can be passed on and the values and can be changed, without passing the whole bean</li>
      * </ul>
      */
-    protected SimpleObjectProperty<T> valueProperty;
+    protected final AtomicReference<SimpleObjectProperty<T>> valueProperty = new AtomicReference<>();
 
 
     /**
@@ -51,8 +53,8 @@ public class RegisterImpl<T extends Number> extends Register<T> {
      * @param defaultValue The default value of the register
      */
     protected RegisterImpl(T defaultValue) {
-        this.defaultValue = defaultValue;
-        valueProperty = new SimpleObjectProperty<>(defaultValue);
+        this.defaultValue.get().set(defaultValue);
+        valueProperty.set(new SimpleObjectProperty<>(defaultValue));
     }
 
 
@@ -62,7 +64,7 @@ public class RegisterImpl<T extends Number> extends Register<T> {
      * @return the property that contains the value
      */
     public final ObjectProperty<T> valueProperty() {
-        return valueProperty;
+        return valueProperty.get();
     }
 
 
@@ -73,7 +75,7 @@ public class RegisterImpl<T extends Number> extends Register<T> {
      */
     @Override
     public T getValue() {
-        return valueProperty.get();
+        return valueProperty.get().get();
     }
 
 
@@ -84,6 +86,6 @@ public class RegisterImpl<T extends Number> extends Register<T> {
      */
     @Override
     public void setValue(T value) {
-        valueProperty.set(value);
+        valueProperty.get().set(value);
     }
 }

@@ -27,6 +27,7 @@ import com.waoss.enesys.mem.CompleteMemory;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * <p>An instance of this class represents the CPU of the NES
@@ -38,8 +39,8 @@ public final class CentralProcessor implements Cloneable {
     /**
      * The console "this" is a part of.
      */
-    private Console console;
-    private CentralProcessingThread thread;
+    private final AtomicReference<Console> console = new AtomicReference<Console>();
+    private final AtomicReference<CentralProcessingThread> thread = new AtomicReference<CentralProcessingThread>();
 
     /**
      * Creates a new Processor for the console.
@@ -47,8 +48,8 @@ public final class CentralProcessor implements Cloneable {
      * @param console The console
      */
     public CentralProcessor(Console console) {
-        this.console = console;
-        this.thread = new CentralProcessingThread(this, console);
+        this.console.set(console);
+        this.thread.set(new CentralProcessingThread(this, console));
     }
 
     /**
@@ -57,7 +58,7 @@ public final class CentralProcessor implements Cloneable {
      * @param centralProcessor the processor to clone
      */
     public CentralProcessor(CentralProcessor centralProcessor) {
-        this(centralProcessor.console);
+        this(centralProcessor.console.get());
     }
 
     /**
@@ -77,11 +78,11 @@ public final class CentralProcessor implements Cloneable {
      * @return the {@link Console} the processor is part of
      */
     public Console getConsole() {
-        return console;
+        return console.get();
     }
 
     public CompleteMemory getCompleteMemory() {
-        return console.getCompleteMemory();
+        return console.get().getCompleteMemory();
     }
 
     /**
@@ -90,7 +91,7 @@ public final class CentralProcessor implements Cloneable {
      * @return the {@link ProcessorStatus}
      */
     public ProcessorStatus getProcessorStatus() {
-        return console.getProcessorStatus();
+        return console.get().getProcessorStatus();
     }
 
     /**
@@ -99,7 +100,7 @@ public final class CentralProcessor implements Cloneable {
      * @return the {@link AccumalativeRegister}
      */
     public AccumalativeRegister getARegister() {
-        return console.getARegister();
+        return console.get().getARegister();
     }
 
     /**
@@ -108,7 +109,7 @@ public final class CentralProcessor implements Cloneable {
      * @return the {@link XRegister}
      */
     public XRegister getXRegister() {
-        return console.getXRegister();
+        return console.get().getXRegister();
     }
 
     /**
@@ -117,7 +118,7 @@ public final class CentralProcessor implements Cloneable {
      * @return the {@link YRegister}
      */
     public YRegister getYRegister() {
-        return console.getYRegister();
+        return console.get().getYRegister();
     }
 
     /**
@@ -126,7 +127,7 @@ public final class CentralProcessor implements Cloneable {
      * @return the {@link StackPointer}
      */
     public StackPointer getStackPointer() {
-        return console.getStackPointer();
+        return console.get().getStackPointer();
     }
 
     /**
@@ -135,7 +136,7 @@ public final class CentralProcessor implements Cloneable {
      * @return the {@link ProgramCounter}
      */
     public ProgramCounter getProgramCounter() {
-        return console.getProgramCounter();
+        return console.get().getProgramCounter();
     }
 
     private void checkZeroAndNegative(int value) {
@@ -185,18 +186,35 @@ public final class CentralProcessor implements Cloneable {
         getXRegister().setValue((getXRegister().getValue() + 1));
     }
 
+    /**
+     * Processes an instruction
+     * Invokes the required method for the instruction implementation
+     *
+     * @param instruction The instruction
+     */
     public void process(Instruction instruction) {
         String name = instruction.getInstructionName().toString().toLowerCase();
+        Method method;
         try {
-            Method method = getClass().getMethod(name, Instruction.class);
+            method = getClass().getMethod(name, Instruction.class);
             method.invoke(this, instruction);
         } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
             e.printStackTrace();
         }
     }
 
+    /**
+     * Starts executing from the program counter in another thread
+     */
     public void start() {
-        thread.run();
+        thread.get().start();
+    }
+
+    /**
+     * Starts executing from the program counter in the same thread
+     */
+    public void run() {
+        thread.get().run();
     }
 
     /**
@@ -204,16 +222,10 @@ public final class CentralProcessor implements Cloneable {
      * Stores into the accumalator the "AND" of the value and the previous value
      * Implementation of {@link com.waoss.enesys.cpu.instructions.InstructionName#AND}
      *
-     * @param value The value
+     * @param instruction The instruction
      */
-    public void and(byte value) {
-    }
-
-    private void parseAddresing(Instruction instruction) {
-        final Object[] arguments = instruction.argumentsProperty().get();
-        switch (instruction.addressingProperty().get()) {
-
-        }
+    public void and(Instruction instruction) throws IOException {
+        checkInstructionName(instruction, InstructionName.AND);
     }
 
     private void checkInstructionName(Instruction instruction, InstructionName name) throws IOException {
@@ -230,7 +242,7 @@ public final class CentralProcessor implements Cloneable {
 
     private void storeRegister(Register register, Instruction instruction, InstructionName name) throws IOException {
         checkInstructionName(instruction, name);
-        Registers.storeRegister(register, console, (Integer) instruction.argumentsProperty().get()[0]);
+        Registers.storeRegister(register, console.get(), (Integer) instruction.argumentsProperty().get()[0]);
         checkZeroAndNegative((Byte) register.getValue());
     }
 

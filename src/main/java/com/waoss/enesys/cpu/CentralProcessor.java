@@ -217,6 +217,18 @@ public final class CentralProcessor implements Cloneable {
         thread.get().run();
     }
 
+    public void interruptThread() {
+        thread.get().interrupt();
+    }
+
+    public void brk(Instruction instruction) {
+        interruptThread();
+    }
+
+    public void nop(Instruction instruction) {
+        return;
+    }
+
     /**
      * Logical AND
      * Stores into the accumalator the "AND" of the value and the previous value

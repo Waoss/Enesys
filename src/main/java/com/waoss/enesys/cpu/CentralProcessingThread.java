@@ -34,13 +34,15 @@ public class CentralProcessingThread extends Thread {
     private final AtomicReference<Console> console;
 
     public CentralProcessingThread(CentralProcessor centralProcessor, Console console) {
+        super("CentralProcessingThread");
         this.centralProcessor = new AtomicReference<>(centralProcessor);
         this.console = new AtomicReference<>(console);
     }
 
     @Override
     public void run() {
-        for (short i = console.get().getProgramCounter().getValue(); ; i++) {
+        short i = console.get().getProgramCounter().getValue();
+        while (true) {
             int opCode = console.get().getCompleteMemory().read(i);
             int size = Instructions.getInstructionSize(opCode) - 1;
             final Number[] arguments = new Number[size];

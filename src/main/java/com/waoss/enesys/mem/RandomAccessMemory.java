@@ -18,23 +18,23 @@
 
 package com.waoss.enesys.mem;
 
-import java.nio.ByteBuffer;
+import java.nio.IntBuffer;
 
 public final class RandomAccessMemory extends Memory {
 
-    private ByteBuffer buffer = ByteBuffer.allocate(2048);
+    private IntBuffer buffer = IntBuffer.allocate(2048);
 
     public RandomAccessMemory() {
         super();
     }
 
     @Override
-    public byte read(short address) {
+    public int read(short address) {
         return buffer.get(address);
     }
 
     @Override
-    public void write(short address, byte value) {
+    public void write(short address, int value) {
         buffer = buffer.put(address, value);
     }
 }

@@ -87,4 +87,23 @@ public class InstructionConstants {
                     Addressing.IMMEDIATE, Addressing.INDEXED_INDIRECT, Addressing.IMMEDIATE, Addressing.INDEXED_INDIRECT, Addressing.ZERO_PAGE, Addressing.ZERO_PAGE, Addressing.ZERO_PAGE, Addressing.ZERO_PAGE, Addressing.IMPLIED, Addressing.IMMEDIATE, Addressing.IMPLIED, Addressing.IMMEDIATE, Addressing.ABSOLUTE, Addressing.ABSOLUTE, Addressing.ABSOLUTE, Addressing.ABSOLUTE,
                     Addressing.RELATIVE, Addressing.INDIRECT_INDEXED, Addressing.IMPLIED, Addressing.INDIRECT_INDEXED, Addressing.ZERO_PAGE_X, Addressing.ZERO_PAGE_X, Addressing.ZERO_PAGE_X, Addressing.ZERO_PAGE_X, Addressing.IMPLIED, Addressing.ABSOLUTE_Y, Addressing.IMPLIED, Addressing.ABSOLUTE_Y, Addressing.ABSOLUTE_X, Addressing.ABSOLUTE_X, Addressing.ABSOLUTE_X, Addressing.ABSOLUTE_X,
             };
+    public static final int[] instructionSizes =
+            {
+                    1, 2, 0, 0, 2, 2, 2, 0, 1, 2, 1, 0, 3, 3, 3, 0,
+                    2, 2, 0, 0, 2, 2, 2, 0, 1, 3, 1, 0, 3, 3, 3, 0,
+                    3, 2, 0, 0, 2, 2, 2, 0, 1, 2, 1, 0, 3, 3, 3, 0,
+                    2, 2, 0, 0, 2, 2, 2, 0, 1, 3, 1, 0, 3, 3, 3, 0,
+                    1, 2, 0, 0, 2, 2, 2, 0, 1, 2, 1, 0, 3, 3, 3, 0,
+                    2, 2, 0, 0, 2, 2, 2, 0, 1, 3, 1, 0, 3, 3, 3, 0,
+                    1, 2, 0, 0, 2, 2, 2, 0, 1, 2, 1, 0, 3, 3, 3, 0,
+                    2, 2, 0, 0, 2, 2, 2, 0, 1, 3, 1, 0, 3, 3, 3, 0,
+                    2, 2, 0, 0, 2, 2, 2, 0, 1, 0, 1, 0, 3, 3, 3, 0,
+                    2, 2, 0, 0, 2, 2, 2, 0, 1, 3, 1, 0, 0, 3, 0, 0,
+                    2, 2, 2, 0, 2, 2, 2, 0, 1, 2, 1, 0, 3, 3, 3, 0,
+                    2, 2, 0, 0, 2, 2, 2, 0, 1, 3, 1, 0, 3, 3, 3, 0,
+                    2, 2, 0, 0, 2, 2, 2, 0, 1, 2, 1, 0, 3, 3, 3, 0,
+                    2, 2, 0, 0, 2, 2, 2, 0, 1, 3, 1, 0, 3, 3, 3, 0,
+                    2, 2, 0, 0, 2, 2, 2, 0, 1, 2, 1, 0, 3, 3, 3, 0,
+                    2, 2, 0, 0, 2, 2, 2, 0, 1, 3, 1, 0, 3, 3, 3, 0,
+            };
 }

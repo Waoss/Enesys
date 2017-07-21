@@ -18,9 +18,9 @@
 
 package com.waoss.enesys.cpu.registers;
 
-public class StackPointer extends UnsignedByteRegister {
+public class StackPointer extends UnsignedIntRegister {
 
     public StackPointer() {
-        super((byte) 0xfd);
+        super(0xfd);
     }
 }

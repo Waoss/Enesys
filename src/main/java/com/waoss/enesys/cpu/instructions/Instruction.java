@@ -30,7 +30,7 @@ public final class Instruction {
     /**
      * This property holds the opcode
      */
-    private final SimpleObjectProperty<Byte> opCode = new SimpleObjectProperty<>(this, "opCode");
+    private final SimpleObjectProperty<Integer> opCode = new SimpleObjectProperty<>(this, "opCode");
     /**
      * This property holds the addressing mode
      */
@@ -64,7 +64,7 @@ public final class Instruction {
      * @param opcode     The opcode
      * @param addressing The addressing mode
      */
-    public Instruction(Byte opcode, Addressing addressing) {
+    public Instruction(Integer opcode, Addressing addressing) {
         this.opCode.set(opcode);
         this.addressing.set(addressing);
         this.instructionName.set(InstructionName.getByOpCode(opcode));
@@ -82,15 +82,15 @@ public final class Instruction {
         return instructionName;
     }
 
-    public Byte getOpCode() {
+    public Integer getOpCode() {
         return opCode.get();
     }
 
-    public void setOpCode(Byte opCode) {
+    public void setOpCode(Integer opCode) {
         this.opCode.set(opCode);
     }
 
-    public final SimpleObjectProperty<Byte> opCodeProperty() {
+    public final SimpleObjectProperty<Integer> opCodeProperty() {
         return opCode;
     }
 

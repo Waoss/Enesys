@@ -84,7 +84,7 @@ public enum InstructionName {
     TXS,
     TYA;
 
-    public static InstructionName getByOpCode(byte opCode) {
+    public static InstructionName getByOpCode(int opCode) {
         return valueOf(instructions[opCode]);
     }
 

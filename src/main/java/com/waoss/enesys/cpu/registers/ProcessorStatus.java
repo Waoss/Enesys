@@ -29,7 +29,7 @@ import java.util.List;
  * The processor status was a special register that stored meta-data of the 6502.<br>
  * They have been implemented as JavaFX properties
  */
-public final class ProcessorStatus extends UnsignedByteRegister {
+public final class ProcessorStatus extends UnsignedIntRegister {
 
     /**
      * Carry Flag : set when the last operation resulted in some sort of carry
@@ -82,7 +82,7 @@ public final class ProcessorStatus extends UnsignedByteRegister {
      * Creates a new ProcessorStatus with the default values for all the flags
      */
     public ProcessorStatus() {
-        super((byte) 0b00110100);
+        super(0b00110100);
     }
 
     /**
@@ -319,11 +319,11 @@ public final class ProcessorStatus extends UnsignedByteRegister {
     }
 
     private void enableBit(byte index) {
-        this.setValue((byte) (this.getValue() | (1 << index)));
+        this.setValue((this.getValue() | (1 << index)));
     }
 
     private void clearBit(byte index) {
-        this.setValue((byte) (this.getValue() & ~(1 << index)));
+        this.setValue((this.getValue() & ~(1 << index)));
     }
 
 }

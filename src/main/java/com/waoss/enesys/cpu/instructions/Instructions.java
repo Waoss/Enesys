@@ -22,4 +22,8 @@ public final class Instructions {
 
     private Instructions() {
     }
+
+    public static final int getInstructionSize(int opcode) {
+        return InstructionConstants.instructionSizes[opcode];
+    }
 }

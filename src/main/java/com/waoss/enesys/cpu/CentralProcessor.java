@@ -25,6 +25,8 @@ import com.waoss.enesys.cpu.registers.*;
 import com.waoss.enesys.mem.CompleteMemory;
 
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 
 /**
  * <p>An instance of this class represents the CPU of the NES
@@ -37,6 +39,7 @@ public final class CentralProcessor implements Cloneable {
      * The console "this" is a part of.
      */
     private Console console;
+    private CentralProcessingThread thread;
 
     /**
      * Creates a new Processor for the console.
@@ -45,6 +48,7 @@ public final class CentralProcessor implements Cloneable {
      */
     public CentralProcessor(Console console) {
         this.console = console;
+        this.thread = new CentralProcessingThread(this, console);
     }
 
     /**
@@ -134,7 +138,7 @@ public final class CentralProcessor implements Cloneable {
         return console.getProgramCounter();
     }
 
-    private void checkZeroAndNegative(byte value) {
+    private void checkZeroAndNegative(int value) {
         if (value == 0) {
             getProcessorStatus().setZeroFlagEnabled(true);
         } else if (value < 0) {
@@ -177,6 +181,24 @@ public final class CentralProcessor implements Cloneable {
         storeRegister(getXRegister(), instruction, InstructionName.STX);
     }
 
+    public void inx() {
+        getXRegister().setValue((getXRegister().getValue() + 1));
+    }
+
+    public void process(Instruction instruction) {
+        String name = instruction.getInstructionName().toString().toLowerCase();
+        try {
+            Method method = getClass().getMethod(name, Instruction.class);
+            method.invoke(this, instruction);
+        } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void start() {
+        thread.run();
+    }
+
     /**
      * Logical AND
      * Stores into the accumalator the "AND" of the value and the previous value
@@ -185,8 +207,6 @@ public final class CentralProcessor implements Cloneable {
      * @param value The value
      */
     public void and(byte value) {
-        getARegister().setValue((byte) (getARegister().getValue() & value));
-        checkZeroAndNegative(getARegister().getValue());
     }
 
     private void parseAddresing(Instruction instruction) {
@@ -204,8 +224,8 @@ public final class CentralProcessor implements Cloneable {
 
     private void loadRegister(Register register, Instruction instruction, InstructionName name) throws IOException {
         checkInstructionName(instruction, name);
-        Registers.loadRegister(register, (Number) instruction.argumentsProperty().get()[0]);
-        checkZeroAndNegative((Byte) register.getValue());
+        Registers.loadRegister(register, instruction.argumentsProperty().get()[0]);
+        checkZeroAndNegative((Integer) register.getValue());
     }
 
     private void storeRegister(Register register, Instruction instruction, InstructionName name) throws IOException {

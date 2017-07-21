@@ -44,4 +44,11 @@ public class CentralProcessorTest {
         assert instructionName == InstructionName.ADC;
         assert InstructionConstants.addressings[0x69] == Addressing.IMMEDIATE;
     }
+
+    @Test
+    public void testCentralProcessingThread() throws Exception {
+        targetConsole.getCompleteMemory().write((short) 0x0600, 0xa2);
+        targetConsole.getCompleteMemory().write((short) 0x0601, 0x44);
+        target.start();
+    }
 }

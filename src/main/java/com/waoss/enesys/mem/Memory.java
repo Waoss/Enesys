@@ -23,7 +23,7 @@ public abstract class Memory {
     protected Memory() {
     }
 
-    public abstract byte read(short address);
+    public abstract int read(short address);
 
-    public abstract void write(short address, byte value);
+    public abstract void write(short address, int value);
 }

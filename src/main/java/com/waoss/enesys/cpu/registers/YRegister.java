@@ -18,9 +18,9 @@
 
 package com.waoss.enesys.cpu.registers;
 
-public class YRegister extends UnsignedByteRegister {
+public class YRegister extends UnsignedIntRegister {
 
     public YRegister() {
-        super((byte) 0x0);
+        super(0x0);
     }
 }

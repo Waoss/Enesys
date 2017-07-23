@@ -34,35 +34,35 @@ public final class ProcessorStatus extends UnsignedIntRegister {
     /**
      * Carry Flag : set when the last operation resulted in some sort of carry
      */
-    private final BooleanProperty carryFlagEnabled = new SimpleBooleanProperty(false);
+    private final BooleanProperty carryFlagEnabled = new SimpleBooleanProperty(this, "carryFlagEnabled", false);
     /**
      * Zero Flag :set when the last operation yielded zero
      */
-    private final BooleanProperty zeroFlagEnabled = new SimpleBooleanProperty(false);
+    private final BooleanProperty zeroFlagEnabled = new SimpleBooleanProperty(this, "zeroFlagEnabled", false);
     /**
      * Interrupt Flag : not as sure when it's set(something to work on)
      */
-    private final BooleanProperty interruptFlagEnabled = new SimpleBooleanProperty(true);
+    private final BooleanProperty interruptFlagEnabled = new SimpleBooleanProperty(this, "interruptFlagEnabled", true);
     /**
      * Decimal Flag : no use to us(The NES disabled Binary Coded Decimals of the 6502)
      */
-    private final BooleanProperty decimalFlagEnabled = new SimpleBooleanProperty(false);
+    private final BooleanProperty decimalFlagEnabled = new SimpleBooleanProperty(this, "decimalFlagEnabled", false);
     /**
      * Break Flag : for break instructions(BRK)
      */
-    private final BooleanProperty breakFlagEnabled = new SimpleBooleanProperty(true);
+    private final BooleanProperty breakFlagEnabled = new SimpleBooleanProperty(this, "breakFlagEnabled", true);
     /**
      * Unused Flag : never used
      */
-    private final BooleanProperty unusedFlagEnabled = new SimpleBooleanProperty(true);
+    private final transient BooleanProperty unusedFlagEnabled = new SimpleBooleanProperty(this, "unusedFlagEnabled", true);
     /**
      * Overflow Flag : set when the last operation resulted in some sort of overflow
      */
-    private final BooleanProperty overflowFlagEnabled = new SimpleBooleanProperty(false);
+    private final BooleanProperty overflowFlagEnabled = new SimpleBooleanProperty(this, "overflowFlagEnabled", false);
     /**
      * Negative Flag : set when an operation yields a negative value
      */
-    private final BooleanProperty negativeFlagEnabled = new SimpleBooleanProperty(false);
+    private final BooleanProperty negativeFlagEnabled = new SimpleBooleanProperty(this, "negativeFlagEnabled", false);
 
     /*
      * Sets the values of all the properties.
@@ -283,7 +283,7 @@ public final class ProcessorStatus extends UnsignedIntRegister {
     public String toString() {
         final String[] result = {""};
         flags().forEach(flag -> {
-            if (flag) {
+            if (flag.get()) {
                 result[0] += "1";
             } else {
                 result[0] += "0";
@@ -297,15 +297,15 @@ public final class ProcessorStatus extends UnsignedIntRegister {
      *
      * @return a list representation of all the flags
      */
-    public List<Boolean> flags() {
+    public List<BooleanProperty> flags() {
         return Arrays.asList(
-                isCarryFlagEnabled(),
-                isZeroFlagEnabled(),
-                isInterruptFlagEnabled(),
-                isDecimalFlagEnabled(),
-                isBreakFlagEnabled(),
-                isOverflowFlagEnabled(),
-                isNegativeFlagEnabled());
+                carryFlagEnabledProperty(),
+                zeroFlagEnabledProperty(),
+                interruptFlagEnabledProperty(),
+                decimalFlagEnabledProperty(),
+                breakFlagEnabledProperty(),
+                overflowFlagEnabledProperty(),
+                negativeFlagEnabledProperty());
     }
 
     private void enableFlag(BooleanProperty property, boolean value, int index) {
@@ -315,7 +315,6 @@ public final class ProcessorStatus extends UnsignedIntRegister {
         } else {
             clearBit((byte) index);
         }
-        flags().set(index, value);
     }
 
     private void enableBit(byte index) {

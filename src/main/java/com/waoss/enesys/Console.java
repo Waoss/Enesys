@@ -18,12 +18,24 @@
 
 package com.waoss.enesys;
 
+import com.google.gson.GsonBuilder;
 import com.waoss.enesys.cpu.registers.*;
 import com.waoss.enesys.mem.CompleteMemory;
 
+import java.io.Serializable;
 import java.util.concurrent.atomic.AtomicReference;
 
-public class Console {
+/**
+ * <p>Represents the complete NES system.
+ * Contains everything from the memory to the registers to everything else.
+ * Primarily contains atomically referenced fields and their getters and setters</p>
+ */
+public class Console implements Serializable {
+
+    /**
+     * The serial version UID.Useful during serialization
+     */
+    public static final long serialVersionUID = 12325890890L;
 
     private final AtomicReference<CompleteMemory> completeMemory = new AtomicReference<>(new CompleteMemory());
     private final AtomicReference<ProcessorStatus> processorStatus = new AtomicReference<>(new ProcessorStatus());
@@ -49,19 +61,19 @@ public class Console {
         this.ARegister.set(ARegister);
     }
 
-    public com.waoss.enesys.cpu.registers.XRegister getXRegister() {
+    public XRegister getXRegister() {
         return XRegister.get();
     }
 
-    public void setXRegister(com.waoss.enesys.cpu.registers.XRegister XRegister) {
+    public void setXRegister(XRegister XRegister) {
         this.XRegister.set(XRegister);
     }
 
-    public com.waoss.enesys.cpu.registers.YRegister getYRegister() {
+    public YRegister getYRegister() {
         return YRegister.get();
     }
 
-    public void setYRegister(com.waoss.enesys.cpu.registers.YRegister YRegister) {
+    public void setYRegister(YRegister YRegister) {
         this.YRegister.set(YRegister);
     }
 
@@ -89,4 +101,8 @@ public class Console {
         this.completeMemory.set(completeMemory);
     }
 
+    @Override
+    public String toString() {
+        return new GsonBuilder().setPrettyPrinting().registerTypeAdapter(getClass(), new ConsoleTypeAdapter()).create().toJson(this);
+    }
 }

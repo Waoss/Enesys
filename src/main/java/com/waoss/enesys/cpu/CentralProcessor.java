@@ -27,6 +27,7 @@ import com.waoss.enesys.mem.CompleteMemory;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
 /**
@@ -39,8 +40,14 @@ public final class CentralProcessor implements Cloneable {
     /**
      * The console "this" is a part of.
      */
-    private final AtomicReference<Console> console = new AtomicReference<Console>();
-    private final AtomicReference<CentralProcessingThread> thread = new AtomicReference<CentralProcessingThread>();
+    private final transient AtomicReference<Console> console = new AtomicReference<>();
+
+    /**
+     *
+     */
+    private final AtomicReference<CentralProcessingThread> thread = new AtomicReference<>();
+
+    private final AtomicBoolean runningInMainThread = new AtomicBoolean(false);
 
     /**
      * Creates a new Processor for the console.
@@ -172,19 +179,61 @@ public final class CentralProcessor implements Cloneable {
      * Implementation of {@link InstructionName#LDX}</p>
      *
      * @param instruction The instruction
-     * @throws IOException If the instruction is LDX
+     * @throws IOException If the instruction is not valid
      */
     public void ldx(Instruction instruction) throws IOException {
         loadRegister(getXRegister(), instruction, InstructionName.LDX);
     }
 
+    /**
+     * <p>Stores the value stored in the X register into the address specified</p>
+     *
+     * @param instruction The instruction
+     * @throws IOException If the instruction is not valid
+     */
     public void stx(Instruction instruction) throws IOException {
         storeRegister(getXRegister(), instruction, InstructionName.STX);
     }
 
-    public void inx() {
+    /**
+     * <p>Increments the value of the X register by 1</p>
+     *
+     * @param instruction The instruction
+     */
+    public void inx(Instruction instruction) {
+        getYRegister().setValue((getYRegister().getValue() + 1));
+    }
+
+    /**
+     * <p>Stores the value of the Y register into the index specified
+     * Implementation of {@link InstructionName#LDY}</p>
+     *
+     * @param instruction The instruction
+     * @throws IOException If the instruction is not valid
+     */
+    public void ldy(Instruction instruction) throws IOException {
+        loadRegister(getYRegister(), instruction, InstructionName.LDY);
+    }
+
+    /**
+     * <p>Stores the value stored in the Y register into the address specified</p>
+     *
+     * @param instruction The instruction
+     * @throws IOException If the instruction is not valid
+     */
+    public void sty(Instruction instruction) throws IOException {
+        storeRegister(getYRegister(), instruction, InstructionName.STY);
+    }
+
+    /**
+     * <p>Increments the value of the Y register by 1</p>
+     *
+     * @param instruction The instruction
+     */
+    public void iny(Instruction instruction) {
         getXRegister().setValue((getXRegister().getValue() + 1));
     }
+
 
     /**
      * Processes an instruction
@@ -207,18 +256,31 @@ public final class CentralProcessor implements Cloneable {
      * Starts executing from the program counter in another thread
      */
     public void start() {
+        runningInMainThread.set(false);
         thread.get().start();
     }
 
     /**
-     * Starts executing from the program counter in the same thread
+     * Starts executing from the program counter in the same thread.<br>
+     * This is deprecated API, use {@link CentralProcessor#start()} instead
      */
+    @Deprecated
     public void run() {
+        runningInMainThread.set(true);
         thread.get().run();
     }
 
+    /**
+     * <p>Interrupts the execution thread.
+     * If the execution was taking place in the main thread, it assumes that the caller is of the main thread
+     * , so it interrupts the current thread.</p>
+     */
     public void interruptThread() {
-        thread.get().interrupt();
+        if (runningInMainThread.get()) {
+            Thread.currentThread().interrupt();
+        } else {
+            thread.get().interrupt();
+        }
     }
 
     public void brk(Instruction instruction) {

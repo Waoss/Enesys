@@ -26,19 +26,42 @@ import com.waoss.enesys.cpu.instructions.Instructions;
 import java.util.concurrent.atomic.AtomicReference;
 
 /**
+ * <p>A thread in which the central processing of the CPU occurs.
+ * The CPU uses the {@link CentralProcessor#start()} method to start processing.
+ * Processing starts a loop from the program counter and the thread reads every byte and finds the
+ * corresponding instruction and then uses the {@link CentralProcessor#process(Instruction)} function to process the instruction</p>
  *
+ * @see CentralProcessor
+ * @see CentralProcessor#process(Instruction)
+ * @see CentralProcessor#start()
+ * @see Console
  */
 public class CentralProcessingThread extends Thread {
 
+    /**
+     * An atomic reference to the central processor which contains this thread
+     */
     private final AtomicReference<CentralProcessor> centralProcessor;
+
+    /**
+     * An atomic reference to the {@link Console} this is a part of.
+     */
     private final AtomicReference<Console> console;
 
-    public CentralProcessingThread(CentralProcessor centralProcessor, Console console) {
+    /**
+     * Creates a new CentralProcessingThread for the processor specified in the constructor
+     *
+     * @param centralProcessor The processor
+     */
+    public CentralProcessingThread(CentralProcessor centralProcessor) {
         super("CentralProcessingThread");
         this.centralProcessor = new AtomicReference<>(centralProcessor);
-        this.console = new AtomicReference<>(console);
+        this.console = new AtomicReference<>(this.centralProcessor.get().getConsole());
     }
 
+    /**
+     * Starts execution
+     */
     @Override
     public void run() {
         short i = console.get().getProgramCounter().getValue();
@@ -55,5 +78,14 @@ public class CentralProcessingThread extends Thread {
             i += size;
             console.get().getProgramCounter().setValue(i);
         }
+    }
+
+    /**
+     * Returns the CentralProcessor that this thread is processing for
+     *
+     * @return the CentralProcessor that this thread is processing for
+     */
+    public CentralProcessor getCentralProcessor() {
+        return centralProcessor.get();
     }
 }

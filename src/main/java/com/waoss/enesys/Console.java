@@ -26,7 +26,7 @@ import java.io.Serializable;
 import java.util.concurrent.atomic.AtomicReference;
 
 /**
- * <p>Represents the complete NES system.
+ * <p>A bean that Represents the complete NES system.
  * Contains everything from the memory to the registers to everything else.
  * Primarily contains atomically referenced fields and their getters and setters</p>
  */
@@ -103,6 +103,6 @@ public class Console implements Serializable {
 
     @Override
     public String toString() {
-        return new GsonBuilder().setPrettyPrinting().registerTypeAdapter(getClass(), new ConsoleTypeAdapter()).create().toJson(this);
+        return new GsonBuilder().setPrettyPrinting().create().toJson(this);
     }
 }

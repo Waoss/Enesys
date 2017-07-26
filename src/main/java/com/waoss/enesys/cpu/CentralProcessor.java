@@ -56,7 +56,7 @@ public final class CentralProcessor implements Cloneable {
      */
     public CentralProcessor(Console console) {
         this.console.set(console);
-        this.thread.set(new CentralProcessingThread(this, console));
+        this.thread.set(new CentralProcessingThread(this));
     }
 
     /**

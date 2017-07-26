@@ -43,10 +43,13 @@ public final class CentralProcessor implements Cloneable {
     private final transient AtomicReference<Console> console = new AtomicReference<>();
 
     /**
-     *
+     * The {@link CentralProcessingThread} in which shit happens
      */
     private final AtomicReference<CentralProcessingThread> thread = new AtomicReference<>();
 
+    /**
+     * This atomic boolean which tells us whether the processing is happening in the main thread.
+     */
     private final AtomicBoolean runningInMainThread = new AtomicBoolean(false);
 
     /**
@@ -77,6 +80,15 @@ public final class CentralProcessor implements Cloneable {
     @Override
     protected Object clone() throws CloneNotSupportedException {
         return new CentralProcessor(this);
+    }
+
+    /**
+     * Returns true if the processing is happening in the main thread
+     *
+     * @return true if the processing is happening in the main thread
+     */
+    public boolean isRunningInMainThread() {
+        return runningInMainThread.get();
     }
 
     /**
@@ -231,9 +243,40 @@ public final class CentralProcessor implements Cloneable {
      * @param instruction The instruction
      */
     public void iny(Instruction instruction) {
-        getXRegister().setValue((getXRegister().getValue() + 1));
+        getYRegister().setValue(getYRegister().getValue() + 1);
     }
 
+    public void brk(Instruction instruction) {
+        interruptThread();
+    }
+
+    public void nop(Instruction instruction) {
+        return;
+    }
+
+    /**
+     * Logical AND
+     * Stores into the accumalator the "AND" of the value and the previous value
+     * Implementation of {@link com.waoss.enesys.cpu.instructions.InstructionName#AND}
+     *
+     * @param instruction The instruction
+     */
+    public void and(Instruction instruction) throws IOException {
+        checkInstructionName(instruction, InstructionName.AND);
+        getARegister().setValue(getARegister().getValue() & (Integer) instruction.argumentsProperty().get()[0]);
+        checkZeroAndNegative(getARegister().getValue());
+    }
+
+    /**
+     * Add with carry
+     * Implementation of {@link InstructionName#ADC}
+     *
+     * @param instruction The instruction
+     */
+    public void adc(Instruction instruction) {
+        getARegister().setValue(getARegister().getValue() + (Integer) instruction.argumentsProperty().get()[0] + (getProcessorStatus().isCarryFlagEnabled() ? 1 : 0));
+        checkZeroAndNegative(getARegister().getValue());
+    }
 
     /**
      * Processes an instruction
@@ -283,24 +326,6 @@ public final class CentralProcessor implements Cloneable {
         }
     }
 
-    public void brk(Instruction instruction) {
-        interruptThread();
-    }
-
-    public void nop(Instruction instruction) {
-        return;
-    }
-
-    /**
-     * Logical AND
-     * Stores into the accumalator the "AND" of the value and the previous value
-     * Implementation of {@link com.waoss.enesys.cpu.instructions.InstructionName#AND}
-     *
-     * @param instruction The instruction
-     */
-    public void and(Instruction instruction) throws IOException {
-        checkInstructionName(instruction, InstructionName.AND);
-    }
 
     private void checkInstructionName(Instruction instruction, InstructionName name) throws IOException {
         if (instruction.instructionNameProperty().get() != name) {

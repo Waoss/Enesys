@@ -20,6 +20,7 @@ package com.waoss.enesys.cpu.registers;
 
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 import java.util.List;
@@ -90,6 +91,7 @@ public final class ProcessorStatus extends UnsignedIntRegister {
      *
      * @return the property that contains the flag
      */
+    @NotNull
     public final BooleanProperty carryFlagEnabledProperty() {
         return carryFlagEnabled;
     }
@@ -117,6 +119,7 @@ public final class ProcessorStatus extends UnsignedIntRegister {
      *
      * @return the property that contains the flag
      */
+    @NotNull
     public final BooleanProperty zeroFlagEnabledProperty() {
         return zeroFlagEnabled;
     }
@@ -144,6 +147,7 @@ public final class ProcessorStatus extends UnsignedIntRegister {
      *
      * @return the property that contains the flag
      */
+    @NotNull
     public final BooleanProperty interruptFlagEnabledProperty() {
         return interruptFlagEnabled;
     }
@@ -171,6 +175,7 @@ public final class ProcessorStatus extends UnsignedIntRegister {
      *
      * @return the property that contains the flag
      */
+    @NotNull
     public final BooleanProperty decimalFlagEnabledProperty() {
         return decimalFlagEnabled;
     }
@@ -198,6 +203,7 @@ public final class ProcessorStatus extends UnsignedIntRegister {
      *
      * @return the property that contains the flag
      */
+    @NotNull
     public final BooleanProperty breakFlagEnabledProperty() {
         return breakFlagEnabled;
     }
@@ -225,6 +231,7 @@ public final class ProcessorStatus extends UnsignedIntRegister {
      *
      * @return the property that contains the flag
      */
+    @NotNull
     public final BooleanProperty overflowFlagEnabledProperty() {
         return overflowFlagEnabled;
     }
@@ -252,6 +259,7 @@ public final class ProcessorStatus extends UnsignedIntRegister {
      *
      * @return the property that contains the flag
      */
+    @NotNull
     public final BooleanProperty negativeFlagEnabledProperty() {
         return negativeFlagEnabled;
     }
@@ -281,7 +289,7 @@ public final class ProcessorStatus extends UnsignedIntRegister {
      */
     @Override
     public String toString() {
-        final String[] result = {""};
+        @NotNull final String[] result = {""};
         flags().forEach(flag -> {
             if (flag.get()) {
                 result[0] += "1";
@@ -308,7 +316,7 @@ public final class ProcessorStatus extends UnsignedIntRegister {
                 negativeFlagEnabledProperty());
     }
 
-    private void enableFlag(BooleanProperty property, boolean value, int index) {
+    private void enableFlag(@NotNull BooleanProperty property, boolean value, int index) {
         property.set(value);
         if (value) {
             enableBit((byte) index);

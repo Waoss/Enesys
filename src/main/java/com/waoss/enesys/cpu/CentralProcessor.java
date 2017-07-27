@@ -23,6 +23,7 @@ import com.waoss.enesys.cpu.instructions.Instruction;
 import com.waoss.enesys.cpu.instructions.InstructionName;
 import com.waoss.enesys.cpu.registers.*;
 import com.waoss.enesys.mem.CompleteMemory;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
@@ -67,7 +68,7 @@ public final class CentralProcessor implements Cloneable {
      *
      * @param centralProcessor the processor to clone
      */
-    public CentralProcessor(CentralProcessor centralProcessor) {
+    public CentralProcessor(@NotNull CentralProcessor centralProcessor) {
         this(centralProcessor.console.get());
     }
 
@@ -77,6 +78,7 @@ public final class CentralProcessor implements Cloneable {
      * @return A clone
      * @throws CloneNotSupportedException Never
      */
+    @NotNull
     @Override
     protected Object clone() throws CloneNotSupportedException {
         return new CentralProcessor(this);
@@ -172,7 +174,7 @@ public final class CentralProcessor implements Cloneable {
      *
      * @param instruction The instruction
      */
-    public void lda(Instruction instruction) throws IOException {
+    public void lda(@NotNull Instruction instruction) throws IOException {
         loadRegister(getARegister(), instruction, InstructionName.LDA);
     }
 
@@ -182,7 +184,7 @@ public final class CentralProcessor implements Cloneable {
      *
      * @param instruction The instruction
      */
-    public void sta(Instruction instruction) throws IOException {
+    public void sta(@NotNull Instruction instruction) throws IOException {
         storeRegister(getARegister(), instruction, InstructionName.STA);
     }
 
@@ -193,7 +195,7 @@ public final class CentralProcessor implements Cloneable {
      * @param instruction The instruction
      * @throws IOException If the instruction is not valid
      */
-    public void ldx(Instruction instruction) throws IOException {
+    public void ldx(@NotNull Instruction instruction) throws IOException {
         loadRegister(getXRegister(), instruction, InstructionName.LDX);
     }
 
@@ -203,7 +205,7 @@ public final class CentralProcessor implements Cloneable {
      * @param instruction The instruction
      * @throws IOException If the instruction is not valid
      */
-    public void stx(Instruction instruction) throws IOException {
+    public void stx(@NotNull Instruction instruction) throws IOException {
         storeRegister(getXRegister(), instruction, InstructionName.STX);
     }
 
@@ -223,7 +225,7 @@ public final class CentralProcessor implements Cloneable {
      * @param instruction The instruction
      * @throws IOException If the instruction is not valid
      */
-    public void ldy(Instruction instruction) throws IOException {
+    public void ldy(@NotNull Instruction instruction) throws IOException {
         loadRegister(getYRegister(), instruction, InstructionName.LDY);
     }
 
@@ -233,7 +235,7 @@ public final class CentralProcessor implements Cloneable {
      * @param instruction The instruction
      * @throws IOException If the instruction is not valid
      */
-    public void sty(Instruction instruction) throws IOException {
+    public void sty(@NotNull Instruction instruction) throws IOException {
         storeRegister(getYRegister(), instruction, InstructionName.STY);
     }
 
@@ -261,7 +263,7 @@ public final class CentralProcessor implements Cloneable {
      *
      * @param instruction The instruction
      */
-    public void and(Instruction instruction) throws IOException {
+    public void and(@NotNull Instruction instruction) throws IOException {
         checkInstructionName(instruction, InstructionName.AND);
         getARegister().setValue(getARegister().getValue() & (Integer) instruction.argumentsProperty().get()[0]);
         checkZeroAndNegative(getARegister().getValue());
@@ -273,7 +275,7 @@ public final class CentralProcessor implements Cloneable {
      *
      * @param instruction The instruction
      */
-    public void adc(Instruction instruction) {
+    public void adc(@NotNull Instruction instruction) {
         getARegister().setValue(getARegister().getValue() + (Integer) instruction.argumentsProperty().get()[0] + (getProcessorStatus().isCarryFlagEnabled() ? 1 : 0));
         checkZeroAndNegative(getARegister().getValue());
     }
@@ -284,13 +286,13 @@ public final class CentralProcessor implements Cloneable {
      *
      * @param instruction The instruction
      */
-    public void process(Instruction instruction) {
-        String name = instruction.getInstructionName().toString().toLowerCase();
+    public void process(@NotNull Instruction instruction) {
+        @NotNull String name = instruction.getInstructionName().toString().toLowerCase();
         Method method;
         try {
             method = getClass().getMethod(name, Instruction.class);
             method.invoke(this, instruction);
-        } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+        } catch (@NotNull NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
             e.printStackTrace();
         }
     }
@@ -327,19 +329,19 @@ public final class CentralProcessor implements Cloneable {
     }
 
 
-    private void checkInstructionName(Instruction instruction, InstructionName name) throws IOException {
+    private void checkInstructionName(@NotNull Instruction instruction, InstructionName name) throws IOException {
         if (instruction.instructionNameProperty().get() != name) {
             throw new IOException("Wrong Instruction");
         }
     }
 
-    private void loadRegister(Register register, Instruction instruction, InstructionName name) throws IOException {
+    private void loadRegister(@NotNull Register register, @NotNull Instruction instruction, InstructionName name) throws IOException {
         checkInstructionName(instruction, name);
         Registers.loadRegister(register, instruction.argumentsProperty().get()[0]);
         checkZeroAndNegative((Integer) register.getValue());
     }
 
-    private void storeRegister(Register register, Instruction instruction, InstructionName name) throws IOException {
+    private void storeRegister(@NotNull Register register, @NotNull Instruction instruction, InstructionName name) throws IOException {
         checkInstructionName(instruction, name);
         Registers.storeRegister(register, console.get(), (Integer) instruction.argumentsProperty().get()[0]);
         checkZeroAndNegative((Byte) register.getValue());

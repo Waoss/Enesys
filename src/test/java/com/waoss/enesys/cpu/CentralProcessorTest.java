@@ -22,12 +22,13 @@ import com.waoss.enesys.Console;
 import com.waoss.enesys.cpu.instructions.InstructionConstants;
 import com.waoss.enesys.cpu.instructions.InstructionName;
 import com.waoss.enesys.mem.Addressing;
+import org.jetbrains.annotations.NotNull;
 import org.junit.Test;
 
 public class CentralProcessorTest {
 
-    Console targetConsole = new Console();
-    CentralProcessor target = new CentralProcessor(targetConsole);
+    @NotNull Console targetConsole = new Console();
+    @NotNull CentralProcessor target = new CentralProcessor(targetConsole);
 
     @Test
     public void testOpCodeMatching() {

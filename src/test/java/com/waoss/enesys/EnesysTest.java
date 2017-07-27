@@ -18,12 +18,5 @@
 
 package com.waoss.enesys;
 
-import org.junit.Test;
-
 public class EnesysTest {
-
-    @Test
-    public void main() throws Exception {
-    }
-
 }

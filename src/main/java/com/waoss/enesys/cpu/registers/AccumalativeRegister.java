@@ -31,7 +31,7 @@ public class AccumalativeRegister extends UnsignedIntRegister {
 
     /**
      * Creates a new A register
-     * The constructor of {@link UnsignedIntRegister#UnsignedIntRegister(Byte)} takes in the default value
+     * The constructor of {@link UnsignedIntRegister#UnsignedIntRegister(Integer)} takes in the default value
      */
     public AccumalativeRegister() {
         super(0x0);

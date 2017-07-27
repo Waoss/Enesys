@@ -22,6 +22,7 @@ import com.waoss.enesys.Console;
 import com.waoss.enesys.cpu.instructions.Instruction;
 import com.waoss.enesys.cpu.instructions.InstructionConstants;
 import com.waoss.enesys.cpu.instructions.Instructions;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -41,11 +42,13 @@ public class CentralProcessingThread extends Thread {
     /**
      * An atomic reference to the central processor which contains this thread
      */
+    @NotNull
     private final AtomicReference<CentralProcessor> centralProcessor;
 
     /**
      * An atomic reference to the {@link Console} this is a part of.
      */
+    @NotNull
     private final AtomicReference<Console> console;
 
     /**
@@ -68,11 +71,11 @@ public class CentralProcessingThread extends Thread {
         while (true) {
             int opCode = console.get().getCompleteMemory().read(i);
             int size = Instructions.getInstructionSize(opCode) - 1;
-            final Number[] arguments = new Number[size];
+            @NotNull final Number[] arguments = new Number[size];
             for (short j = 1; j <= size; j++) {
                 arguments[j - 1] = console.get().getCompleteMemory().read((short) (i + j));
             }
-            final Instruction result = new Instruction(opCode, InstructionConstants.addressings[opCode]);
+            @NotNull final Instruction result = new Instruction(opCode, InstructionConstants.addressings[opCode]);
             result.argumentsProperty().set(arguments);
             centralProcessor.get().process(result);
             i += size;

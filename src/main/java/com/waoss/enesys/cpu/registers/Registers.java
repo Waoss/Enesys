@@ -19,17 +19,18 @@
 package com.waoss.enesys.cpu.registers;
 
 import com.waoss.enesys.Console;
+import org.jetbrains.annotations.NotNull;
 
 public final class Registers {
 
     private Registers() {
     }
 
-    public static <T extends Number> void loadRegister(Register<T> tRegister, T value) {
+    public static <T extends Number> void loadRegister(@NotNull Register<T> tRegister, T value) {
         tRegister.setValue(value);
     }
 
-    public static <T extends Byte> void storeRegister(Register<T> tRegister, Console console, int address) {
+    public static <T extends Byte> void storeRegister(@NotNull Register<T> tRegister, @NotNull Console console, int address) {
         console.getCompleteMemory().write((short) address, tRegister.getValue());
     }
 }

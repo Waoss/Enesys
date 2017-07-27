@@ -18,9 +18,9 @@
 
 package com.waoss.enesys.cpu.registers;
 
-public class ProgramCounter extends UnsignedShortRegister {
+public class ProgramCounter extends UnsignedIntRegister {
 
-    public ProgramCounter(short defaultValue) {
+    public ProgramCounter(int defaultValue) {
         super(defaultValue);
     }
 }

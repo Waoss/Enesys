@@ -30,12 +30,12 @@ public final class RandomAccessMemory extends Memory {
     }
 
     @Override
-    public int read(short address) {
+    public int read(int address) {
         return buffer.get().get(address);
     }
 
     @Override
-    public void write(short address, int value) {
+    public void write(int address, int value) {
         buffer.set(buffer.get().put(address, value));
     }
 }

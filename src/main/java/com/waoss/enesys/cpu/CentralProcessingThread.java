@@ -67,11 +67,11 @@ public class CentralProcessingThread extends Thread {
      */
     @Override
     public void run() {
-        short i = console.get().getProgramCounter().getValue();
+        int i = console.get().getProgramCounter().getValue();
         while (true) {
             int opCode = console.get().getCompleteMemory().read(i);
-            int size = Instructions.getInstructionSize(opCode) - 1;
-            @NotNull final Number[] arguments = new Number[size];
+            int size = Instructions.getInstructionSize(opCode);
+            @NotNull final Integer[] arguments = new Integer[size];
             for (short j = 1; j <= size; j++) {
                 arguments[j - 1] = console.get().getCompleteMemory().read((short) (i + j));
             }

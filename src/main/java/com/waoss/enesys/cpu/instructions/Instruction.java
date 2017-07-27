@@ -41,7 +41,7 @@ public final class Instruction {
      * This property stores the arguments<br>
      * For example, a branching instruction would have one argument: where to go if condition is true
      */
-    private final AtomicReference<SimpleObjectProperty<Number[]>> arguments = new AtomicReference<>(new SimpleObjectProperty<>(this, "arguments"));
+    private final AtomicReference<SimpleObjectProperty<Integer[]>> arguments = new AtomicReference<>(new SimpleObjectProperty<>(this, "arguments"));
 
     /**
      * Creates a new Instruction when given the name and addressing
@@ -106,11 +106,11 @@ public final class Instruction {
         return arguments.get().get();
     }
 
-    public void setArguments(Number... arguments) {
+    public void setArguments(Integer... arguments) {
         this.arguments.get().set(arguments);
     }
 
-    public SimpleObjectProperty<Number[]> argumentsProperty() {
+    public SimpleObjectProperty<Integer[]> argumentsProperty() {
         return arguments.get();
     }
 }

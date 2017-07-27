@@ -45,7 +45,7 @@ public class CompleteMemory extends Memory {
      * @return The value
      */
     @Override
-    public int read(short address) {
+    public int read(int address) {
         //guy wants RAM
         if (address < 2048) {
             return randomAccessMemory.get().get().read(address);
@@ -60,7 +60,7 @@ public class CompleteMemory extends Memory {
      * @param value   The value
      */
     @Override
-    public void write(short address, int value) {
+    public void write(int address, int value) {
         if (address < 2048) {
             randomAccessMemory.get().get().write(address, value);
         }

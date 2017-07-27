@@ -18,7 +18,6 @@
 
 package com.waoss.enesys;
 
-import com.google.gson.GsonBuilder;
 import com.waoss.enesys.cpu.registers.*;
 import com.waoss.enesys.mem.CompleteMemory;
 
@@ -101,8 +100,4 @@ public class Console implements Serializable {
         this.completeMemory.set(completeMemory);
     }
 
-    @Override
-    public String toString() {
-        return new GsonBuilder().setPrettyPrinting().create().toJson(this);
-    }
 }

@@ -19,9 +19,6 @@
 package com.waoss.enesys.cpu;
 
 import com.waoss.enesys.Console;
-import com.waoss.enesys.cpu.instructions.InstructionConstants;
-import com.waoss.enesys.cpu.instructions.InstructionName;
-import com.waoss.enesys.mem.Addressing;
 import org.jetbrains.annotations.NotNull;
 import org.junit.Test;
 
@@ -29,18 +26,20 @@ public class CentralProcessorTest {
 
     @NotNull Console targetConsole = new Console();
     @NotNull CentralProcessor target = new CentralProcessor(targetConsole);
-
     @Test
-    public void testOpCodeMatching() {
-        InstructionName instructionName = InstructionName.getByOpCode((byte) 0x69);
-        assert instructionName == InstructionName.ADC;
-        assert InstructionConstants.addressings[0x69] == Addressing.IMMEDIATE;
+    public void ldx() throws Exception {
+        targetConsole.getCompleteMemory().write((short) 0x0600, 0xa2);
+        targetConsole.getCompleteMemory().write((short) 0x0601, 0x44);
+        target.start();
+        Thread.sleep(3000);
+        target.interruptThread();
     }
 
     @Test
-    public void testCentralProcessingThread() throws Exception {
-        targetConsole.getCompleteMemory().write((short) 0x0600, 0xa2);
-        targetConsole.getCompleteMemory().write((short) 0x0601, 0x44);
+    public void bcc() throws Exception {
+        targetConsole.getProcessorStatus().setCarryFlagEnabled(false);
+        targetConsole.getCompleteMemory().write((short) 0x0600, 0x90);
+        targetConsole.getCompleteMemory().write((short) 0x0601, 0x0600);
         target.start();
         Thread.sleep(3000);
         target.interruptThread();

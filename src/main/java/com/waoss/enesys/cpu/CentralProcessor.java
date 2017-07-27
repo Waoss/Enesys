@@ -275,9 +275,24 @@ public final class CentralProcessor implements Cloneable {
      *
      * @param instruction The instruction
      */
-    public void adc(@NotNull Instruction instruction) {
+    public void adc(@NotNull Instruction instruction) throws IOException {
+        checkInstructionName(instruction, InstructionName.ADC);
         getARegister().setValue(getARegister().getValue() + (Integer) instruction.argumentsProperty().get()[0] + (getProcessorStatus().isCarryFlagEnabled() ? 1 : 0));
         checkZeroAndNegative(getARegister().getValue());
+    }
+
+    /**
+     * Branch on carry clear
+     * Implementation of {@link InstructionName#BCC}
+     *
+     * @param instruction The instruction
+     * @throws IOException If something IO shit happens
+     */
+    public void bcc(@NotNull Instruction instruction) throws IOException {
+        if (!getProcessorStatus().isCarryFlagEnabled()) {
+            final ProgramCounter programCounter = getProgramCounter();
+            programCounter.setValue(instruction.argumentsProperty().get()[0]);
+        }
     }
 
     /**
@@ -321,11 +336,7 @@ public final class CentralProcessor implements Cloneable {
      * , so it interrupts the current thread.</p>
      */
     public void interruptThread() {
-        if (runningInMainThread.get()) {
-            Thread.currentThread().interrupt();
-        } else {
-            thread.get().interrupt();
-        }
+        thread.get().interrupt();
     }
 
 

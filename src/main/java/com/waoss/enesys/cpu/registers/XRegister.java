@@ -18,7 +18,7 @@
 
 package com.waoss.enesys.cpu.registers;
 
-public class XRegister extends UnsignedIntRegister {
+public class XRegister extends IntRegister {
 
     public XRegister() {
         super(0x0);

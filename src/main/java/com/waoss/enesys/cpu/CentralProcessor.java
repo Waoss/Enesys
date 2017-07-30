@@ -23,9 +23,11 @@ import com.waoss.enesys.cpu.instructions.Instruction;
 import com.waoss.enesys.cpu.instructions.InstructionName;
 import com.waoss.enesys.cpu.registers.*;
 import com.waoss.enesys.mem.CompleteMemory;
+import javafx.beans.property.SimpleBooleanProperty;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -265,7 +267,7 @@ public final class CentralProcessor implements Cloneable {
      */
     public void and(@NotNull Instruction instruction) throws IOException {
         checkInstructionName(instruction, InstructionName.AND);
-        getARegister().setValue(getARegister().getValue() & (Integer) instruction.argumentsProperty().get()[0]);
+        getARegister().setValue(getARegister().getValue() & instruction.argumentsProperty().get()[0]);
         checkZeroAndNegative(getARegister().getValue());
     }
 
@@ -277,7 +279,7 @@ public final class CentralProcessor implements Cloneable {
      */
     public void adc(@NotNull Instruction instruction) throws IOException {
         checkInstructionName(instruction, InstructionName.ADC);
-        getARegister().setValue(getARegister().getValue() + (Integer) instruction.argumentsProperty().get()[0] + (getProcessorStatus().isCarryFlagEnabled() ? 1 : 0));
+        getARegister().setValue(getARegister().getValue() + instruction.argumentsProperty().get()[0] + (getProcessorStatus().isCarryFlagEnabled() ? 1 : 0));
         checkZeroAndNegative(getARegister().getValue());
     }
 
@@ -286,13 +288,41 @@ public final class CentralProcessor implements Cloneable {
      * Implementation of {@link InstructionName#BCC}
      *
      * @param instruction The instruction
-     * @throws IOException If something IO shit happens
+     * @throws IOException If some IO shit happens
      */
     public void bcc(@NotNull Instruction instruction) throws IOException {
-        if (!getProcessorStatus().isCarryFlagEnabled()) {
-            final ProgramCounter programCounter = getProgramCounter();
-            programCounter.setValue(instruction.argumentsProperty().get()[0]);
-        }
+        branchOnFlag("carryFlagEnabled", instruction, false);
+    }
+
+    /**
+     * Branch on carry set
+     * Implementation of {@link InstructionName#BCS}
+     *
+     * @param instruction The instruction
+     * @throws IOException If some IO shit happens
+     */
+    public void bcs(@NotNull Instruction instruction) throws IOException {
+        branchOnFlag("carryFlagEnabled", instruction, true);
+    }
+
+    /**
+     * Branch on overflow clear
+     *
+     * @param instruction The instruction
+     * @throws IOException If some IO shit happens
+     */
+    public void bvc(@NotNull Instruction instruction) throws IOException {
+        branchOnFlag("overflowFlagEnabled", instruction, false);
+    }
+
+    /**
+     * Branch on overflow set
+     *
+     * @param instruction The instruction
+     * @throws IOException If some IO shit happens
+     */
+    public void bvs(@NotNull Instruction instruction) throws IOException {
+        branchOnFlag("overflowFlagEnabled", instruction, true);
     }
 
     /**
@@ -354,8 +384,26 @@ public final class CentralProcessor implements Cloneable {
 
     private void storeRegister(@NotNull Register register, @NotNull Instruction instruction, InstructionName name) throws IOException {
         checkInstructionName(instruction, name);
-        Registers.storeRegister(register, console.get(), (Integer) instruction.argumentsProperty().get()[0]);
+        Registers.storeRegister(register, console.get(), instruction.argumentsProperty().get()[0]);
         checkZeroAndNegative((Byte) register.getValue());
+    }
+
+    private void branchOnFlag(@NotNull String flagName, @NotNull Instruction instruction, boolean bool) throws IOException {
+        try {
+            final ProcessorStatus currentProcessorStatus = getProcessorStatus();
+            final Field flagPropertyField = ProcessorStatus.class.getField(flagName);
+            @NotNull final SimpleBooleanProperty flagProperty = (SimpleBooleanProperty) flagPropertyField.get(currentProcessorStatus);
+            final ProgramCounter programCounter = getProgramCounter();
+            if ((bool && flagProperty.get()) || (!bool && !flagProperty.get())) {
+                updateProgramCounter(programCounter, programCounter.getValue() + instruction.argumentsProperty().get()[0]);
+            }
+        } catch (@NotNull NoSuchFieldException | IllegalAccessException e) {
+            throw new IOException(e);
+        }
+    }
+
+    private void updateProgramCounter(@NotNull final ProgramCounter programCounter, Integer newValue) {
+        programCounter.setValue(newValue);
     }
 
 }

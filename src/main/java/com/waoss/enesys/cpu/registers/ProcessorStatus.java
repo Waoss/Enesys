@@ -30,7 +30,7 @@ import java.util.List;
  * The processor status was a special register that stored meta-data of the 6502.<br>
  * They have been implemented as JavaFX properties
  */
-public final class ProcessorStatus extends UnsignedIntRegister {
+public final class ProcessorStatus extends IntRegister {
 
     /**
      * Carry Flag : set when the last operation resulted in some sort of carry

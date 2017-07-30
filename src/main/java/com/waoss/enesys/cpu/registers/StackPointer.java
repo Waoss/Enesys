@@ -18,7 +18,7 @@
 
 package com.waoss.enesys.cpu.registers;
 
-public class StackPointer extends UnsignedIntRegister {
+public class StackPointer extends IntRegister {
 
     public StackPointer() {
         super(0xfd);

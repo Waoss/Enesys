@@ -73,7 +73,7 @@ public class CentralProcessingThread extends Thread {
             int size = Instructions.getInstructionSize(opCode);
             @NotNull final Integer[] arguments = new Integer[size];
             for (short j = 1; j <= size; j++) {
-                arguments[j - 1] = console.get().getCompleteMemory().read((short) (i + j));
+                arguments[j - 1] = console.get().getCompleteMemory().read(i + j);
             }
             @NotNull final Instruction result = new Instruction(opCode, InstructionConstants.addressings[opCode]);
             result.argumentsProperty().set(arguments);

@@ -21,13 +21,13 @@ package com.waoss.enesys.cpu.registers;
 /**
  * An implementation of a register that is one byte wide.
  */
-public class UnsignedIntRegister extends RegisterImpl<Integer> {
+public class IntRegister extends RegisterImpl<Integer> {
     /**
-     * Creates a new UnsignedIntRegister
+     * Creates a new IntRegister
      *
      * @param defaultValue The default value of the register
      */
-    public UnsignedIntRegister(Integer defaultValue) {
+    public IntRegister(Integer defaultValue) {
         super(defaultValue);
     }
 }

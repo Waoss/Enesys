@@ -23,15 +23,15 @@ package com.waoss.enesys.cpu.registers;
  * The default value of the A register is 0.
  *
  * @see Register
- * @see UnsignedIntRegister
+ * @see IntRegister
  * @see UnsignedShortRegister
  * @see RegisterImpl
  */
-public class AccumalativeRegister extends UnsignedIntRegister {
+public class AccumalativeRegister extends IntRegister {
 
     /**
      * Creates a new A register
-     * The constructor of {@link UnsignedIntRegister#UnsignedIntRegister(Integer)} takes in the default value
+     * The constructor of {@link IntRegister#IntRegister(Integer)} takes in the default value
      */
     public AccumalativeRegister() {
         super(0x0);

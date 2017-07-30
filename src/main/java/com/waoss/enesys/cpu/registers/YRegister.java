@@ -18,7 +18,7 @@
 
 package com.waoss.enesys.cpu.registers;
 
-public class YRegister extends UnsignedIntRegister {
+public class YRegister extends IntRegister {
 
     public YRegister() {
         super(0x0);

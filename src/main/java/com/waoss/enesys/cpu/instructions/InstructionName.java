@@ -88,4 +88,27 @@ public enum InstructionName {
         return valueOf(instructions[opCode]);
     }
 
+    public boolean isBranchingInstruction() {
+        switch (this) {
+            case BCC:
+                return true;
+            case BCS:
+                return true;
+            case BPL:
+                return true;
+            case BEQ:
+                return true;
+            case BNE:
+                return true;
+            case BVC:
+                return true;
+            case BVS:
+                return true;
+            case BMI:
+                return true;
+            default:
+                return false;
+        }
+    }
+
 }

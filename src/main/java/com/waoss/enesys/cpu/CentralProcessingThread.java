@@ -78,8 +78,7 @@ public class CentralProcessingThread extends Thread {
             @NotNull final Instruction result = new Instruction(opCode, InstructionConstants.addressings[opCode]);
             result.argumentsProperty().set(arguments);
             centralProcessor.get().process(result);
-            i += size;
-            console.get().getProgramCounter().setValue(i);
+            //TODO:Make program counter sober
         }
     }
 

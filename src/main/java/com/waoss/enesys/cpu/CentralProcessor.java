@@ -23,11 +23,10 @@ import com.waoss.enesys.cpu.instructions.Instruction;
 import com.waoss.enesys.cpu.instructions.InstructionName;
 import com.waoss.enesys.cpu.registers.*;
 import com.waoss.enesys.mem.CompleteMemory;
-import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.BooleanProperty;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
-import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -389,16 +388,17 @@ public final class CentralProcessor implements Cloneable {
     }
 
     private void branchOnFlag(@NotNull String flagName, @NotNull Instruction instruction, boolean bool) throws IOException {
+        final ProcessorStatus currentProcessorStatus = getProcessorStatus();
+        flagName += "Property";
         try {
-            final ProcessorStatus currentProcessorStatus = getProcessorStatus();
-            final Field flagPropertyField = ProcessorStatus.class.getField(flagName);
-            @NotNull final SimpleBooleanProperty flagProperty = (SimpleBooleanProperty) flagPropertyField.get(currentProcessorStatus);
+            final Method method = ProcessorStatus.class.getMethod(flagName);
+            final BooleanProperty flagProperty = (BooleanProperty) method.invoke(currentProcessorStatus);
             final ProgramCounter programCounter = getProgramCounter();
             if ((bool && flagProperty.get()) || (!bool && !flagProperty.get())) {
                 updateProgramCounter(programCounter, programCounter.getValue() + instruction.argumentsProperty().get()[0]);
             }
-        } catch (@NotNull NoSuchFieldException | IllegalAccessException e) {
-            throw new IOException(e);
+        } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+            e.printStackTrace();
         }
     }
 

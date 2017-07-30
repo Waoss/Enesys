@@ -26,8 +26,9 @@ public class CentralProcessorTest {
 
     @NotNull Console targetConsole = new Console();
     @NotNull CentralProcessor target = new CentralProcessor(targetConsole);
+
     @Test
-    public void ldx() throws Exception {
+    public void registerLoading() throws Exception {
         targetConsole.getCompleteMemory().write((short) 0x0600, 0xa2);
         targetConsole.getCompleteMemory().write((short) 0x0601, 0x44);
         target.start();
@@ -36,11 +37,11 @@ public class CentralProcessorTest {
     }
 
     @Test
-    public void bcc() throws Exception {
+    public void branching() throws Exception {
         targetConsole.getProcessorStatus().setCarryFlagEnabled(false);
         targetConsole.getCompleteMemory().write((short) 0x0600, 0x90);
-        targetConsole.getCompleteMemory().write((short) 0x0601, 0x0600);
-        target.start();
+        targetConsole.getCompleteMemory().write((short) 0x0601, 0x0);
+        target.run();
         Thread.sleep(3000);
         target.interruptThread();
     }

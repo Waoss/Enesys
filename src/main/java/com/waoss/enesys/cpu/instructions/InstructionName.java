@@ -29,11 +29,26 @@ public enum InstructionName {
      * Logical And
      */
     AND,
+    /**
+     * Arithmetic shift left
+     */
     ASL,
+    /**
+     * Branch on carry clear
+     */
     BCC,
+    /**
+     * Branch on carry set
+     */
     BCS,
+    /**
+     * Branch on equals
+     */
     BEQ,
     BIT,
+    /**
+     * Branch on minus
+     */
     BMI,
     BNE,
     BPL,

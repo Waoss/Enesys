@@ -37,9 +37,30 @@ public class CentralProcessorTest {
         testBiArgumented(0x0600, 0x90, 0x0601, 0x01);
     }
 
+    @Test
+    public void carryFlagSetting() throws Exception {
+        testUniArgumented(0x0600, 0x38);
+        assert target.getProcessorStatus().isCarryFlagEnabled();
+    }
+
+    @Test
+    public void decimalFlagSetting() throws Exception {
+        testUniArgumented(0x0600, 0xf8);
+        assert target.getProcessorStatus().isDecimalFlagEnabled();
+    }
+
+    private void testUniArgumented(int address, int instruction) throws Exception {
+        testBiArgumented(address, instruction, 0, 0);
+    }
+
+    //Testing for two arguments
     private void testBiArgumented(int start, int startValue, int end, int endValue) throws Exception {
         targetConsole.getCompleteMemory().write(start, startValue);
         targetConsole.getCompleteMemory().write(end, endValue);
+        startTarget();
+    }
+
+    private void startTarget() throws Exception {
         target.start();
         Thread.sleep(3000);
         target.interruptThread();

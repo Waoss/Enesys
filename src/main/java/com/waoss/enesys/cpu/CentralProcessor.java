@@ -58,7 +58,8 @@ public final class CentralProcessor implements Cloneable, Processor {
     /**
      * Creates a new Processor for the console.
      *
-     * @param console The console
+     * @param console
+     *         The console
      */
     public CentralProcessor(Console console) {
         this.console.set(console);
@@ -68,7 +69,8 @@ public final class CentralProcessor implements Cloneable, Processor {
     /**
      * Creates a clone by copying all the properties
      *
-     * @param centralProcessor the processor to clone
+     * @param centralProcessor
+     *         the processor to clone
      */
     public CentralProcessor(@NotNull CentralProcessor centralProcessor) {
         this(centralProcessor.console.get());
@@ -78,7 +80,9 @@ public final class CentralProcessor implements Cloneable, Processor {
      * Returns a clone of this processor
      *
      * @return A clone
-     * @throws CloneNotSupportedException Never
+     *
+     * @throws CloneNotSupportedException
+     *         Never
      */
     @NotNull
     @Override
@@ -162,6 +166,10 @@ public final class CentralProcessor implements Cloneable, Processor {
         return console.get().getProgramCounter();
     }
 
+    public CentralProcessingThread getThread() {
+        return thread.get();
+    }
+
     private void checkZeroAndNegative(int value) {
         if (value == 0) {
             getProcessorStatus().setZeroFlagEnabled(true);
@@ -174,7 +182,8 @@ public final class CentralProcessor implements Cloneable, Processor {
      * Loads a value into the A register.
      * Implementation of {@link com.waoss.enesys.cpu.instructions.InstructionName#LDA}
      *
-     * @param instruction The instruction
+     * @param instruction
+     *         The instruction
      */
     public boolean lda(@NotNull Instruction instruction) throws IOException {
         return loadRegister(getARegister(), instruction, InstructionName.LDA);
@@ -184,7 +193,8 @@ public final class CentralProcessor implements Cloneable, Processor {
      * <p>Stores the value of the A register into the index specified
      * Implementation of {@link com.waoss.enesys.cpu.instructions.InstructionName#STA}</p>
      *
-     * @param instruction The instruction
+     * @param instruction
+     *         The instruction
      */
     public boolean sta(@NotNull Instruction instruction) throws IOException {
         return storeRegister(getARegister(), instruction, InstructionName.STA);
@@ -194,8 +204,11 @@ public final class CentralProcessor implements Cloneable, Processor {
      * <p>Stores the value of the X register into the index specified
      * Implementation of {@link InstructionName#LDX}</p>
      *
-     * @param instruction The instruction
-     * @throws IOException If the instruction is not valid
+     * @param instruction
+     *         The instruction
+     *
+     * @throws IOException
+     *         If the instruction is not valid
      */
     public boolean ldx(@NotNull Instruction instruction) throws IOException {
         return loadRegister(getXRegister(), instruction, InstructionName.LDX);
@@ -204,8 +217,11 @@ public final class CentralProcessor implements Cloneable, Processor {
     /**
      * <p>Stores the value stored in the X register into the address specified</p>
      *
-     * @param instruction The instruction
-     * @throws IOException If the instruction is not valid
+     * @param instruction
+     *         The instruction
+     *
+     * @throws IOException
+     *         If the instruction is not valid
      */
     public boolean stx(@NotNull Instruction instruction) throws IOException {
         return storeRegister(getXRegister(), instruction, InstructionName.STX);
@@ -214,7 +230,8 @@ public final class CentralProcessor implements Cloneable, Processor {
     /**
      * <p>Increments the value of the X register by 1</p>
      *
-     * @param instruction The instruction
+     * @param instruction
+     *         The instruction
      */
     public boolean inx(Instruction instruction) {
         getYRegister().setValue((getYRegister().getValue() + 1));
@@ -225,8 +242,11 @@ public final class CentralProcessor implements Cloneable, Processor {
      * <p>Stores the value of the Y register into the index specified
      * Implementation of {@link InstructionName#LDY}</p>
      *
-     * @param instruction The instruction
-     * @throws IOException If the instruction is not valid
+     * @param instruction
+     *         The instruction
+     *
+     * @throws IOException
+     *         If the instruction is not valid
      */
     public boolean ldy(@NotNull Instruction instruction) throws IOException {
         loadRegister(getYRegister(), instruction, InstructionName.LDY);
@@ -236,8 +256,11 @@ public final class CentralProcessor implements Cloneable, Processor {
     /**
      * <p>Stores the value stored in the Y register into the address specified</p>
      *
-     * @param instruction The instruction
-     * @throws IOException If the instruction is not valid
+     * @param instruction
+     *         The instruction
+     *
+     * @throws IOException
+     *         If the instruction is not valid
      */
     public boolean sty(@NotNull Instruction instruction) throws IOException {
         return storeRegister(getYRegister(), instruction, InstructionName.STY);
@@ -246,7 +269,8 @@ public final class CentralProcessor implements Cloneable, Processor {
     /**
      * <p>Increments the value of the Y register by 1</p>
      *
-     * @param instruction The instruction
+     * @param instruction
+     *         The instruction
      */
     public boolean iny(Instruction instruction) {
         getYRegister().setValue(getYRegister().getValue() + 1);
@@ -256,7 +280,8 @@ public final class CentralProcessor implements Cloneable, Processor {
     /**
      * Breaks execution.An interrupt.Interrupts the running thread.
      *
-     * @param instruction The instruction
+     * @param instruction
+     *         The instruction
      */
     public boolean brk(Instruction instruction) {
         interruptThread();
@@ -272,7 +297,8 @@ public final class CentralProcessor implements Cloneable, Processor {
      * Stores into the accumalator the "AND" of the value and the previous value
      * Implementation of {@link com.waoss.enesys.cpu.instructions.InstructionName#AND}
      *
-     * @param instruction The instruction
+     * @param instruction
+     *         The instruction
      */
     public boolean and(@NotNull Instruction instruction) throws IOException {
         checkInstructionName(instruction, InstructionName.AND);
@@ -285,11 +311,13 @@ public final class CentralProcessor implements Cloneable, Processor {
      * Add with carry
      * Implementation of {@link InstructionName#ADC}
      *
-     * @param instruction The instruction
+     * @param instruction
+     *         The instruction
      */
     public boolean adc(@NotNull Instruction instruction) throws IOException {
         checkInstructionName(instruction, InstructionName.ADC);
-        getARegister().setValue(getARegister().getValue() + instruction.argumentsProperty().get()[0] + (getProcessorStatus().isCarryFlagEnabled() ? 1 : 0));
+        getARegister().setValue(
+                getARegister().getValue() + instruction.argumentsProperty().get()[0] + (getProcessorStatus().isCarryFlagEnabled() ? 1 : 0));
         checkZeroAndNegative(getARegister().getValue());
         return false;
     }
@@ -298,8 +326,11 @@ public final class CentralProcessor implements Cloneable, Processor {
      * Branch on carry clear
      * Implementation of {@link InstructionName#BCC}
      *
-     * @param instruction The instruction
-     * @throws IOException If some IO shit happens
+     * @param instruction
+     *         The instruction
+     *
+     * @throws IOException
+     *         If some IO shit happens
      */
     public boolean bcc(@NotNull Instruction instruction) throws IOException {
         checkInstructionName(instruction, InstructionName.BCC);
@@ -310,8 +341,11 @@ public final class CentralProcessor implements Cloneable, Processor {
      * Branch on carry set
      * Implementation of {@link InstructionName#BCS}
      *
-     * @param instruction The instruction
-     * @throws IOException If some IO shit happens
+     * @param instruction
+     *         The instruction
+     *
+     * @throws IOException
+     *         If some IO shit happens
      */
     public boolean bcs(@NotNull Instruction instruction) throws IOException {
         checkInstructionName(instruction, InstructionName.BCS);
@@ -321,8 +355,11 @@ public final class CentralProcessor implements Cloneable, Processor {
     /**
      * Branch on overflow clear
      *
-     * @param instruction The instruction
-     * @throws IOException If some IO shit happens
+     * @param instruction
+     *         The instruction
+     *
+     * @throws IOException
+     *         If some IO shit happens
      */
     public boolean bvc(@NotNull Instruction instruction) throws IOException {
         checkInstructionName(instruction, InstructionName.BVC);
@@ -332,8 +369,13 @@ public final class CentralProcessor implements Cloneable, Processor {
     /**
      * Branch on overflow set
      *
-     * @param instruction The instruction
-     * @throws IOException If some IO shit happens
+     * @param instruction
+     *         The instruction
+     *
+     * @return True if branching happened,false otherwise.
+     *
+     * @throws IOException
+     *         If some IO shit happens
      */
     public boolean bvs(@NotNull Instruction instruction) throws IOException {
         checkInstructionName(instruction, InstructionName.BVS);
@@ -341,10 +383,45 @@ public final class CentralProcessor implements Cloneable, Processor {
     }
 
     /**
+     * Set carry flag
+     *
+     * @param instruction
+     *         The instruction
+     *
+     * @return False:for no manupilation to the Program counter was doen
+     *
+     * @throws IOException
+     *         If some IO shit happens
+     */
+    public boolean sec(@NotNull Instruction instruction) throws IOException {
+        checkInstructionName(instruction, InstructionName.SEC);
+        getProcessorStatus().setCarryFlagEnabled(true);
+        return false;
+    }
+
+    /**
+     * Set decimal flag
+     *
+     * @param instruction
+     *         The instruction
+     *
+     * @return False : No change of Program counter
+     *
+     * @throws IOException
+     *         If some IO shit happens
+     */
+    public boolean sed(@NotNull Instruction instruction) throws IOException {
+        checkInstructionName(instruction, InstructionName.SED);
+        getProcessorStatus().setDecimalFlagEnabled(true);
+        return false;
+    }
+
+    /**
      * Processes an instruction
      * Invokes the required method for the instruction implementation
      *
-     * @param instruction The instruction
+     * @param instruction
+     *         The instruction
      */
     public void process(@NotNull Instruction instruction) {
         @NotNull String name = instruction.getInstructionName().toString().toLowerCase();
@@ -388,7 +465,7 @@ public final class CentralProcessor implements Cloneable, Processor {
      * , so it interrupts the current thread.</p>
      */
     public void interruptThread() {
-        thread.get().interrupt();
+        thread.get().setRunning(false);
     }
 
 
@@ -419,8 +496,9 @@ public final class CentralProcessor implements Cloneable, Processor {
             final Method method = ProcessorStatus.class.getMethod(flagName);
             final BooleanProperty flagProperty = (BooleanProperty) method.invoke(currentProcessorStatus);
             final ProgramCounter programCounter = getProgramCounter();
-            if ((bool && flagProperty.get()) || (!bool && !flagProperty.get())) {
-                return updateProgramCounter(programCounter, (programCounter.getValue() + instruction.argumentsProperty().get()[0]));
+            if ((bool && flagProperty.get()) || (! bool && ! flagProperty.get())) {
+                return updateProgramCounter(programCounter,
+                        (programCounter.getValue() + instruction.argumentsProperty().get()[0]));
 
             }
         } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {

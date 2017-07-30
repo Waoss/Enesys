@@ -19,18 +19,18 @@
 package com.waoss.enesys.cpu;
 
 import com.waoss.enesys.Console;
-import com.waoss.enesys.cpu.instructions.Instruction;
-import com.waoss.enesys.cpu.instructions.InstructionConstants;
-import com.waoss.enesys.cpu.instructions.Instructions;
+import com.waoss.enesys.cpu.instructions.*;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * <p>A thread in which the central processing of the CPU occurs.
  * The CPU uses the {@link CentralProcessor#start()} method to start processing.
  * Processing starts a loop from the program counter and the thread reads every byte and finds the
- * corresponding instruction and then uses the {@link CentralProcessor#process(Instruction)} function to process the instruction</p>
+ * corresponding instruction and then uses the {@link CentralProcessor#process(Instruction)} function to process the
+ * instruction</p>
  *
  * @see CentralProcessor
  * @see CentralProcessor#process(Instruction)
@@ -52,9 +52,16 @@ public class CentralProcessingThread extends Thread {
     private final AtomicReference<Console> console;
 
     /**
+     * An atomic boolean representing whether thread is running
+     */
+    @NotNull
+    private final AtomicBoolean running = new AtomicBoolean(false);
+
+    /**
      * Creates a new CentralProcessingThread for the processor specified in the constructor
      *
-     * @param centralProcessor The processor
+     * @param centralProcessor
+     *         The processor
      */
     public CentralProcessingThread(CentralProcessor centralProcessor) {
         super("CentralProcessingThread");
@@ -67,7 +74,8 @@ public class CentralProcessingThread extends Thread {
      */
     @Override
     public void run() {
-        int i = 1536;
+        setRunning(true);
+        int i;
         while (true) {
             i = console.get().getProgramCounter().getValue();
             int opCode = console.get().getCompleteMemory().read(i);
@@ -89,5 +97,13 @@ public class CentralProcessingThread extends Thread {
      */
     public CentralProcessor getCentralProcessor() {
         return centralProcessor.get();
+    }
+
+    public boolean isRunning() {
+        return running.get();
+    }
+
+    public void setRunning(boolean bool) {
+        running.set(bool);
     }
 }

@@ -19,6 +19,8 @@
 package com.waoss.enesys.cpu.instructions;
 
 import com.waoss.enesys.mem.Addressing;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
 
 import java.util.concurrent.atomic.AtomicReference;
@@ -42,6 +44,14 @@ public final class Instruction {
      * For example, a branching instruction would have one argument: where to go if condition is true
      */
     private final AtomicReference<SimpleObjectProperty<Integer[]>> arguments = new AtomicReference<>(new SimpleObjectProperty<>(this, "arguments"));
+
+    private final AtomicReference<IntegerProperty> size = new AtomicReference<>(new SimpleIntegerProperty(this, "size", 0));
+
+    {
+        arguments.get().addListener((observable, oldValue, newValue) -> {
+            size.get().set(newValue.length);
+        });
+    }
 
     /**
      * Creates a new Instruction when given the name and addressing
@@ -112,5 +122,17 @@ public final class Instruction {
 
     public SimpleObjectProperty<Integer[]> argumentsProperty() {
         return arguments.get();
+    }
+
+    public int getSize() {
+        return size.get().get();
+    }
+
+    public void setSize(int size) {
+        this.size.get().set(size);
+    }
+
+    public final IntegerProperty sizeProperty() {
+        return size.get();
     }
 }

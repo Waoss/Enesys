@@ -29,19 +29,18 @@ public class CentralProcessorTest {
 
     @Test
     public void registerLoading() throws Exception {
-        targetConsole.getCompleteMemory().write((short) 0x0600, 0xa2);
-        targetConsole.getCompleteMemory().write((short) 0x0601, 0x44);
-        target.start();
-        Thread.sleep(3000);
-        target.interruptThread();
+        testBiArgumented(0x0600, 0xa2, 0x0601, 0x44);
     }
 
     @Test
     public void branching() throws Exception {
-        targetConsole.getProcessorStatus().setCarryFlagEnabled(false);
-        targetConsole.getCompleteMemory().write((short) 0x0600, 0x90);
-        targetConsole.getCompleteMemory().write((short) 0x0601, 0x0);
-        target.run();
+        testBiArgumented(0x0600, 0x90, 0x0601, 0x01);
+    }
+
+    private void testBiArgumented(int start, int startValue, int end, int endValue) throws Exception {
+        targetConsole.getCompleteMemory().write(start, startValue);
+        targetConsole.getCompleteMemory().write(end, endValue);
+        target.start();
         Thread.sleep(3000);
         target.interruptThread();
     }

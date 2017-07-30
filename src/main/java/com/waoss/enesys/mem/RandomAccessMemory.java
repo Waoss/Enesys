@@ -38,4 +38,9 @@ public final class RandomAccessMemory extends Memory {
     public void write(int address, int value) {
         buffer.set(buffer.get().put(address, value));
     }
+
+    @Override
+    public int size() {
+        return buffer.get().capacity();
+    }
 }

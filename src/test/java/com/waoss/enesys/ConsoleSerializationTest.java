@@ -16,16 +16,19 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.waoss.enesys.mem;
+package com.waoss.enesys;
 
-public abstract class Memory {
+import com.google.gson.GsonBuilder;
+import org.junit.Test;
 
-    protected Memory() {
+public class ConsoleSerializationTest {
+
+    private Console console = new Console();
+
+    @Test
+    public void consoleSerialize() throws Exception {
+        System.out.println(new GsonBuilder().setPrettyPrinting().registerTypeAdapter(Console.class,
+                new ConsoleAdapter()).create().toJson(console));
+
     }
-
-    public abstract int read(int address);
-
-    public abstract void write(int address, int value);
-
-    public abstract int size();
 }

@@ -24,7 +24,8 @@ import java.util.concurrent.atomic.AtomicReference;
 
 public class CompleteMemory extends Memory {
 
-    final AtomicReference<SimpleObjectProperty<RandomAccessMemory>> randomAccessMemory = new AtomicReference<>(new SimpleObjectProperty<>(new RandomAccessMemory()));
+    final AtomicReference<SimpleObjectProperty<RandomAccessMemory>> randomAccessMemory = new AtomicReference<>(
+            new SimpleObjectProperty<>(new RandomAccessMemory()));
 
     public RandomAccessMemory getRandomAccessMemory() {
         return randomAccessMemory.get().get();
@@ -41,7 +42,9 @@ public class CompleteMemory extends Memory {
     /**
      * Returns the value at the given address
      *
-     * @param address The address
+     * @param address
+     *         The address
+     *
      * @return The value
      */
     @Override
@@ -56,13 +59,20 @@ public class CompleteMemory extends Memory {
     /**
      * Writes the value to the given address
      *
-     * @param address The address
-     * @param value   The value
+     * @param address
+     *         The address
+     * @param value
+     *         The value
      */
     @Override
     public void write(int address, int value) {
         if (address < 2048) {
             randomAccessMemory.get().get().write(address, value);
         }
+    }
+
+    @Override
+    public int size() {
+        return randomAccessMemory.get().get().size();
     }
 }

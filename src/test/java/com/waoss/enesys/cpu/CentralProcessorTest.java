@@ -22,31 +22,40 @@ import com.waoss.enesys.Console;
 import org.jetbrains.annotations.NotNull;
 import org.junit.Test;
 
+import java.util.logging.Logger;
+
 public class CentralProcessorTest {
 
     @NotNull Console targetConsole = new Console();
     @NotNull CentralProcessor target = new CentralProcessor(targetConsole);
+    @NotNull Logger logger = Logger.getLogger("com.waoss.enesys.cpu");
 
     @Test
     public void registerLoading() throws Exception {
+        logger.info("Loading into the X register");
         testBiArgumented(0x0600, 0xa2, 0x0601, 0x44);
     }
 
     @Test
     public void branching() throws Exception {
+        logger.info("Testing branching");
         testBiArgumented(0x0600, 0x90, 0x0601, 0x01);
     }
 
     @Test
     public void carryFlagSetting() throws Exception {
+        logger.info("Setting the carry flag");
         testUniArgumented(0x0600, 0x38);
         assert target.getProcessorStatus().isCarryFlagEnabled();
+        logger.info("Branching successful");
     }
 
     @Test
     public void decimalFlagSetting() throws Exception {
+        logger.info("Setting the decimal flag");
         testUniArgumented(0x0600, 0xf8);
         assert target.getProcessorStatus().isDecimalFlagEnabled();
+        logger.info("Branching successful");
     }
 
     private void testUniArgumented(int address, int instruction) throws Exception {

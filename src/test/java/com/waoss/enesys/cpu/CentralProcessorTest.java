@@ -56,11 +56,6 @@ public class CentralProcessorTest {
         assert target.getProcessorStatus().isDecimalFlagEnabled();
     }
 
-    @Test
-    public void instructionProcessingTest() throws Exception {
-        target.process(0xe8);
-    }
-
     private void testUniArgumented(int address, int instruction) throws Exception {
         testBiArgumented(address, instruction, 0, 0);
     }

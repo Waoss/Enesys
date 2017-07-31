@@ -527,27 +527,31 @@ public final class CentralProcessor implements Cloneable {
         }
     }
 
-    private void checkInstructionName(@NotNull Instruction instruction, InstructionName name) throws ProcessingException {
+    private void checkInstructionName(@NotNull Instruction instruction, InstructionName name) throws
+            ProcessingException {
         if (instruction.instructionNameProperty().get() != name) {
             throw new ProcessingException("Wrong Instruction");
         }
     }
 
-    private boolean loadRegister(@NotNull Register register, @NotNull Instruction instruction, InstructionName name) throws ProcessingException {
+    private boolean loadRegister(@NotNull Register register, @NotNull Instruction instruction, InstructionName name) throws
+            ProcessingException {
         checkInstructionName(instruction, name);
         Registers.loadRegister(register, instruction.argumentsProperty().get()[0]);
         checkZeroAndNegative((Integer) register.getValue());
         return false;
     }
 
-    private boolean storeRegister(@NotNull Register register, @NotNull Instruction instruction, InstructionName name) throws ProcessingException {
+    private boolean storeRegister(@NotNull Register register, @NotNull Instruction instruction, InstructionName name) throws
+            ProcessingException {
         checkInstructionName(instruction, name);
         Registers.storeRegister(register, console.get(), instruction.argumentsProperty().get()[0]);
         checkZeroAndNegative((Byte) register.getValue());
         return false;
     }
 
-    private boolean branchOnFlag(@NotNull String flagName, @NotNull Instruction instruction, boolean bool) throws ProcessingException {
+    private boolean branchOnFlag(@NotNull String flagName, @NotNull Instruction instruction, boolean bool) throws
+            ProcessingException {
         final ProcessorStatus currentProcessorStatus = getProcessorStatus();
         flagName += "Property";
         try {

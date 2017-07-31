@@ -22,7 +22,7 @@ import javafx.beans.property.SimpleObjectProperty;
 
 import java.util.concurrent.atomic.AtomicReference;
 
-public class CompleteMemory extends Memory {
+public class CompleteMemory implements Memory {
 
     final AtomicReference<SimpleObjectProperty<RandomAccessMemory>> randomAccessMemory = new AtomicReference<>(
             new SimpleObjectProperty<>(new RandomAccessMemory()));

@@ -18,14 +18,39 @@
 
 package com.waoss.enesys.mem;
 
-public abstract class Memory {
+/**
+ * Represents a sort of a memory.An interface which may be implemented as CPU Memory, PPU Memory, Mapper Memory and
+ * stuff.
+ *
+ * @see RandomAccessMemory
+ * @see CompleteMemory
+ */
+public interface Memory {
 
-    protected Memory() {
-    }
+    /**
+     * Reads the value at the address specified in the parameter and returns the value at that address
+     *
+     * @param address
+     *         The address
+     *
+     * @return The value at that address
+     */
+    int read(int address);
 
-    public abstract int read(int address);
+    /**
+     * Writes the value at the address specified in the parameter.
+     *
+     * @param address
+     *         The address to write the value to
+     * @param value
+     *         The value to write
+     */
+    void write(int address, int value);
 
-    public abstract void write(int address, int value);
-
-    public abstract int size();
+    /**
+     * Returns the size of the memory
+     *
+     * @return the size of the memory
+     */
+    int size();
 }

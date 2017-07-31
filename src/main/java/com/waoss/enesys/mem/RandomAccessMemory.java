@@ -21,7 +21,7 @@ package com.waoss.enesys.mem;
 import java.nio.IntBuffer;
 import java.util.concurrent.atomic.AtomicReference;
 
-public final class RandomAccessMemory extends Memory {
+public final class RandomAccessMemory implements Memory {
 
     private final AtomicReference<IntBuffer> buffer = new AtomicReference<>(IntBuffer.allocate(2048));
 

@@ -16,9 +16,12 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.waoss.enesys;
+package com.waoss.enesys.annotations;
 
-public interface Processor {
+import java.lang.annotation.*;
 
-    void process(Object... args) throws ProcessingException;
+@Retention(RetentionPolicy.SOURCE)
+@Target(value = {ElementType.TYPE, ElementType.METHOD})
+public @interface Untested {
+
 }

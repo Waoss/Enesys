@@ -18,11 +18,10 @@
 
 package com.waoss.enesys.cpu;
 
-import com.waoss.enesys.Console;
-import com.waoss.enesys.Processor;
-import com.waoss.enesys.cpu.instructions.Instruction;
-import com.waoss.enesys.cpu.instructions.InstructionName;
+import com.waoss.enesys.*;
+import com.waoss.enesys.cpu.instructions.*;
 import com.waoss.enesys.cpu.registers.*;
+import com.waoss.enesys.mem.Addressing;
 import com.waoss.enesys.mem.CompleteMemory;
 import javafx.beans.property.BooleanProperty;
 import org.jetbrains.annotations.NotNull;
@@ -30,6 +29,7 @@ import org.jetbrains.annotations.NotNull;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.Objects;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -436,9 +436,41 @@ public final class CentralProcessor implements Cloneable, Processor {
         }
     }
 
+    /**
+     * <p>Implementation of {@link Processor#process(Object...)}.
+     * Assumes the first argument to be the opcode and a second optional argument to be the Addressing mode as defined
+     * in
+     * {@link Addressing}.If no addressing mode is given,it is found using the opcode<br>
+     * For example, {@code
+     * cpu.process(0xe8);
+     * } would execute {@link #inx(Instruction)} because of the opcode.</p>
+     *
+     * @param args
+     *         The arguments, at least one is expected(the opcode),the addressing too may be optionally given
+     *
+     * @throws ProcessingException
+     *         If the opcode is invalid or the arguments are invalid.
+     * @throws NullPointerException
+     *         If {@code args} is null
+     */
     @Override
-    public void process(Object... args) {
-        process((Instruction) args[0]);
+    public void process(Object... args) throws ProcessingException {
+        Objects.requireNonNull(args);
+        Integer opCode = 0;
+        Addressing addressing = null;
+        if (args[0] instanceof Number) {
+            if (args[0] instanceof Integer || args[1] instanceof Byte || args[0] instanceof Short) {
+                opCode = (Integer) args[0];
+            } else {
+                throw new ProcessingException("Invalid argument " + args[0]);
+            }
+        }
+        if (args[1] instanceof Integer) {
+            addressing = Addressing.values()[(Integer) args[1]];
+        } else if (args[1] == null) {
+            addressing = InstructionConstants.addressings[opCode];
+        }
+        process(new Instruction(opCode, addressing));
     }
 
     /**

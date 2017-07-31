@@ -19,9 +19,7 @@
 package com.waoss.enesys.cpu.instructions;
 
 import com.waoss.enesys.mem.Addressing;
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.*;
 
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -30,34 +28,40 @@ public final class Instruction {
     /**
      * This property holds the instruction name
      */
-    private final AtomicReference<SimpleObjectProperty<InstructionName>> instructionName = new AtomicReference<>(new SimpleObjectProperty<>(this, "instructionName"));
+    private final AtomicReference<SimpleObjectProperty<InstructionName>> instructionName = new AtomicReference<>(
+            new SimpleObjectProperty<>(this, "instructionName"));
     /**
      * This property holds the opcode
      */
-    private final AtomicReference<SimpleObjectProperty<Integer>> opCode = new AtomicReference<>(new SimpleObjectProperty<>(this, "opCode"));
+    private final AtomicReference<SimpleObjectProperty<Integer>> opCode = new AtomicReference<>(
+            new SimpleObjectProperty<>(this, "opCode"));
     /**
      * This property holds the addressing mode
      */
-    private final AtomicReference<SimpleObjectProperty<Addressing>> addressing = new AtomicReference<>(new SimpleObjectProperty<>(this, "addressing"));
+    private final AtomicReference<SimpleObjectProperty<Addressing>> addressing = new AtomicReference<>(
+            new SimpleObjectProperty<>(this, "addressing"));
     /**
      * This property stores the arguments<br>
      * For example, a branching instruction would have one argument: where to go if condition is true
      */
-    private final AtomicReference<SimpleObjectProperty<Integer[]>> arguments = new AtomicReference<>(new SimpleObjectProperty<>(this, "arguments"));
+    private final AtomicReference<SimpleObjectProperty<Integer[]>> arguments = new AtomicReference<>(
+            new SimpleObjectProperty<>(this, "arguments"));
 
-    private final AtomicReference<IntegerProperty> size = new AtomicReference<>(new SimpleIntegerProperty(this, "size", 0));
+    private final AtomicReference<IntegerProperty> size = new AtomicReference<>(
+            new SimpleIntegerProperty(this, "size", 0));
 
     {
-        arguments.get().addListener((observable, oldValue, newValue) -> {
-            size.get().set(newValue.length);
-        });
+        //This ensures that if arguments change the size also changes because size is actually the length of the arguments
+        arguments.get().addListener((observable, oldValue, newValue) -> size.get().set(newValue.length));
     }
 
     /**
      * Creates a new Instruction when given the name and addressing
      *
-     * @param instructionName The name
-     * @param addressing      The Addressing mode
+     * @param instructionName
+     *         The name
+     * @param addressing
+     *         The Addressing mode
      */
     public Instruction(InstructionName instructionName, Addressing addressing) {
         this.instructionName.get().set(instructionName);
@@ -67,8 +71,10 @@ public final class Instruction {
     /**
      * Creates a new Instruction given the opcode and addressing
      *
-     * @param opcode     The opcode
-     * @param addressing The addressing mode
+     * @param opcode
+     *         The opcode
+     * @param addressing
+     *         The addressing mode
      */
     public Instruction(Integer opcode, Addressing addressing) {
         this.opCode.get().set(opcode);

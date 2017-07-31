@@ -18,7 +18,13 @@
 
 package com.waoss.enesys;
 
-public interface Processor {
+public class ProcessingException extends RuntimeException {
 
-    void process(Object... args) throws ProcessingException;
+    public ProcessingException(int invalidOpCode) {
+        super("Invalid Operation Code : " + invalidOpCode);
+    }
+
+    public ProcessingException(String message) {
+        super(message);
+    }
 }

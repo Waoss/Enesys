@@ -118,7 +118,7 @@ public final class Instruction {
         return addressing.get();
     }
 
-    public Object[] getArguments() {
+    public Integer[] getArguments() {
         return arguments.get().get();
     }
 

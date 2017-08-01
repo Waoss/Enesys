@@ -76,7 +76,7 @@ public class CentralProcessingThread extends Thread {
     public void run() {
         setRunning(true);
         int i;
-        while (true) {
+        while (isRunning()) {
             i = console.get().getProgramCounter().getValue();
             int opCode = console.get().getCompleteMemory().read(i);
             int size = Instructions.getInstructionSize(opCode);

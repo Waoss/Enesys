@@ -19,14 +19,13 @@
 package com.waoss.enesys.cpu;
 
 import com.waoss.enesys.Console;
-import org.jetbrains.annotations.NotNull;
 import org.junit.Before;
 import org.junit.Test;
 
 public class CentralProcessorTest {
 
-    @NotNull Console targetConsole = new Console();
-    @NotNull CentralProcessor target = new CentralProcessor(targetConsole);
+    Console targetConsole;
+    CentralProcessor target;
 
     @Before
     public void initTargets() {
@@ -54,6 +53,11 @@ public class CentralProcessorTest {
     public void decimalFlagSetting() throws Exception {
         testUniArgumented(0x0600, 0xf8);
         assert target.getProcessorStatus().isDecimalFlagEnabled();
+    }
+
+    @Test
+    public void aslTest() throws Exception {
+        testBiArgumented(0x0600, 0x0e, 0x0601, 0x05);
     }
 
     private void testUniArgumented(int address, int instruction) throws Exception {

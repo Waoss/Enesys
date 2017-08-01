@@ -463,6 +463,14 @@ public final class CentralProcessor implements Cloneable {
         return false;
     }
 
+    public boolean asl(@NotNull Instruction instruction) throws ProcessingException {
+        checkInstructionName(instruction, InstructionName.ASL);
+        final AccumalativeRegister accumalativeRegister = getARegister();
+        accumalativeRegister.setValue(accumalativeRegister.getValue() << instruction.getArguments()[0]);
+        checkZeroAndNegative(accumalativeRegister.getValue());
+        return false;
+    }
+
     /**
      * <p>Processes an instruction.
      * Invokes the required method for the instruction implementation.The method to invoke is found dynamically using

@@ -590,6 +590,23 @@ public final class CentralProcessor implements Cloneable {
         return false;
     }
 
+    /**
+     * Transfer A to X
+     *
+     * @param instruction
+     *         The instruction
+     *
+     * @return false;no change to PC
+     *
+     * @throws ProcessingException
+     *         if some shit happens
+     */
+    public boolean tax(@NotNull Instruction instruction) throws ProcessingException {
+        checkInstructionName(instruction, InstructionName.TAX);
+        transferRegister(getARegister(), getXRegister());
+        return false;
+    }
+
     /********************************************************* End of Instructions implementation *********************************************************/
 
     /**
@@ -692,6 +709,10 @@ public final class CentralProcessor implements Cloneable {
     }
 
     /********************************************************* Internal API *********************************************************/
+
+    private void transferRegister(Register register1, Register register2) {
+        register1.setValue(register2.getValue());
+    }
 
     private void checkZeroAndNegative(int value) {
         if (value == 0) {

@@ -481,7 +481,7 @@ public final class CentralProcessor implements Cloneable {
     }
 
     /**
-     * Arithmetic shift left (<<)
+     * Arithmetic shift left
      *
      * @param instruction
      *         The instruction

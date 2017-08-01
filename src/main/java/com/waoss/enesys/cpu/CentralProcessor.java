@@ -533,6 +533,17 @@ public final class CentralProcessor implements Cloneable {
         return false;
     }
 
+    /**
+     * Clear overflow flag
+     *
+     * @param instruction
+     *         The instruction
+     *
+     * @return false;no change top PC
+     *
+     * @throws ProcessingException
+     *         if some shit happens
+     */
     public boolean clv(@NotNull Instruction instruction) throws ProcessingException {
         checkInstructionName(instruction, InstructionName.CLV);
         setFlag("overflowFlagEnabled", false);
@@ -695,13 +706,13 @@ public final class CentralProcessor implements Cloneable {
         return true;
     }
 
-    private void setFlag(String flagName, boolean bool) {
+    private void setFlag(String flagName, boolean newValue) {
         final ProcessorStatus currentProcessorStatus = getProcessorStatus();
         flagName += "Property";
         try {
             final Method method = ProcessorStatus.class.getMethod(flagName);
             final BooleanProperty flagProperty = (BooleanProperty) method.invoke(currentProcessorStatus);
-            flagProperty.setValue(bool);
+            flagProperty.setValue(newValue);
         } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
             e.printStackTrace();
         }

@@ -464,6 +464,23 @@ public final class CentralProcessor implements Cloneable {
     }
 
     /**
+     * Set the interrupt disable flag disallowing interrupts
+     *
+     * @param instruction
+     *         The instruction
+     *
+     * @return false; no change to PC
+     *
+     * @throws ProcessingException
+     *         if some shit happens
+     */
+    public boolean sei(@NotNull Instruction instruction) throws ProcessingException {
+        checkInstructionName(instruction, InstructionName.SEI);
+        getProcessorStatus().setInterruptFlagEnabled(false);
+        return false;
+    }
+
+    /**
      * Arithmetic shift left (<<)
      *
      * @param instruction
@@ -512,7 +529,7 @@ public final class CentralProcessor implements Cloneable {
      */
     public boolean cli(@NotNull Instruction instruction) throws ProcessingException {
         checkInstructionName(instruction, InstructionName.CLI);
-        setFlag("interruptFlagEnabled", false);
+        setFlag("interruptFlagEnabled", true);
         return false;
     }
 

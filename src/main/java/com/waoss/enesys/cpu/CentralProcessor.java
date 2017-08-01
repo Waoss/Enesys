@@ -551,6 +551,24 @@ public final class CentralProcessor implements Cloneable {
     }
 
     /**
+     * Logical shift right
+     *
+     * @param instruction
+     *         The instruction
+     *
+     * @return false; no change to PC
+     *
+     * @throws ProcessingException
+     *         if some shit happens
+     */
+    public boolean lsr(@NotNull Instruction instruction) throws ProcessingException {
+        checkInstructionName(instruction, InstructionName.LSR);
+        final AccumalativeRegister accumalativeRegister = getARegister();
+        accumalativeRegister.setValue(accumalativeRegister.getValue() >> instruction.getArguments()[0]);
+        return false;
+    }
+
+    /**
      * <p>Processes an instruction.
      * Invokes the required method for the instruction implementation.The method to invoke is found dynamically using
      * reflection.

@@ -18,8 +18,23 @@
 
 package com.waoss.enesys.cpu.registers;
 
+/**
+ * <p>The program counter is a register that stored the location of the current instruction.The PC of the 6502 was 2
+ * bytes wide.The PC was not accessible through any instruction but could only be changed using a jump/jsr instruction
+ * or a
+ * branching.</p>
+ */
 public class ProgramCounter extends IntRegister {
 
+    /**
+     * <p>Creates a new program counter with the default value.<br>Usually,the PC is set by the OS.But the 6502 usually
+     * did not run an OS.This means that the binaries were loaded by hardware and the PC was set accordingly.Enesys
+     * loads binaries to 0x0600 and then binaries are free to change the program counter using not only the
+     * jmp/jsr/branching but also using the 0xfffe,the reset vector(I guess that's what it's called).</p>
+     *
+     * @param defaultValue
+     *         The default value
+     */
     public ProgramCounter(int defaultValue) {
         super(defaultValue);
     }

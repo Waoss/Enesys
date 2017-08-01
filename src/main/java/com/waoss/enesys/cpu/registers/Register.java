@@ -20,5 +20,15 @@ package com.waoss.enesys.cpu.registers;
 
 import com.waoss.enesys.ValueContainer;
 
-public abstract class Register<T extends Number> implements ValueContainer<T> {
+/**
+ * An implementation of this interface represents a CPU register.
+ *
+ * @param <T>
+ *         A register can be of an unfixed size;thus a templating
+ *
+ * @see ValueContainer
+ * @see RegisterImpl
+ */
+public interface Register<T extends Number> extends ValueContainer<T> {
+
 }

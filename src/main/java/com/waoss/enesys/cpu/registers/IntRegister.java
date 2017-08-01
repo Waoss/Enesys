@@ -19,13 +19,15 @@
 package com.waoss.enesys.cpu.registers;
 
 /**
- * An implementation of a register that is one byte wide.
+ * An implementation of a register that is implemented as an int.
  */
 public class IntRegister extends RegisterImpl<Integer> {
+
     /**
      * Creates a new IntRegister
      *
-     * @param defaultValue The default value of the register
+     * @param defaultValue
+     *         The default value of the register
      */
     public IntRegister(Integer defaultValue) {
         super(defaultValue);

@@ -16,10 +16,15 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.waoss.enesys.cpu.registers;
+/**
+ * <p>This package contains classes and sub-packages that primarily deal with the CPU of the NES,which was a modified
+ * 6502.The NES CPU had no stack overflow detection,nor did it have the floating point.The CPU had a rather small
+ * register file.
+ * It was quite primitive compared to modern CPUs(so no OS -> no multithreading).The lack of features in the NES CPU
+ * mean that the developers of the time had great skills; but more importantly,we have lesser shit to implement.Good for
+ * us.</p>
+ *
+ * @see com.waoss.enesys.cpu.instructions
+ */
 
-public class UnsignedShortRegister extends RegisterImpl<Short> {
-    public UnsignedShortRegister(Short defaultValue) {
-        super(defaultValue);
-    }
-}
+package com.waoss.enesys.cpu;

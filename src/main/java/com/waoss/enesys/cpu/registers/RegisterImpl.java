@@ -29,7 +29,7 @@ import java.util.concurrent.atomic.AtomicReference;
  *
  * @param <T> The type of the register
  */
-public class RegisterImpl<T extends Number> extends Register<T> {
+public class RegisterImpl<T extends Number> implements Register<T> {
 
     /**
      * The default value of the register

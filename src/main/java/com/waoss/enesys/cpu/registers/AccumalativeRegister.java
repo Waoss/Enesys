@@ -24,7 +24,6 @@ package com.waoss.enesys.cpu.registers;
  *
  * @see Register
  * @see IntRegister
- * @see UnsignedShortRegister
  * @see RegisterImpl
  */
 public class AccumalativeRegister extends IntRegister {

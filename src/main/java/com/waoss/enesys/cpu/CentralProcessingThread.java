@@ -99,10 +99,21 @@ public class CentralProcessingThread extends Thread {
         return centralProcessor.get();
     }
 
+    /**
+     * Returns true if the thread is running
+     *
+     * @return true if the thread is running
+     */
     public boolean isRunning() {
         return running.get();
     }
 
+    /**
+     * Sets the running status of the thread
+     *
+     * @param bool
+     *         the status to set
+     */
     public void setRunning(boolean bool) {
         running.set(bool);
     }

@@ -16,12 +16,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.waoss.enesys;
+/**
+ * This package provides all necessary stuff to deal with instructions.
+ * <p>Every instruction is treated as an {@link com.waoss.enesys.cpu.instructions.Instruction} object,which contains all
+ * necessary fields and methods for it.</p>
+ */
 
-public interface ValueContainer<T> {
-
-    T getValue();
-
-    void setValue(T t);
-
-}
+package com.waoss.enesys.cpu.instructions;

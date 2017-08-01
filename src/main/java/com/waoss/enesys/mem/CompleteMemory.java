@@ -75,4 +75,5 @@ public class CompleteMemory implements Memory {
     public int size() {
         return randomAccessMemory.get().get().size();
     }
+
 }

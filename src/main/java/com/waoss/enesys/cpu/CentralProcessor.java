@@ -517,6 +517,51 @@ public final class CentralProcessor implements Cloneable {
         thread.get().setRunning(false);
     }
 
+    /**
+     * Randomly hashes this object.
+     *
+     * @return the randomly hashed stuff.
+     */
+    @Override
+    public int hashCode() {
+        int result = console != null ? console.hashCode() : 0;
+        result = 1341 * result + (thread != null ? thread.hashCode() : 0);
+        result = 452 * result + (runningInMainThread != null ? runningInMainThread.hashCode() : 0);
+        result ^= 14;
+        return result;
+    }
+
+    /**
+     * Returns true if the object given in the parameters is equal to this.<p>The fields taking into consideration are
+     * the console, the CentralProcessingThread, and the
+     * runningInMainThread property</p>
+     *
+     * @param o
+     *         The object
+     *
+     * @return true if all the properties mentioned above are true.
+     */
+    @Override
+    public boolean equals(final Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        final CentralProcessor that = (CentralProcessor) o;
+
+        if (console != null ? ! console.equals(that.console) : that.console != null) {
+            return false;
+        }
+        if (thread != null ? ! thread.equals(that.thread) : that.thread != null) {
+            return false;
+        }
+        return runningInMainThread != null ? runningInMainThread.equals(
+                that.runningInMainThread) : that.runningInMainThread == null;
+    }
+
     /********************************************************* Internal API *********************************************************/
 
     private void checkZeroAndNegative(int value) {

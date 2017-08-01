@@ -27,14 +27,16 @@ import java.util.concurrent.atomic.AtomicReference;
  * An implemented Register
  * All Registers extend this class
  *
- * @param <T> The type of the register
+ * @param <T>
+ *         The type of the register
  */
 public class RegisterImpl<T extends Number> implements Register<T> {
 
     /**
      * The default value of the register
      */
-    protected final AtomicReference<SimpleObjectProperty<T>> defaultValue = new AtomicReference<>(new SimpleObjectProperty<>(this, "defaultValue"));
+    protected final AtomicReference<SimpleObjectProperty<T>> defaultValue = new AtomicReference<>(
+            new SimpleObjectProperty<>(this, "defaultValue"));
 
     /**
      * The property that stores the value
@@ -50,7 +52,8 @@ public class RegisterImpl<T extends Number> implements Register<T> {
     /**
      * Creates a new <b>implemented</b> register
      *
-     * @param defaultValue The default value of the register
+     * @param defaultValue
+     *         The default value of the register
      */
     protected RegisterImpl(T defaultValue) {
         this.defaultValue.get().set(defaultValue);
@@ -82,10 +85,16 @@ public class RegisterImpl<T extends Number> implements Register<T> {
     /**
      * Sets the value of the register
      *
-     * @param value the value to be set
+     * @param value
+     *         the value to be set
      */
     @Override
     public void setValue(T value) {
         valueProperty.get().set(value);
+    }
+
+    @Override
+    public boolean equals(final Object that) {
+        return super.equals(that);
     }
 }

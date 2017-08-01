@@ -19,6 +19,7 @@
 package com.waoss.enesys;
 
 import com.google.gson.GsonBuilder;
+import com.waoss.enesys.cpu.CentralProcessor;
 import com.waoss.enesys.cpu.registers.*;
 import com.waoss.enesys.mem.CompleteMemory;
 
@@ -45,6 +46,8 @@ public class Console implements Serializable {
     private final AtomicReference<StackPointer> stackPointer = new AtomicReference<>(new StackPointer());
     private final AtomicReference<ProgramCounter> programCounter = new AtomicReference<>(
             new ProgramCounter((short) 0x0600));
+    private final AtomicReference<CentralProcessor> centralProcessor = new AtomicReference<>(
+            new CentralProcessor(this));
 
     public ProcessorStatus getProcessorStatus() {
         return processorStatus.get();
@@ -100,6 +103,14 @@ public class Console implements Serializable {
 
     public void setCompleteMemory(CompleteMemory completeMemory) {
         this.completeMemory.set(completeMemory);
+    }
+
+    public CentralProcessor getCentralProcessor() {
+        return centralProcessor.get();
+    }
+
+    public void setCentralProcessor(CentralProcessor centralProcessor) {
+        this.centralProcessor.set(centralProcessor);
     }
 
     @Override

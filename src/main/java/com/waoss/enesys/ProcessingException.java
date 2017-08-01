@@ -18,13 +18,27 @@
 
 package com.waoss.enesys;
 
-
+/**
+ * An exception a processor(CPU,APU,PPU) may throw on any shit
+ */
 public class ProcessingException extends RuntimeException {
 
+    /**
+     * Because all three processors deal with opcodes an exception for an invalid opcode appears legit to me.
+     *
+     * @param invalidOpCode
+     *         The invalid opcode.
+     */
     public ProcessingException(int invalidOpCode) {
         super("Invalid Operation Code : " + invalidOpCode);
     }
 
+    /**
+     * Throw an exception with a message using the constructor of {@link RuntimeException}
+     *
+     * @param message
+     *         the message
+     */
     public ProcessingException(String message) {
         super(message);
     }

@@ -16,12 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+/**
+ * The main package and the entry into Ensys.
+ */
+
 package com.waoss.enesys;
-
-public interface ValueContainer<T> {
-
-    T getValue();
-
-    void setValue(T t);
-
-}

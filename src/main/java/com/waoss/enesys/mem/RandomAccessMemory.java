@@ -43,4 +43,5 @@ public final class RandomAccessMemory implements Memory {
     public int size() {
         return buffer.get().capacity();
     }
+
 }

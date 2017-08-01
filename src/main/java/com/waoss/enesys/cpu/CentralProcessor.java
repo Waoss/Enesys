@@ -104,6 +104,8 @@ public final class CentralProcessor implements Cloneable {
         return new CentralProcessor(this);
     }
 
+    /********************************************************* Getters *********************************************************/
+
     /**
      * Returns true if the processing is happening in the main thread
      *
@@ -188,6 +190,8 @@ public final class CentralProcessor implements Cloneable {
     public CentralProcessingThread getThread() {
         return thread.get();
     }
+
+    /********************************************************* Instructions implementation *********************************************************/
 
     /**
      * Loads a value into the A register.
@@ -567,6 +571,26 @@ public final class CentralProcessor implements Cloneable {
         accumalativeRegister.setValue(accumalativeRegister.getValue() >> instruction.getArguments()[0]);
         return false;
     }
+
+    /**
+     * Logical bitwise OR
+     *
+     * @param instruction
+     *         The instruction
+     *
+     * @return false;no change to PC
+     *
+     * @throws ProcessingException
+     *         if some shit happens
+     */
+    public boolean ora(@NotNull Instruction instruction) throws ProcessingException {
+        checkInstructionName(instruction, InstructionName.ORA);
+        final AccumalativeRegister accumalativeRegister = getARegister();
+        accumalativeRegister.setValue(accumalativeRegister.getValue() | instruction.getArguments()[0]);
+        return false;
+    }
+
+    /********************************************************* End of Instructions implementation *********************************************************/
 
     /**
      * <p>Processes an instruction.

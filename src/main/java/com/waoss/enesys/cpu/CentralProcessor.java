@@ -476,7 +476,7 @@ public final class CentralProcessor implements Cloneable {
      */
     public boolean sei(@NotNull Instruction instruction) throws ProcessingException {
         checkInstructionName(instruction, InstructionName.SEI);
-        getProcessorStatus().setInterruptFlagEnabled(false);
+        getProcessorStatus().setInterruptFlagEnabled(true);
         return false;
     }
 
@@ -529,7 +529,13 @@ public final class CentralProcessor implements Cloneable {
      */
     public boolean cli(@NotNull Instruction instruction) throws ProcessingException {
         checkInstructionName(instruction, InstructionName.CLI);
-        setFlag("interruptFlagEnabled", true);
+        setFlag("interruptFlagEnabled", false);
+        return false;
+    }
+
+    public boolean clv(@NotNull Instruction instruction) throws ProcessingException {
+        checkInstructionName(instruction, InstructionName.CLV);
+        setFlag("overflowFlagEnabled", false);
         return false;
     }
 

@@ -68,6 +68,12 @@ public class CentralProcessorTest {
     }
 
     @Test
+    public void overflowFlagClearing() throws Exception {
+        testUniArgumented(0x0600, 0xb8);
+        assert ! target.getProcessorStatus().isOverflowFlagEnabled();
+    }
+
+    @Test
     public void decimalFlagSetting() throws Exception {
         testUniArgumented(0x0600, 0xf8);
         assert target.getProcessorStatus().isDecimalFlagEnabled();

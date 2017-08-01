@@ -17,14 +17,14 @@
  */
 
 /**
- * <p>This package is practically the register file of the CPU.The 6502 had only three general purpose registers :
+ * This package is practically the register file of the CPU.The 6502 had only three general purpose registers :
  * <ul>
  * <li>The Accumulator {@link com.waoss.enesys.cpu.registers.AccumalativeRegister}</li>
  * <li>The X register {@link com.waoss.enesys.cpu.registers.XRegister}</li>
  * <li>The Y register {@link com.waoss.enesys.cpu.registers.YRegister}</li>
  * </ul><br>Except this, there was the {@link com.waoss.enesys.cpu.registers.ProgramCounter} and the {@link
  * com.waoss.enesys.cpu.registers.StackPointer}.All these are different implementations of {@link
- * com.waoss.enesys.cpu.registers.Register}.</p>
+ * com.waoss.enesys.cpu.registers.Register}.
  */
 
 package com.waoss.enesys.cpu.registers;

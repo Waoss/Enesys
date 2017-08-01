@@ -56,6 +56,12 @@ public class CentralProcessorTest {
     }
 
     @Test
+    public void interruptClearing() throws Exception {
+        testUniArgumented(0x0600, 0x58);
+        assert ! target.getProcessorStatus().isInterruptFlagEnabled();
+    }
+
+    @Test
     public void decimalFlagSetting() throws Exception {
         testUniArgumented(0x0600, 0xf8);
         assert target.getProcessorStatus().isDecimalFlagEnabled();

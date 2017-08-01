@@ -500,6 +500,23 @@ public final class CentralProcessor implements Cloneable {
     }
 
     /**
+     * Clear interrupt disable allowing interrupts
+     *
+     * @param instruction
+     *         The instruction
+     *
+     * @return false;no change to CP
+     *
+     * @throws ProcessingException
+     *         if any shit happens
+     */
+    public boolean cli(@NotNull Instruction instruction) throws ProcessingException {
+        checkInstructionName(instruction, InstructionName.CLI);
+        setFlag("interruptFlagEnabled", false);
+        return false;
+    }
+
+    /**
      * <p>Processes an instruction.
      * Invokes the required method for the instruction implementation.The method to invoke is found dynamically using
      * reflection.

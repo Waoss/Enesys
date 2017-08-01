@@ -463,11 +463,39 @@ public final class CentralProcessor implements Cloneable {
         return false;
     }
 
+    /**
+     * Arithmetic shift left (<<)
+     *
+     * @param instruction
+     *         The instruction
+     *
+     * @return false; no change to the PC
+     *
+     * @throws ProcessingException
+     *         If some shit happens
+     */
     public boolean asl(@NotNull Instruction instruction) throws ProcessingException {
         checkInstructionName(instruction, InstructionName.ASL);
         final AccumalativeRegister accumalativeRegister = getARegister();
         accumalativeRegister.setValue(accumalativeRegister.getValue() << instruction.getArguments()[0]);
         checkZeroAndNegative(accumalativeRegister.getValue());
+        return false;
+    }
+
+    /**
+     * Clears the carry flag
+     *
+     * @param instruction
+     *         The instruction
+     *
+     * @return false; no change to PC
+     *
+     * @throws ProcessingException
+     *         if some shit happens
+     */
+    public boolean clc(@NotNull Instruction instruction) throws ProcessingException {
+        checkInstructionName(instruction, InstructionName.CLC);
+        setFlag("carryFlagEnabled", false);
         return false;
     }
 
@@ -625,6 +653,18 @@ public final class CentralProcessor implements Cloneable {
     private boolean updateProgramCounter(@NotNull final ProgramCounter programCounter, Integer newValue) {
         programCounter.setValue(newValue);
         return true;
+    }
+
+    private void setFlag(String flagName, boolean bool) {
+        final ProcessorStatus currentProcessorStatus = getProcessorStatus();
+        flagName += "Property";
+        try {
+            final Method method = ProcessorStatus.class.getMethod(flagName);
+            final BooleanProperty flagProperty = (BooleanProperty) method.invoke(currentProcessorStatus);
+            flagProperty.setValue(bool);
+        } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+            e.printStackTrace();
+        }
     }
 
 }

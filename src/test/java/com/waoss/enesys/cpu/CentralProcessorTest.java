@@ -50,6 +50,12 @@ public class CentralProcessorTest {
     }
 
     @Test
+    public void carryFlagClearing() throws Exception {
+        testUniArgumented(0x0600, 0x18);
+        assert ! target.getProcessorStatus().isCarryFlagEnabled();
+    }
+
+    @Test
     public void decimalFlagSetting() throws Exception {
         testUniArgumented(0x0600, 0xf8);
         assert target.getProcessorStatus().isDecimalFlagEnabled();

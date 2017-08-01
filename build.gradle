@@ -36,5 +36,5 @@ version = '1.1-alpha'
 mainClassName = 'com.waoss.enesys.Enesys'
 javadoc {
     source = sourceSets.main.allJava
-    destinationDir = new File('docs/javadoc')
+    destinationDir = new File('docs/' + version + '/javadoc')
 }

@@ -22,6 +22,9 @@ import com.waoss.enesys.Console;
 import org.junit.Before;
 import org.junit.Test;
 
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
 public class CentralProcessorTest {
 
     Console targetConsole;
@@ -46,31 +49,31 @@ public class CentralProcessorTest {
     @Test
     public void carryFlagSetting() throws Exception {
         testUniArgumented(0x0600, 0x38);
-        assert target.getProcessorStatus().isCarryFlagEnabled();
+        assertTrue(target.getProcessorStatus().isCarryFlagEnabled());
     }
 
     @Test
     public void carryFlagClearing() throws Exception {
         testUniArgumented(0x0600, 0x18);
-        assert ! target.getProcessorStatus().isCarryFlagEnabled();
+        assertFalse(target.getProcessorStatus().isCarryFlagEnabled());
     }
 
     @Test
     public void interruptClearing() throws Exception {
         testUniArgumented(0x0600, 0x58);
-        assert ! target.getProcessorStatus().isInterruptFlagEnabled();
+        assertFalse(target.getProcessorStatus().isInterruptFlagEnabled());
     }
 
     @Test
     public void interruptSetting() throws Exception {
         testUniArgumented(0x0600, 0x78);
-        assert target.getProcessorStatus().isInterruptFlagEnabled();
+        assertTrue(target.getProcessorStatus().isInterruptFlagEnabled());
     }
 
     @Test
     public void overflowFlagClearing() throws Exception {
         testUniArgumented(0x0600, 0xb8);
-        assert ! target.getProcessorStatus().isOverflowFlagEnabled();
+        assertFalse(target.getProcessorStatus().isOverflowFlagEnabled());
     }
 
     @Test
@@ -82,6 +85,13 @@ public class CentralProcessorTest {
     @Test
     public void aslTest() throws Exception {
         testBiArgumented(0x0600, 0x0e, 0x0601, 0x05);
+    }
+
+    @Test
+    public void compareTest() throws Exception {
+        testBiArgumented(0x0600, 0xc9, 0x0601, 0x00);
+        assertTrue(target.getProcessorStatus().isZeroFlagEnabled());
+        assertFalse(target.getProcessorStatus().isCarryFlagEnabled());
     }
 
     private void testUniArgumented(int address, int instruction) throws Exception {

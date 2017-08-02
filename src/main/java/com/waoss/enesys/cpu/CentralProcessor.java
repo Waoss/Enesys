@@ -703,11 +703,31 @@ public final class CentralProcessor implements Cloneable {
      *
      * @throws ProcessingException
      *         if some shit happens
+     * @see #cpx(Instruction)
      */
     public boolean cmp(@NotNull Instruction instruction) throws ProcessingException {
         final Integer toCompare = instruction.getArguments()[0];
         final Integer aRegisterValue = getARegister().getValue();
         compareRegisters(aRegisterValue, toCompare);
+        return false;
+    }
+
+    /**
+     * Compares some value with the X register.
+     *
+     * @param instruction
+     *         The instruction
+     *
+     * @return false; no change to PC
+     *
+     * @throws ProcessingException
+     *         if some shit happens
+     * @see #cmp(Instruction)
+     */
+    public boolean cpx(@NotNull Instruction instruction) throws ProcessingException {
+        final Integer toCompare = instruction.getArguments()[0];
+        final Integer xRegisterValue = getXRegister().getValue();
+        compareRegisters(xRegisterValue, toCompare);
         return false;
     }
 

@@ -36,7 +36,7 @@ public class ConsoleAdapter extends TypeAdapter<Console> {
         out.name("x").value(value.getXRegister().getValue());
         out.name("y").value(value.getYRegister().getValue());
         out.name("a").value(value.getARegister().getValue());
-        out.name("flags").value(value.getProcessorStatus().toString());
+        out.name("flags").value(value.getProcessorStatus().getValue());
         out.name("programCounter").value(value.getProgramCounter().getValue());
         out.name("stackPointer").value(value.getStackPointer().getValue());
         out.endObject();

@@ -704,6 +704,7 @@ public final class CentralProcessor implements Cloneable {
      * @throws ProcessingException
      *         if some shit happens
      * @see #cpx(Instruction)
+     * @see #cpy(Instruction)
      */
     public boolean cmp(@NotNull Instruction instruction) throws ProcessingException {
         final Integer toCompare = instruction.getArguments()[0];
@@ -723,11 +724,32 @@ public final class CentralProcessor implements Cloneable {
      * @throws ProcessingException
      *         if some shit happens
      * @see #cmp(Instruction)
+     * @see #cpy(Instruction)
      */
     public boolean cpx(@NotNull Instruction instruction) throws ProcessingException {
         final Integer toCompare = instruction.getArguments()[0];
         final Integer xRegisterValue = getXRegister().getValue();
         compareRegisters(xRegisterValue, toCompare);
+        return false;
+    }
+
+    /**
+     * Compares some value with the Y register.
+     *
+     * @param instruction
+     *         The instruction
+     *
+     * @return false; no change to PC
+     *
+     * @throws ProcessingException
+     *         if some shit happens
+     * @see #cmp(Instruction)
+     * @see #cpx(Instruction)
+     */
+    public boolean cpy(@NotNull Instruction instruction) throws ProcessingException {
+        final Integer toCompare = instruction.getArguments()[0];
+        final Integer yRegisterValue = getXRegister().getValue();
+        compareRegisters(yRegisterValue, toCompare);
         return false;
     }
 

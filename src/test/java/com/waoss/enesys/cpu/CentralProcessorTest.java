@@ -94,6 +94,13 @@ public class CentralProcessorTest {
         assertFalse(target.getProcessorStatus().isCarryFlagEnabled());
     }
 
+    @Test
+    public void compareXTest() throws Exception {
+        testBiArgumented(0x0600, 0xe0, 0x0601, 0x00);
+        assertTrue(target.getProcessorStatus().isZeroFlagEnabled());
+        assertFalse(target.getProcessorStatus().isCarryFlagEnabled());
+    }
+
     private void testUniArgumented(int address, int instruction) throws Exception {
         testBiArgumented(address, instruction, 0, 0);
     }

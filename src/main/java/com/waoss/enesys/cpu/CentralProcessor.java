@@ -607,6 +607,23 @@ public final class CentralProcessor implements Cloneable {
         return false;
     }
 
+    /**
+     * Transfer A to Y
+     *
+     * @param instruction
+     *         The instruction
+     *
+     * @return false; no change to PC
+     *
+     * @throws ProcessingException
+     *         if some shit happens
+     */
+    public boolean tay(@NotNull Instruction instruction) throws ProcessingException {
+        checkInstructionName(instruction, InstructionName.TAY);
+        transferRegister(getARegister(), getYRegister());
+        return false;
+    }
+
     /********************************************************* End of Instructions implementation *********************************************************/
 
     /**

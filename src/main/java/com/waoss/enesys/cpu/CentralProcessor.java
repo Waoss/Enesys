@@ -52,6 +52,7 @@ import java.util.concurrent.atomic.AtomicReference;
  *
  * @see #process(Instruction)
  */
+@Incomplete
 public final class CentralProcessor implements Cloneable {
 
     /**
@@ -104,9 +105,9 @@ public final class CentralProcessor implements Cloneable {
         return new CentralProcessor(this);
     }
 
-    /********************************************************* Getters *********************************************************/
+    /********************************************************* Getters 
 
-    /**
+     /**
      * Returns true if the processing is happening in the main thread
      *
      * @return true if the processing is happening in the main thread
@@ -191,7 +192,7 @@ public final class CentralProcessor implements Cloneable {
         return thread.get();
     }
 
-    /********************************************************* Instructions implementation *********************************************************/
+    // Instructions implementation 
 
     /**
      * Loads a value into the A register.
@@ -692,6 +693,24 @@ public final class CentralProcessor implements Cloneable {
         return false;
     }
 
+    /**
+     * Compares some value with the A register.
+     *
+     * @param instruction
+     *         The instruction
+     *
+     * @return false; no change to PC
+     *
+     * @throws ProcessingException
+     *         if some shit happens
+     */
+    public boolean cmp(@NotNull Instruction instruction) throws ProcessingException {
+        final Integer toCompare = instruction.getArguments()[0];
+        final Integer aRegisterValue = getARegister().getValue();
+        compareRegisters(aRegisterValue, toCompare);
+        return false;
+    }
+
     // End of Instructions implementation
 
     /**
@@ -793,7 +812,7 @@ public final class CentralProcessor implements Cloneable {
                 that.runningInMainThread) : that.runningInMainThread == null;
     }
 
-    /********************************************************* Internal API *********************************************************/
+    // Internal API 
 
     private void transferRegister(Register register1, Register register2) {
         register1.setValue(register2.getValue());
@@ -863,6 +882,13 @@ public final class CentralProcessor implements Cloneable {
             flagProperty.setValue(newValue);
         } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
             e.printStackTrace();
+        }
+    }
+
+    private void compareRegisters(Integer integer1, Integer integer2) {
+        checkZeroAndNegative(integer1 - integer2);
+        if (integer1 > integer2) {
+            getProcessorStatus().setCarryFlagEnabled(true);
         }
     }
 

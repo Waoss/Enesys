@@ -624,7 +624,24 @@ public final class CentralProcessor implements Cloneable {
         return false;
     }
 
-    /********************************************************* End of Instructions implementation *********************************************************/
+    /**
+     * Transfer Stack Pointer to X
+     *
+     * @param instruction
+     *         The instruction
+     *
+     * @return false; no change to PC
+     *
+     * @throws ProcessingException
+     *         if some shit happens
+     */
+    public boolean tsx(@NotNull Instruction instruction) throws ProcessingException {
+        checkInstructionName(instruction, InstructionName.TAY);
+        transferRegister(getStackPointer(), getXRegister());
+        return false;
+    }
+
+    // End of Instructions implementation
 
     /**
      * <p>Processes an instruction.

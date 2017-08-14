@@ -105,7 +105,7 @@ public final class CentralProcessor implements Cloneable {
         return new CentralProcessor(this);
     }
 
-    /********************************************************* Getters 
+    //Getters
 
      /**
      * Returns true if the processing is happening in the main thread
@@ -677,7 +677,7 @@ public final class CentralProcessor implements Cloneable {
     }
 
     /**
-     * Transfer X to Stack Pointer
+     * Transfer Y to A
      *
      * @param instruction
      *         The instruction
@@ -748,10 +748,11 @@ public final class CentralProcessor implements Cloneable {
      */
     public boolean cpy(@NotNull Instruction instruction) throws ProcessingException {
         final Integer toCompare = instruction.getArguments()[0];
-        final Integer yRegisterValue = getXRegister().getValue();
+        final Integer yRegisterValue = getYRegister().getValue();
         compareRegisters(yRegisterValue, toCompare);
         return false;
     }
+
 
     // End of Instructions implementation
 

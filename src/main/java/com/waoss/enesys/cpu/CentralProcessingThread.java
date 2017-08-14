@@ -85,7 +85,9 @@ public class CentralProcessingThread extends Thread {
                 arguments[j - 1] = console.get().getCompleteMemory().read(i + j);
             }
             @NotNull final Instruction result = new Instruction(opCode, InstructionConstants.addressings[opCode]);
+            result.setCentralProcessor(centralProcessor.get());
             result.argumentsProperty().set(arguments);
+            result.parseSelf();
             centralProcessor.get().process(result);
         }
     }

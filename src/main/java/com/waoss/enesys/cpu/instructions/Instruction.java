@@ -18,9 +18,11 @@
 
 package com.waoss.enesys.cpu.instructions;
 
+import com.waoss.enesys.cpu.CentralProcessor;
 import com.waoss.enesys.mem.Addressing;
 import javafx.beans.property.*;
 
+import java.util.Arrays;
 import java.util.concurrent.atomic.AtomicReference;
 
 public final class Instruction {
@@ -49,6 +51,9 @@ public final class Instruction {
 
     private final AtomicReference<IntegerProperty> size = new AtomicReference<>(
             new SimpleIntegerProperty(this, "size", 0));
+
+    private final AtomicReference<SimpleObjectProperty<CentralProcessor>> centralProcessor = new AtomicReference<>(
+            new SimpleObjectProperty<>(this, "centralProcessor"));
 
     {
         //This ensures that if arguments change the size also changes because size is actually the length of the arguments
@@ -90,7 +95,7 @@ public final class Instruction {
         this.instructionName.get().set(instructionName);
     }
 
-    public final SimpleObjectProperty<InstructionName> instructionNameProperty() {
+    public final ObjectProperty<InstructionName> instructionNameProperty() {
         return instructionName.get();
     }
 
@@ -102,7 +107,7 @@ public final class Instruction {
         this.opCode.get().set(opCode);
     }
 
-    public final SimpleObjectProperty<Integer> opCodeProperty() {
+    public final ObjectProperty<Integer> opCodeProperty() {
         return opCode.get();
     }
 
@@ -114,7 +119,7 @@ public final class Instruction {
         this.addressing.get().set(addressing);
     }
 
-    public final SimpleObjectProperty<Addressing> addressingProperty() {
+    public final ObjectProperty<Addressing> addressingProperty() {
         return addressing.get();
     }
 
@@ -126,7 +131,7 @@ public final class Instruction {
         this.arguments.get().set(arguments);
     }
 
-    public SimpleObjectProperty<Integer[]> argumentsProperty() {
+    public ObjectProperty<Integer[]> argumentsProperty() {
         return arguments.get();
     }
 
@@ -140,5 +145,117 @@ public final class Instruction {
 
     public final IntegerProperty sizeProperty() {
         return size.get();
+    }
+
+    public CentralProcessor getCentralProcessor() {
+        return centralProcessor.get().get();
+    }
+
+    public void setCentralProcessor(final CentralProcessor centralProcessor) {
+        this.centralProcessor.get().set(centralProcessor);
+    }
+
+    public final ObjectProperty<CentralProcessor> centralProcessorProperty() {
+        return centralProcessor.get();
+    }
+
+    /**
+     * Parses itself according to the arguments and addressing
+     */
+    public void parseSelf() {
+        final Addressing addressing = getAddressing();
+        final Integer[] givenArguments = argumentsProperty().get();
+        /*If there are no arguments it is safe to assume that the instruction does not require any results from us.
+        * This type of addressing is handled but not setting resultArguments as null can lead to NullPointerExceptions.Wish I was using Kotlin*/
+        final Integer[] resultArguments = givenArguments != null ? Arrays.copyOf(givenArguments,
+                givenArguments.length) : null;
+        final CentralProcessor centralProcessor = getCentralProcessor();
+        switch (addressing) {
+            case ABSOLUTE:
+                if (resultArguments != null) {
+                    resultArguments[0] = centralProcessor.getCompleteMemory().read(givenArguments[0]);
+                }
+                break;
+            case ABSOLUTE_X:
+                if (resultArguments != null) {
+                    resultArguments[0] = givenArguments[0] + centralProcessor.getXRegister().getValue();
+                }
+                break;
+            case ABSOLUTE_Y:
+                if (resultArguments != null) {
+                    resultArguments[0] = givenArguments[0] + centralProcessor.getYRegister().getValue();
+                }
+                break;
+            case ACCUMULATOR:
+                break;
+            case IMMEDIATE:
+                if (resultArguments != null) {
+                    resultArguments[0] = givenArguments[0];
+                }
+                break;
+            case IMPLIED:
+                break;
+            case INDEXED_INDIRECT:
+                Integer postXAddress = null;
+                if (givenArguments != null) {
+                    postXAddress = givenArguments[0] + centralProcessor.getXRegister().getValue();
+                }
+                Integer mostSignificantByte = centralProcessor.getCompleteMemory().read(postXAddress + 1);
+                Integer leastSignificantByte = centralProcessor.getCompleteMemory().read(postXAddress);
+                Integer finalAddress = (mostSignificantByte * 0x0100) + leastSignificantByte;
+                if (resultArguments != null) {
+                    resultArguments[0] = centralProcessor.getCompleteMemory().read(finalAddress);
+                }
+                break;
+            case INDIRECT:
+                mostSignificantByte = givenArguments != null ? givenArguments[1] : null;
+                leastSignificantByte = givenArguments != null ? givenArguments[0] : null;
+                finalAddress = (mostSignificantByte * 0x0100) + leastSignificantByte;
+                if (resultArguments != null) {
+                    resultArguments[0] = centralProcessor.getCompleteMemory().read(finalAddress);
+                }
+                break;
+            case INDIRECT_INDEXED:
+                Integer addressToLookup = givenArguments != null ? givenArguments[0] : null;
+                mostSignificantByte = centralProcessor.getCompleteMemory().read(addressToLookup + 1);
+                leastSignificantByte = centralProcessor.getCompleteMemory().read(addressToLookup);
+                finalAddress = (mostSignificantByte * 0x0100) + leastSignificantByte;
+                finalAddress += centralProcessor.getYRegister().getValue();
+                if (resultArguments != null) {
+                    resultArguments[0] = centralProcessor.getCompleteMemory().read(finalAddress);
+                }
+                break;
+            case RELATIVE:
+                Byte rawAddress = givenArguments != null ? givenArguments[0].byteValue() : 0;
+                if (resultArguments != null) {
+                    resultArguments[0] = rawAddress.intValue();
+                }
+                break;
+            case ZERO_PAGE:
+                addressToLookup = givenArguments != null ? givenArguments[0] : null;
+                if (resultArguments != null) {
+                    resultArguments[0] = centralProcessor.getCompleteMemory().read(addressToLookup);
+                }
+                break;
+            case ZERO_PAGE_X:
+                Integer zeroPageAddressToLookup = givenArguments != null ? givenArguments[0] : 0;
+                if (resultArguments != null) {
+                    resultArguments[0] = centralProcessor.getCompleteMemory().read(zeroPageAddressToLookup);
+                }
+                if (resultArguments != null) {
+                    resultArguments[0] += centralProcessor.getXRegister().getValue();
+                }
+                break;
+            case ZERO_PAGE_Y:
+                zeroPageAddressToLookup = givenArguments != null ? givenArguments[0] : 0;
+                if (resultArguments != null) {
+                    resultArguments[0] = centralProcessor.getCompleteMemory().read(zeroPageAddressToLookup);
+                }
+                if (resultArguments != null) {
+                    resultArguments[0] += centralProcessor.getYRegister().getValue();
+                }
+                break;
+        }
+        setArguments(resultArguments);
     }
 }

@@ -19,11 +19,13 @@
 package com.waoss.enesys.cpu;
 
 import com.waoss.enesys.Console;
+import com.waoss.enesys.cpu.instructions.Instruction;
+import com.waoss.enesys.mem.Addressing;
+import com.waoss.enesys.mem.Memory;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class CentralProcessorTest {
 
@@ -67,7 +69,7 @@ public class CentralProcessorTest {
     @Test
     public void interruptSetting() throws Exception {
         testUniArgumented(0x0600, 0x78);
-        assertTrue(target.getProcessorStatus().isInterruptFlagEnabled());
+        assertFalse(target.getProcessorStatus().isInterruptFlagEnabled());
     }
 
     @Test
@@ -108,6 +110,71 @@ public class CentralProcessorTest {
         assertFalse(target.getProcessorStatus().isCarryFlagEnabled());
     }
 
+    @Test
+    public void indexedIndirectAddressingProcessing() throws Exception {
+        final Instruction instruction = new Instruction(0xa1, Addressing.INDEXED_INDIRECT);
+        final Memory memory = target.getCompleteMemory();
+        target.getXRegister().setValue(1);
+        memory.write(1, 5);
+        memory.write(2, 6);
+        memory.write(0x0605, 5);
+        instruction.setCentralProcessor(target);
+        instruction.setArguments(0);
+        instruction.parseSelf();
+    }
+
+    @Test
+    public void indirectIndexedAddressingProcessing() throws Exception {
+        final Instruction instruction = new Instruction(0xa1, Addressing.INDIRECT_INDEXED);
+        final Memory memory = target.getCompleteMemory();
+        target.getYRegister().setValue(1);
+        memory.write(1, 3);
+        memory.write(2, 7);
+        memory.write(0x0704, 5);
+        instruction.setCentralProcessor(target);
+        instruction.setArguments(1);
+        instruction.parseSelf();
+    }
+
+    @Test
+    public void relativeAddressingProcessing() throws Exception {
+        final Instruction instruction = new Instruction(0xd0, Addressing.RELATIVE);
+        instruction.setCentralProcessor(target);
+        instruction.setArguments(0xf9);
+        instruction.parseSelf();
+    }
+
+    @Test
+    public void zeroPageAddressingProcessing() throws Exception {
+        final Instruction instruction = new Instruction(0xd0, Addressing.ZERO_PAGE);
+        instruction.setCentralProcessor(target);
+        target.getCompleteMemory().write(0xff, 5);
+        instruction.setArguments(0xff);
+        instruction.parseSelf();
+    }
+
+    @Test
+    public void zeroPageXAddressingProcessing() throws Exception {
+        final Instruction instruction = testAddressing(Addressing.ZERO_PAGE_X);
+        assertEquals(5, (int) instruction.getArguments()[0]);
+        assertEquals(5, (int) instruction.getArguments()[0]);
+    }
+
+    @Test
+    public void zeroPageYAddressingProcessing() throws Exception {
+        final Instruction instruction = testAddressing(Addressing.ZERO_PAGE_Y);
+        assertEquals(5, (int) instruction.getArguments()[0]);
+    }
+
+    private Instruction testAddressing(Addressing addressing) {
+        final Instruction instruction = new Instruction(0xd0, addressing);
+        instruction.setCentralProcessor(target);
+        target.getCompleteMemory().write(0xff, 5);
+        instruction.setArguments(0xff);
+        instruction.parseSelf();
+        return instruction;
+    }
+
     private void testUniArgumented(int address, int instruction) throws Exception {
         testBiArgumented(address, instruction, 0, 0);
     }
@@ -121,7 +188,7 @@ public class CentralProcessorTest {
 
     private void startTarget() throws Exception {
         target.start();
-        Thread.sleep(3000);
+        Thread.sleep(300);
         target.interruptThread();
     }
 }

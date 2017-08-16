@@ -16,7 +16,18 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-rootProject.name = 'Enesys'
-include ':standalone6502'
-include ':enesys'
+group 'com.waoss.enesys'
+version '1.1-alpha'
 
+apply plugin: 'java'
+apply plugin: 'application'
+
+sourceCompatibility = 1.8
+mainClassName = 'com.waoss.enesys.standalone6502.Standalone6502'
+repositories {
+    mavenCentral()
+}
+dependencies {
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+    compile project(':enesys')
+}

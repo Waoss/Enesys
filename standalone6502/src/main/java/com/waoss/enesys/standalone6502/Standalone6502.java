@@ -16,7 +16,11 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-rootProject.name = 'Enesys'
-include ':standalone6502'
-include ':enesys'
+package com.waoss.enesys.standalone6502;
 
+public class Standalone6502 {
+
+    public static void main(String... args) {
+
+    }
+}

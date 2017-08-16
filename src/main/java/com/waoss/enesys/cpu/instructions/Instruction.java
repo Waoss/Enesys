@@ -162,11 +162,13 @@ public final class Instruction {
     /**
      * Parses itself according to the arguments and addressing
      */
-    public void parseSelf() {
+    public void parseArgumentsAccordingToAddressing() {
         final Addressing addressing = getAddressing();
         final Integer[] givenArguments = argumentsProperty().get();
-        /*If there are no arguments it is safe to assume that the instruction does not require any results from us.
-        * This type of addressing is handled but not setting resultArguments as null can lead to NullPointerExceptions.Wish I was using Kotlin*/
+        /*
+        If there are no arguments it is safe to assume that the instruction does not require any results from us.
+        This type of addressing is handled but not inferring nullity is shitty af.Wish I was using Kotlin
+        */
         final Integer[] resultArguments = givenArguments != null ? Arrays.copyOf(givenArguments,
                 givenArguments.length) : null;
         final CentralProcessor centralProcessor = getCentralProcessor();

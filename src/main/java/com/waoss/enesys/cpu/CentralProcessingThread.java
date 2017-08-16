@@ -87,7 +87,7 @@ public class CentralProcessingThread extends Thread {
             @NotNull final Instruction result = new Instruction(opCode, InstructionConstants.addressings[opCode]);
             result.setCentralProcessor(centralProcessor.get());
             result.argumentsProperty().set(arguments);
-            result.parseSelf();
+            result.parseArgumentsAccordingToAddressing();
             centralProcessor.get().process(result);
         }
     }

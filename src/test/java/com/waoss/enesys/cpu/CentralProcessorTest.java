@@ -29,8 +29,8 @@ import static org.junit.Assert.*;
 
 public class CentralProcessorTest {
 
-    Console targetConsole;
-    CentralProcessor target;
+    private Console targetConsole;
+    private CentralProcessor target;
 
     @Before
     public void initTargets() {
@@ -120,7 +120,7 @@ public class CentralProcessorTest {
         memory.write(0x0605, 5);
         instruction.setCentralProcessor(target);
         instruction.setArguments(0);
-        instruction.parseSelf();
+        instruction.parseArgumentsAccordingToAddressing();
     }
 
     @Test
@@ -133,7 +133,7 @@ public class CentralProcessorTest {
         memory.write(0x0704, 5);
         instruction.setCentralProcessor(target);
         instruction.setArguments(1);
-        instruction.parseSelf();
+        instruction.parseArgumentsAccordingToAddressing();
     }
 
     @Test
@@ -141,7 +141,7 @@ public class CentralProcessorTest {
         final Instruction instruction = new Instruction(0xd0, Addressing.RELATIVE);
         instruction.setCentralProcessor(target);
         instruction.setArguments(0xf9);
-        instruction.parseSelf();
+        instruction.parseArgumentsAccordingToAddressing();
     }
 
     @Test
@@ -150,13 +150,12 @@ public class CentralProcessorTest {
         instruction.setCentralProcessor(target);
         target.getCompleteMemory().write(0xff, 5);
         instruction.setArguments(0xff);
-        instruction.parseSelf();
+        instruction.parseArgumentsAccordingToAddressing();
     }
 
     @Test
     public void zeroPageXAddressingProcessing() throws Exception {
         final Instruction instruction = testAddressing(Addressing.ZERO_PAGE_X);
-        assertEquals(5, (int) instruction.getArguments()[0]);
         assertEquals(5, (int) instruction.getArguments()[0]);
     }
 
@@ -171,7 +170,7 @@ public class CentralProcessorTest {
         instruction.setCentralProcessor(target);
         target.getCompleteMemory().write(0xff, 5);
         instruction.setArguments(0xff);
-        instruction.parseSelf();
+        instruction.parseArgumentsAccordingToAddressing();
         return instruction;
     }
 

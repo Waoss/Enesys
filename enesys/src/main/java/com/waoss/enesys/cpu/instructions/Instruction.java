@@ -25,6 +25,19 @@ import javafx.beans.property.*;
 import java.util.Arrays;
 import java.util.concurrent.atomic.AtomicReference;
 
+/**
+ * Represents an instruction of the NES processor.<br>
+ * <p>An instruction object contains all the data : the name of the instruction,the opcode,the addressing mode,the
+ * arguments required for the instruction (a jump instruction takes in the new value of the program counter along)</p>
+ * For example,
+ * {@code
+ * Instruction instruction = new Instruction(InstructionName.ADC, Addressing.ABSOLUTE);
+ * instruction.getOpCode(); // works fine
+ * instruction.setArguments(5); // the arguments
+ * }
+ * <p>Addressing is also handled because every time there is a change in the arguments;their is an update according to
+ * the addressing mode</p>
+ */
 public final class Instruction {
 
     /**
@@ -40,8 +53,7 @@ public final class Instruction {
     /**
      * This property holds the addressing mode
      */
-    private final AtomicReference<SimpleObjectProperty<Addressing>> addressing = new AtomicReference<>(
-            new SimpleObjectProperty<>(this, "addressing"));
+    private final AtomicReference<SimpleObjectProperty<Addressing>> addressing = new AtomicReference<>(new SimpleObjectProperty<>(this, "addressing"));
     /**
      * This property stores the arguments<br>
      * For example, a branching instruction would have one argument: where to go if condition is true
@@ -56,7 +68,11 @@ public final class Instruction {
             new SimpleObjectProperty<>(this, "centralProcessor"));
 
     {
-        //This ensures that if arguments change the size also changes because size is actually the length of the arguments
+        /*
+        This ensures that if arguments change the size also changes because size is actually the length of the arguments
+        and the addressing mode is recognised an the arguments
+        are parsed accordingly.
+        */
         arguments.get().addListener((observable, oldValue, newValue) -> size.get().set(newValue.length));
     }
 
@@ -169,8 +185,7 @@ public final class Instruction {
         If there are no arguments it is safe to assume that the instruction does not require any results from us.
         This type of addressing is handled but not inferring nullity is shitty af.Wish I was using Kotlin
         */
-        final Integer[] resultArguments = givenArguments != null ? Arrays.copyOf(givenArguments,
-                givenArguments.length) : null;
+        final Integer[] resultArguments = givenArguments != null ? Arrays.copyOf(givenArguments, givenArguments.length) : null;
         final CentralProcessor centralProcessor = getCentralProcessor();
         switch (addressing) {
             case ABSOLUTE:

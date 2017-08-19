@@ -26,6 +26,8 @@ import com.waoss.enesys.cpu.instructions.InstructionName;
 import com.waoss.enesys.cpu.registers.*;
 import com.waoss.enesys.mem.CompleteMemory;
 import javafx.beans.property.BooleanProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -48,9 +50,16 @@ import java.util.concurrent.atomic.AtomicReference;
  * <strong>strongly recommended</strong> that the {@link #run()}
  * method not be used unless for debugging, for it runs stuff in the thread that calls it and the loop is infinite
  * unless it be stopped by the {@link #interruptThread()} method.
+ * The class also allows you to add event handlers for every time an instruction is executed.You need to provide an
+ * implementation of {@link InstructionExecutionHandler}
+ * and use the {@link #addInstructionExecutionHandler(InstructionExecutionHandler)} or {@link
+ * #getInstructionExecutionHandlers()},which returns an {@link ObservableList} and you
+ * can use {@link ObservableList#add(Object)}
  * </p>
  *
  * @see #process(Instruction)
+ * @see InstructionExecutionHandler
+ * @see #addInstructionExecutionHandler(InstructionExecutionHandler)
  */
 @Incomplete
 public final class CentralProcessor implements Cloneable {
@@ -69,6 +78,16 @@ public final class CentralProcessor implements Cloneable {
      * This atomic boolean which tells us whether the processing is happening in the main thread.
      */
     private final AtomicBoolean runningInMainThread = new AtomicBoolean(false);
+
+    private ObservableList<InstructionExecutionHandler> instructionExecutionHandlers = FXCollections.observableArrayList();
+
+    public ObservableList<InstructionExecutionHandler> getInstructionExecutionHandlers() {
+        return instructionExecutionHandlers;
+    }
+
+    public void addInstructionExecutionHandler(InstructionExecutionHandler instructionExecutionHandler) {
+        instructionExecutionHandlers.add(instructionExecutionHandler);
+    }
 
     /**
      * Creates a new Processor for the console.
@@ -107,7 +126,7 @@ public final class CentralProcessor implements Cloneable {
 
     //Getters
 
-     /**
+    /**
      * Returns true if the processing is happening in the main thread
      *
      * @return true if the processing is happening in the main thread
@@ -781,6 +800,11 @@ public final class CentralProcessor implements Cloneable {
         } catch (@NotNull NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
             e.printStackTrace();
         }
+        /*
+        * Executing all the handlers
+        */
+        instructionExecutionHandlers.forEach(
+                instructionExecutionHandler -> instructionExecutionHandler.handle(this, instruction));
     }
 
     /**

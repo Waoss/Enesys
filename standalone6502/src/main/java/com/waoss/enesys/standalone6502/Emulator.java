@@ -18,19 +18,29 @@
 
 package com.waoss.enesys.standalone6502;
 
-import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.*;
-import javafx.stage.Stage;
+import com.waoss.enesys.Console;
+import org.apache.commons.lang3.ArrayUtils;
 
-public class Standalone6502 extends Application {
+public class Emulator {
 
-    @Override
-    public void start(final Stage primaryStage) throws Exception {
-        FXMLLoader fxmlLoader = new FXMLLoader();
-        fxmlLoader.setLocation(getClass().getClassLoader().getResource("Standalone6502.fxml"));
-        primaryStage.setScene(new Scene(fxmlLoader.load()));
-        primaryStage.setTitle("Standalone 6502 Emulator");
-        primaryStage.show();
+    private final Console console = new Console();
+    private int[] binaries;
+
+    {
+        console.getCentralProcessor().addInstructionExecutionHandler((centralProcessor, executed) -> {
+            System.out.println("Instruction executed was " + executed);
+        });
+    }
+
+    public int[] getBinaries() {
+        return binaries;
+    }
+
+    public void setBinaries(final int[] binaries) {
+        this.binaries = binaries;
+    }
+
+    public void executeBinaries() {
+        console.loadAndExecuteBinaries(ArrayUtils.remove(binaries, binaries.length - 1), 0x0600);
     }
 }

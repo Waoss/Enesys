@@ -16,21 +16,24 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.waoss.enesys.standalone6502;
+package com.waoss.enesys.cpu;
 
-import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.*;
-import javafx.stage.Stage;
+import com.waoss.enesys.cpu.instructions.Instruction;
 
-public class Standalone6502 extends Application {
+/**
+ * Implementations of this interface are executed by the CPU every time an instruction is processed.<br>
+ * It is a functional interface and it's function is {@link #handle(CentralProcessor, Instruction)}
+ */
+@FunctionalInterface
+public interface InstructionExecutionHandler {
 
-    @Override
-    public void start(final Stage primaryStage) throws Exception {
-        FXMLLoader fxmlLoader = new FXMLLoader();
-        fxmlLoader.setLocation(getClass().getClassLoader().getResource("Standalone6502.fxml"));
-        primaryStage.setScene(new Scene(fxmlLoader.load()));
-        primaryStage.setTitle("Standalone 6502 Emulator");
-        primaryStage.show();
-    }
+    /**
+     * This is the actual method called by the CPU and also the function which makes it a Functional Interface
+     *
+     * @param centralProcessor
+     *         The processor that executed the handler
+     * @param executed
+     *         The executed that was executed
+     */
+    void handle(CentralProcessor centralProcessor, Instruction executed);
 }

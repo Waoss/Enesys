@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+  ~ Enesys : An NES Emulator
+  ~ Copyright (C) 2017  Rahul Chhabra and Waoss
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+<?import javafx.scene.canvas.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<AnchorPane xmlns:fx="http://javafx.com/fxml/1" prefHeight="500.0" prefWidth="600.0" stylesheets="@style.css"
+            xmlns="http://javafx.com/javafx/8.0.121"
+            fx:controller="com.waoss.enesys.standalone6502.Standalone6502Controller">
+    <AnchorPane prefHeight="468.0" prefWidth="600" AnchorPane.bottomAnchor="5">
+        <Canvas fx:id="screen"/>
+    </AnchorPane>
+    <Button fx:id="loadBinariesButton" layoutY="2.0" mnemonicParsing="false" onAction="#loadBinariesButtonOnAction"
+            text="Load binary"/>
+</AnchorPane>

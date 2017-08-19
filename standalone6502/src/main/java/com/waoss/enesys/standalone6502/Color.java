@@ -18,19 +18,21 @@
 
 package com.waoss.enesys.standalone6502;
 
-import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.*;
-import javafx.stage.Stage;
-
-public class Standalone6502 extends Application {
-
-    @Override
-    public void start(final Stage primaryStage) throws Exception {
-        FXMLLoader fxmlLoader = new FXMLLoader();
-        fxmlLoader.setLocation(getClass().getClassLoader().getResource("Standalone6502.fxml"));
-        primaryStage.setScene(new Scene(fxmlLoader.load()));
-        primaryStage.setTitle("Standalone 6502 Emulator");
-        primaryStage.show();
-    }
+public enum Color {
+    BLACK,
+    WHITE,
+    RED,
+    CYAN,
+    PURPLE,
+    GREEN,
+    BLUE,
+    YELLOW,
+    ORANGE,
+    BROWN,
+    LIGHT_RED,
+    DARK_GREY,
+    GREY,
+    LIGHT_GREEN,
+    LIGHT_BLUE,
+    LIGHT_GREY
 }

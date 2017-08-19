@@ -22,6 +22,7 @@ import com.google.gson.GsonBuilder;
 import com.waoss.enesys.cpu.CentralProcessor;
 import com.waoss.enesys.cpu.registers.*;
 import com.waoss.enesys.mem.CompleteMemory;
+import com.waoss.enesys.mem.Memory;
 
 import java.io.Serializable;
 import java.util.concurrent.atomic.AtomicReference;
@@ -117,5 +118,37 @@ public class Console implements Serializable {
     public String toString() {
         return new GsonBuilder().setPrettyPrinting().registerTypeAdapter(Console.class,
                 new ConsoleAdapter()).create().toJson(this);
+    }
+
+    /**
+     * Loads a set of binaries at the given program counter
+     *
+     * @param binaries
+     *         The binaries to load
+     * @param pc
+     *         The program counter to load them at
+     */
+    public void loadBinaries(int[] binaries, int pc) {
+        Memory memory = getCompleteMemory();
+        for (int i = 0; i < binaries.length; i++) { //iterating
+            int binary = binaries[i];
+            memory.write(pc + i, binary);
+        }
+        getProgramCounter().setValue(pc);
+    }
+
+    /**
+     * Loads a set of binaries and executes them
+     *
+     * @param binaries
+     *         The binaries to load
+     * @param pc
+     *         The program and counter to load them at
+     *
+     * @see #loadBinaries(int[], int)
+     */
+    public void loadAndExecuteBinaries(int[] binaries, int pc) {
+        loadBinaries(binaries, pc);
+        centralProcessor.get().start();
     }
 }
